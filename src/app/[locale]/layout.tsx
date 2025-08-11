@@ -1,105 +1,98 @@
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import { AppProvider } from "@/providers/AppProvider";
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Lato } from "next/font/google";
 import { notFound } from "next/navigation";
 import PropTypes from "prop-types";
 import getRequestConfig from "../../i18n/request";
 import "../globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+type RootLayoutProps = {
+  children: React.ReactNode;
+  params: { locale: string };
+};
 
-export const metadata = {
-  metadataBase: new URL("https://alliviarte.com"),
-  title: "Alliviarte | Sistema de gestión para podólogos",
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-lato",
+});
+
+export const metadata: Metadata = {
+  title: "Copexia | Creamos soluciones a medida",
   description:
-    "Alliviarte es un sistema profesional de gestión de pacientes, turnos e historias clínicas, diseñado para podólogos en Tucumán, Argentina.",
+    "En Copexia acompañamos a organizaciones que quieren evolucionar combinando herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
   keywords: [
-    "Alliviarte",
-    "Sistema podología",
-    "Gestión de pacientes",
-    "Turnos online",
-    "Historia clínica digital",
-    "Software médico",
-    "Podólogos Tucumán",
-    "Software Argentina",
+    "Copexia",
+    "transformación cultural",
+    "soluciones digitales",
+    "optimización de procesos",
+    "consultoría organizacional",
+    "capacitación empresarial",
+    "Power BI",
+    "Kaizen",
+    "metodologías ágiles",
+    "gestión del cambio",
+    "formación en acción",
   ],
-  author: "Alliviarte",
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
-    title: "Alliviarte | Sistema de gestión para podólogos",
+    type: "website",
+    url: "https://copexia.com",
+    title: "Copexia | Soluciones humanas y tecnológicas para tu organización",
     description:
-      "Software de gestión de pacientes y turnos pensado para profesionales de la podología. 100% digital y accesible desde cualquier dispositivo.",
-    url: "https://alliviarte.com",
-    siteName: "Alliviarte",
+      "Impulsamos la excelencia de tu organización mediante consultoría estratégica, adopción tecnológica, optimización de procesos y formación con impacto.",
+    siteName: "Copexia",
     images: [
       {
-        url: "/og-image.jpg", // Cambialo si tenés una imagen real
+        url: "https://copexia.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Vista previa de Alliviarte",
+        alt: "Copexia - Transformamos tu organización",
       },
     ],
-    locale: "es_AR",
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alliviarte | Sistema de gestión para podólogos",
+    title: "Copexia | Soluciones humanas y tecnológicas",
     description:
-      "Gestión moderna de pacientes, historias clínicas y turnos para profesionales podólogos.",
-    images: {
-      url: "/twitter-image.jpg", // Cambialo si tenés una imagen real
-      alt: "Imagen para Twitter de Alliviarte",
-    },
-    creator: "@alliviarte", // Podés dejarlo o eliminarlo si aún no existe
-    site: "@alliviarte",
+      "Acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
+    images: ["https://copexia.com/og-image.jpg"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  metadataBase: new URL("https://copexia.com"),
+  alternates: { canonical: "/" },
 };
 
-export default async function RootLayout({ children, params }) {
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
   const awaitedParams = await params;
   if (!awaitedParams) notFound();
 
   const locale = awaitedParams.locale;
 
-  let messages;
   try {
-    const { messages: loadedMessages } = await getRequestConfig({
-      requestLocale: locale,
+    const { messages } = await getRequestConfig({
+      requestLocale: Promise.resolve(locale),
     });
-    messages = loadedMessages;
+
+    return (
+      <html
+        lang={locale}
+        suppressHydrationWarning
+        className={`${lato.variable} `}
+      >
+        <body suppressHydrationWarning>
+          <AppProvider locale={locale} messages={messages}>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </AppProvider>
+        </body>
+      </html>
+    );
   } catch (error) {
     console.error(error);
     notFound();
   }
-
-  return (
-    <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        <AppProvider locale={locale} messages={messages}>
-          <LayoutWrapper>{children}</LayoutWrapper>
-        </AppProvider>
-      </body>
-    </html>
-  );
 }
 
 RootLayout.propTypes = {

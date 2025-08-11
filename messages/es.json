@@ -1,147 +1,109 @@
 {
   "Header": {
-    "brandName": "Aliviarte",
-    "homeLink": "Inicio",
-    "aboutLink": "Nosotros",
-    "contactLink": "Contacto",
-    "myAccount": "Mi cuenta",
-    "logout": "Cerrar sesión"
-  },
-  "Footer": {
-    "brandName": "Aliviarte",
-    "rightsReserved": "Derechos reservados",
-    "description": "Bienvenido al panel. Aquí podés gestionar tu sistema."
-  },
-  "Login": {
-    "title": "Iniciar sesión",
-    "emailLabel": "Correo electrónico",
-    "emailPlaceholder": "correo@ejemplo.com",
-    "passwordLabel": "Contraseña",
-    "passwordPlaceholder": "••••••••",
-    "submitButton": "Iniciar sesión",
-    "noAccountPrompt": "¿No tienes una cuenta?",
-    "registerLink": "Registrarse",
-    "toastSuccess": "Sesión iniciada",
-    "loginError": "No se pudo iniciar sesión.",
-    "forgotPasswordLink": "¿Olvidaste tu contraseña?"
-  },
-  "Register": {
-    "title": "Registro de Profesional",
-    "personalDataTitle": "Datos Personales",
-    "professionalDataTitle": "Datos Profesionales",
-    "addressDataTitle": "Dirección",
-    "emailLabel": "Correo electrónico",
-    "emailPlaceholder": "Ingresa tu correo electrónico",
-    "passwordLabel": "Contraseña",
-    "passwordPlaceholder": "Ingresa tu contraseña",
-    "confirmPasswordLabel": "Confirmar Contraseña",
-    "confirmPasswordPlaceholder": "Repite tu contraseña",
-    "firstNameLabel": "Nombre/s",
-    "firstNamePlaceholder": "Ingresa tu nombre",
-    "lastNameLabel": "Apellido/s",
-    "lastNamePlaceholder": "Ingresa tu apellido",
-    "birthDateLabel": "Fecha de Nacimiento",
-    "birthDatePlaceholder": "Selecciona tu fecha de nacimiento",
-    "dniLabel": "DNI",
-    "dniPlaceholder": "Ingresa tu DNI",
-    "phoneLabel": "Teléfono",
-    "phonePlaceholder": "Ingresa tu número de teléfono",
-    "titleLabel": "Título Profesional",
-    "titlePlaceholder": "Selecciona tu título",
-    "titleBachelor": "Licenciado/a",
-    "titleTechnician": "Técnico/a",
-    "licenseNumberLabel": "Número de Matrícula",
-    "licenseNumberPlaceholder": "Ingresa tu número de matrícula",
-    "licenseTypeLabel": "Tipo de Licencia",
-    "licenseTypePlaceholder": "Selecciona el tipo de licencia",
-    "licenseTypeNational": "Nacional",
-    "licenseTypeProvincial": "Provincial",
-    "streetLabel": "Calle",
-    "streetPlaceholder": "Tu calle",
-    "cityLabel": "Ciudad",
-    "cityPlaceholder": "Tu ciudad",
-    "provinceLabel": "Provincia",
-    "provincePlaceholder": "Tu provincia",
-    "postalCodeLabel": "Código Postal",
-    "postalCodePlaceholder": "Tu código postal",
-    "submitButton": "Registrarse",
-    "submittingButton": "Registrando...",
-    "hasAccountPrompt": "¿Ya tienes una cuenta?",
-    "registerError": "No se pudo registrar el usuario.",
-    "loginLink": "Inicia sesión"
-  },
-  "RecoveryPassword": {
-    "title": "Recuperar Contraseña",
-    "emailLabel": "Correo Electrónico",
-    "emailPlaceholder": "tu@email.com",
-    "submitButton": "Enviar instrucciones",
-    "goBackToLogin": "Volver al login",
-    "passwordResetSuccess": "Correo enviado con instrucciones.",
-    "passwordResetError": "No se pudo enviar el correo de recuperación."
-  },
-  "ResetPassword": {
-    "title": "Restablecer contraseña",
-    "description": "Ingresá una nueva contraseña para tu cuenta.",
-    "passwordLabel": "Nueva contraseña",
-    "passwordPlaceholder": "Tu nueva contraseña",
-    "confirmPasswordLabel": "Confirmar contraseña",
-    "confirmPasswordPlaceholder": "Repetí la nueva contraseña",
-    "submitButton": "Guardar nueva contraseña",
-    "note": "Asegurate de recordar tu nueva contraseña.",
-    "passwordChangeSuccess": "Contraseña restablecida con éxito.",
-    "passwordChangeError": "No se pudo restablecer la contraseña."
-  },
-  "Validations": {
-    "Login": {
-      "emailRequired": "El correo es obligatorio.",
-      "emailInvalid": "El correo no es válido.",
-      "passwordRequired": "La contraseña es obligatoria.",
-      "passwordMin": "La contraseña debe tener al menos 8 caracteres."
+    "brandName": "Copexia",
+    "menu": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "about": "Sobre nosotros",
+      "learning": "Copexia Learning",
+      "contact": "Contacto"
     },
-    "ForgotPassword": {
-      "emailRequired": "El correo electrónico es obligatorio.",
-      "emailInvalid": "El correo electrónico no es válido."
-    },
-    "Register": {
-      "emailRequired": "El correo electrónico es obligatorio.",
-      "emailInvalid": "El correo electrónico no es válido.",
-      "passwordRequired": "La contraseña es obligatoria.",
-      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
-      "confirmPasswordRequired": "Debes confirmar la contraseña.",
-      "confirmPasswordMin": "La confirmación debe tener al menos 8 caracteres.",
-      "passwordMismatch": "Las contraseñas no coinciden.",
-      "firstNameRequired": "El nombre es obligatorio.",
-      "lastNameRequired": "El apellido es obligatorio.",
-      "birthDateRequired": "La fecha de nacimiento es obligatoria.",
-      "dniRequired": "El DNI es obligatorio.",
-      "dniMin": "El DNI debe tener al menos 7 caracteres.",
-      "phoneRequired": "El teléfono es obligatorio.",
-      "phoneMin": "El teléfono debe tener al menos 7 caracteres.",
-      "titleRequired": "El título profesional es obligatorio.",
-      "licenseNumberRequired": "El número de matrícula es obligatorio.",
-      "licenseTypeRequired": "El tipo de licencia es obligatorio.",
-      "streetRequired": "La calle es obligatoria.",
-      "cityRequired": "La ciudad es obligatoria.",
-      "provinceRequired": "La provincia es obligatoria.",
-      "postalCodeRequired": "El código postal es obligatorio."
-    },
-    "ResetPassword": {
-      "passwordRequired": "La contraseña es obligatoria.",
-      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
-      "confirmPasswordRequired": "Debes confirmar la contraseña.",
-      "confirmPasswordMin": "La confirmación debe tener al menos 8 caracteres.",
-      "passwordsDoNotMatch": "Las contraseñas no coinciden."
+    "submenu": {
+      "services": {
+        "transformation": "Transformación cultural y organizacional",
+        "adoption": "Adopción e implementación de soluciones digitales",
+        "optimization": "Optimización de procesos y mejora operativa",
+        "research": "Investigaciones internas"
+      },
+      "learning": {
+        "powerbi": "Power BI aplicado",
+        "adoption": "Adopción tecnológica",
+        "methods": "Metodologías de trabajo y gestión del cambio",
+        "dynamics": "Dinámicas para equipos y liderazgo"
+      }
     }
   },
-  "Sidebar": {
-    "panelTitle": "Admin",
-    "dashboardLink": "Dashboard",
-    "usersLink": "Usuarios",
-    "settingsLink": "Ajustes",
-    "logout": "Cerrar sesión"
+  "Footer": {
+    "brandName": "Copexia",
+    "rightsReserved": "Todos los derechos reservados",
+    "description": "Creamos soluciones a medida. Impulsamos la excelencia de tu organización."
   },
-  "AdminDashboard": {
-    "title": "Panel de Administración",
-    "description": "Bienvenido al panel. Aquí podés gestionar tu sistema."
+
+  "Hero": {
+    "title": "Transformamos tu organización con soluciones humanas y tecnológicas",
+    "subtitle": "Acompañamos a empresas y equipos en la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
+    "primaryCta": "Conocé nuestros servicios",
+    "secondaryCta": "Contactanos"
+  },
+
+  "About": {
+    "title": "Sobre nosotros",
+    "lead": "Desde 2021 integramos gestión, tecnología y enfoque humano para crear soluciones viables, concretas y sostenibles.",
+    "bulletsTitle": "Nos enfocamos en",
+    "bullets": [
+      "Cambio organizacional y desarrollo cultural",
+      "Adopción e implementación de soluciones digitales",
+      "Optimización de procesos y mejora operativa",
+      "Investigaciones internas y liderazgo",
+      "Capacitaciones prácticas para equipos"
+    ],
+    "cta": "Hablemos de tu desafío"
+  },
+
+  "Services": {
+    "title": "Nuestros servicios",
+    "items": [
+      {
+        "name": "Transformación cultural y organizacional",
+        "desc": "Procesos de cambio que alinean cultura, liderazgo y formas de trabajo."
+      },
+      {
+        "name": "Adopción tecnológica",
+        "desc": "Implementación realista de herramientas para generar uso con sentido y continuidad."
+      },
+      {
+        "name": "Optimización de procesos",
+        "desc": "Eficiencia, simplicidad y mejora continua aplicada a tu operación."
+      },
+      {
+        "name": "Investigaciones internas",
+        "desc": "Clima, madurez, liderazgo y recomendaciones accionables."
+      }
+    ]
+  },
+
+  "Learning": {
+    "title": "Copexia Learning",
+    "slogan": "Formación en acción. Aprendizaje con impacto.",
+    "areas": [
+      "Power BI aplicado (talleres, asesorías, módulos por habilidades)",
+      "Adopción tecnológica para primeros pasos en digitalización",
+      "Metodologías de trabajo: Kaizen, Scrum/Kanban y gestión del cambio",
+      "Dinámicas breves para equipos y liderazgo"
+    ],
+    "cta": "Ver opciones de capacitación"
+  },
+
+  "Values": {
+    "title": "Nuestros valores",
+    "list": [
+      "Personalización absoluta",
+      "Transparencia incondicional",
+      "Pasión",
+      "Empuje con propósito",
+      "Acompañamiento activo",
+      "Construcción compartida",
+      "Excelencia como condición"
+    ]
+  },
+
+  "Contact": {
+    "title": "Contacto",
+    "subtitle": "Contanos tu necesidad y diseñamos juntos el próximo paso.",
+    "name": "Nombre",
+    "email": "Email",
+    "message": "Mensaje",
+    "send": "Enviar",
+    "success": "¡Gracias! Te responderemos a la brevedad."
   }
 }

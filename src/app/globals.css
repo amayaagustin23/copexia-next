@@ -44,66 +44,31 @@
 
 :root {
   --radius: 0.625rem;
+  font-family: var(--font-lato), system-ui, -apple-system, Segoe UI, Roboto,
+    Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+  --background: #0f1c2e;
+  --foreground: #ffffff;
 
-  --background: oklch(0.975 0.01 250); /* fondo general azul pastel */
-  --foreground: oklch(0.28 0.02 20); /* texto principal */
+  --secondary: #ac7400;
+  --primary-foreground: #ffffff;
 
-  --primary: oklch(0.65 0.21 28); /* rojo botón */
-  --primary-foreground: oklch(1 0 0); /* texto blanco sobre rojo */
+  --primary: #b79653;
+  --secondary-foreground: #0f0f0f;
 
-  --secondary: oklch(0.94 0.01 250); /* gris claro */
-  --secondary-foreground: oklch(0.28 0.02 20);
+  --accent: #dfcd81;
+  --accent-foreground: #0f0f0f;
 
-  --muted: oklch(0.88 0.005 250); /* borde inputs */
-  --muted-foreground: oklch(0.45 0.02 20);
+  --muted: #1a1a1a;
+  --muted-foreground: #cccccc;
 
-  --accent: oklch(0.55 0.15 25); /* links tipo 'Registrarse' */
-  --accent-foreground: oklch(1 0 0);
+  --destructive: #8b1e1e;
 
-  --destructive: oklch(0.6 0.22 27);
+  --border: rgba(255, 255, 255, 0.18);
+  --input: #151515;
+  --ring: #dfcd81;
 
-  --border: oklch(0.88 0.005 250);
-  --input: oklch(0.95 0.01 250);
-  --ring: oklch(0.5 0.05 20);
-
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.28 0.02 20);
-
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
-
-  --sidebar: var(--background);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
-}
-
-.dark {
-  --background: oklch(0.18 0.01 250);
-  --foreground: oklch(1 0 0);
-
-  --primary: oklch(0.72 0.2 28);
-  --primary-foreground: oklch(1 0 0);
-
-  --secondary: oklch(0.25 0.01 250);
-  --secondary-foreground: oklch(0.98 0 0);
-
-  --muted: oklch(0.2 0.01 250);
-  --muted-foreground: oklch(0.65 0.01 250);
-
-  --accent: oklch(0.58 0.13 25);
-  --accent-foreground: oklch(1 0 0);
-
-  --destructive: oklch(0.65 0.22 28);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.45 0.05 20);
-
-  --card: var(--background);
+  --card: #151515;
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--card-foreground);
@@ -118,12 +83,64 @@
   --sidebar-ring: var(--ring);
 }
 
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+
+  --primary: #ac7400;
+  --primary-foreground: #ffffff;
+
+  --secondary: #b79653;
+  --secondary-foreground: #0a0a0a;
+
+  --accent: #dfcd81;
+  --accent-foreground: #0a0a0a;
+
+  --muted: #141414;
+  --muted-foreground: #d6d6d6;
+
+  --destructive: #8b1e1e;
+
+  --border: rgba(255, 255, 255, 0.16);
+  --input: #121212;
+  --ring: #dfcd81;
+
+  --card: #121212;
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--card-foreground);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+:root {
+  --gold-gradient: linear-gradient(
+    135deg,
+    #dfcd81 0%,
+    #b79653 45%,
+    #ac7400 100%
+  );
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-
   body {
     @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+
+  [id] {
+    scroll-margin-top: 88px;
   }
 }

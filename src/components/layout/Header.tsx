@@ -1,151 +1,145 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import { getNavLinks } from "@/lib/constants/navLinks";
 import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
-import { logoutUser } from "@/services/authService";
-import { LogOut, Menu, User, X } from "lucide-react";
+import { getMenu } from "@/lib/menu/getMenu";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export const Header = () => {
   const t = useTranslations("Header");
-  const paths = useLocalizedPaths();
-  const navLinks = getNavLinks(t, paths);
-  const router = useRouter();
-  const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const rutas = useLocalizedPaths();
+  const menuItems = getMenu(t, rutas);
+  const [openMobile, setOpenMobile] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const handleLogout = async () => {
-    await logoutUser();
-    router.replace(paths.auth.login);
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown((prev) => (prev === name ? null : name));
   };
 
   return (
-    <header className="bg-background border-b border-border shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href={paths.root} className="flex items-center gap-2">
-          <div className="relative w-12 h-12">
-            <Image
-              src="/images/logo.png"
-              alt="Logo"
-              fill
-              className="object-contain"
-              sizes="48px"
-            />
-          </div>
-          <span className="font-bold text-lg">{t("brandName")}</span>
-        </Link>
-
-        <nav className="hidden md:flex gap-6 items-center">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm hover:underline"
-            >
-              {link.name}
-            </a>
-          ))}
-
-          {user && (
-            <div className="relative ml-4">
-              <button
-                onClick={() => setDropdownOpen((prev) => !prev)}
-                className="flex items-center gap-2 text-sm font-medium hover:underline"
-              >
-                <User className="w-4 h-4" />
-                {user.firstName}
-              </button>
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-white border border-border rounded shadow-md w-44 z-50">
-                  <Link
-                    href={paths.account}
-                    className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <User className="w-4 h-4" />
-                    {t("myAccount")}
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-muted"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    {t("logout")}
-                  </button>
-                </div>
-              )}
+    <header className="sticky top-0 z-50">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="mt-3 flex items-center justify-between rounded-2xl border border-border/60 bg-background/70 px-4 py-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/50">
+          <Link href={rutas.raiz} className="flex items-center gap-3">
+            <div className="relative h-20 w-20 shrink-0">
+              <Image
+                src="/images/logo-copexia.png"
+                alt="Copexia"
+                fill
+                className="object-contain"
+                sizes="48px"
+                priority
+              />
             </div>
-          )}
-        </nav>
+            <span className="text-lg font-semibold tracking-tight bg-[var(--gold-gradient)] bg-clip-text text-transparent">
+              {t("brandName") || "Copexia"}
+            </span>
+          </Link>
 
-        <button
-          className="md:hidden"
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
-          {isOpen ? <X /> : <Menu />}
-        </button>
+          <nav className="hidden items-center gap-6 md:flex">
+            {menuItems.map((item) =>
+              item.submenu ? (
+                <div key={item.href} className="relative group">
+                  <button
+                    onClick={() => toggleDropdown(item.name)}
+                    className="flex items-center gap-1 text-sm text-foreground/90 hover:text-foreground transition"
+                  >
+                    {item.name}
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  <div className="absolute left-0 top-full hidden min-w-[200px] rounded-md border border-border bg-background shadow-lg group-hover:block">
+                    {item.submenu.map((sub) => (
+                      <a
+                        key={sub.href}
+                        href={sub.href}
+                        className="block px-4 py-2 text-sm hover:bg-secondary/70"
+                      >
+                        {sub.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="relative text-sm text-foreground/90 transition hover:text-foreground"
+                >
+                  <span className="after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
+                    {item.name}
+                  </span>
+                </a>
+              )
+            )}
+          </nav>
+
+          <button
+            className="md:hidden rounded-lg p-2 hover:bg-secondary/60"
+            onClick={() => setOpenMobile((v) => !v)}
+            aria-label="Abrir menú"
+            aria-expanded={openMobile}
+          >
+            {openMobile ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </div>
 
-      {isOpen && (
-        <nav className="md:hidden px-4 pb-4 flex flex-col gap-3">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm hover:underline"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </a>
-          ))}
-
-          {user && (
-            <>
-              <hr className="my-2 border-border" />
-              <button
-                onClick={() => setDropdownOpen((prev) => !prev)}
-                className="flex items-center gap-2 text-sm font-medium hover:underline"
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden fixed inset-y-0 right-0 z-50 w-72 transform border-l border-border bg-background/95 px-5 pb-8 pt-20 shadow-xl backdrop-blur transition-transform duration-200 ${
+          openMobile ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <nav className="flex flex-col gap-3">
+          {menuItems.map((item) =>
+            item.submenu ? (
+              <div key={item.href}>
+                <button
+                  className="w-full text-left rounded-lg px-3 py-2 text-base font-medium hover:bg-secondary/70 flex justify-between items-center"
+                  onClick={() => toggleDropdown(item.name)}
+                >
+                  {item.name}
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      openDropdown === item.name ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {openDropdown === item.name && (
+                  <div className="ml-4 flex flex-col gap-1">
+                    {item.submenu.map((sub) => (
+                      <a
+                        key={sub.href}
+                        href={sub.href}
+                        className="rounded-lg px-3 py-2 text-sm hover:bg-secondary/70"
+                        onClick={() => setOpenMobile(false)}
+                      >
+                        {sub.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a
+                key={item.href}
+                href={item.href}
+                className="rounded-lg px-3 py-2 text-base hover:bg-secondary/70"
+                onClick={() => setOpenMobile(false)}
               >
-                <User className="w-4 h-4" />
-                {user.firstName}
-              </button>
-
-              {dropdownOpen && (
-                <div className="pl-4 flex flex-col gap-2 mt-2">
-                  <Link
-                    href={paths.account}
-                    className="flex items-center gap-2 text-sm hover:underline"
-                    onClick={() => {
-                      setDropdownOpen(false);
-                      setIsOpen(false);
-                    }}
-                  >
-                    <User className="w-4 h-4" />
-                    {t("myAccount")}
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setDropdownOpen(false);
-                      setIsOpen(false);
-                    }}
-                    className="flex items-center gap-2 text-sm text-left hover:underline"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    {t("logout")}
-                  </button>
-                </div>
-              )}
-            </>
+                {item.name}
+              </a>
+            )
           )}
         </nav>
-      )}
+      </div>
     </header>
   );
 };
