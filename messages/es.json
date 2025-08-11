@@ -1,0 +1,147 @@
+{
+  "Header": {
+    "brandName": "Aliviarte",
+    "homeLink": "Inicio",
+    "aboutLink": "Nosotros",
+    "contactLink": "Contacto",
+    "myAccount": "Mi cuenta",
+    "logout": "Cerrar sesión"
+  },
+  "Footer": {
+    "brandName": "Aliviarte",
+    "rightsReserved": "Derechos reservados",
+    "description": "Bienvenido al panel. Aquí podés gestionar tu sistema."
+  },
+  "Login": {
+    "title": "Iniciar sesión",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "correo@ejemplo.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "submitButton": "Iniciar sesión",
+    "noAccountPrompt": "¿No tienes una cuenta?",
+    "registerLink": "Registrarse",
+    "toastSuccess": "Sesión iniciada",
+    "loginError": "No se pudo iniciar sesión.",
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?"
+  },
+  "Register": {
+    "title": "Registro de Profesional",
+    "personalDataTitle": "Datos Personales",
+    "professionalDataTitle": "Datos Profesionales",
+    "addressDataTitle": "Dirección",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "confirmPasswordLabel": "Confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Repite tu contraseña",
+    "firstNameLabel": "Nombre/s",
+    "firstNamePlaceholder": "Ingresa tu nombre",
+    "lastNameLabel": "Apellido/s",
+    "lastNamePlaceholder": "Ingresa tu apellido",
+    "birthDateLabel": "Fecha de Nacimiento",
+    "birthDatePlaceholder": "Selecciona tu fecha de nacimiento",
+    "dniLabel": "DNI",
+    "dniPlaceholder": "Ingresa tu DNI",
+    "phoneLabel": "Teléfono",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "titleLabel": "Título Profesional",
+    "titlePlaceholder": "Selecciona tu título",
+    "titleBachelor": "Licenciado/a",
+    "titleTechnician": "Técnico/a",
+    "licenseNumberLabel": "Número de Matrícula",
+    "licenseNumberPlaceholder": "Ingresa tu número de matrícula",
+    "licenseTypeLabel": "Tipo de Licencia",
+    "licenseTypePlaceholder": "Selecciona el tipo de licencia",
+    "licenseTypeNational": "Nacional",
+    "licenseTypeProvincial": "Provincial",
+    "streetLabel": "Calle",
+    "streetPlaceholder": "Tu calle",
+    "cityLabel": "Ciudad",
+    "cityPlaceholder": "Tu ciudad",
+    "provinceLabel": "Provincia",
+    "provincePlaceholder": "Tu provincia",
+    "postalCodeLabel": "Código Postal",
+    "postalCodePlaceholder": "Tu código postal",
+    "submitButton": "Registrarse",
+    "submittingButton": "Registrando...",
+    "hasAccountPrompt": "¿Ya tienes una cuenta?",
+    "registerError": "No se pudo registrar el usuario.",
+    "loginLink": "Inicia sesión"
+  },
+  "RecoveryPassword": {
+    "title": "Recuperar Contraseña",
+    "emailLabel": "Correo Electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "submitButton": "Enviar instrucciones",
+    "goBackToLogin": "Volver al login",
+    "passwordResetSuccess": "Correo enviado con instrucciones.",
+    "passwordResetError": "No se pudo enviar el correo de recuperación."
+  },
+  "ResetPassword": {
+    "title": "Restablecer contraseña",
+    "description": "Ingresá una nueva contraseña para tu cuenta.",
+    "passwordLabel": "Nueva contraseña",
+    "passwordPlaceholder": "Tu nueva contraseña",
+    "confirmPasswordLabel": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Repetí la nueva contraseña",
+    "submitButton": "Guardar nueva contraseña",
+    "note": "Asegurate de recordar tu nueva contraseña.",
+    "passwordChangeSuccess": "Contraseña restablecida con éxito.",
+    "passwordChangeError": "No se pudo restablecer la contraseña."
+  },
+  "Validations": {
+    "Login": {
+      "emailRequired": "El correo es obligatorio.",
+      "emailInvalid": "El correo no es válido.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres."
+    },
+    "ForgotPassword": {
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "emailInvalid": "El correo electrónico no es válido."
+    },
+    "Register": {
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "emailInvalid": "El correo electrónico no es válido.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
+      "confirmPasswordRequired": "Debes confirmar la contraseña.",
+      "confirmPasswordMin": "La confirmación debe tener al menos 8 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "firstNameRequired": "El nombre es obligatorio.",
+      "lastNameRequired": "El apellido es obligatorio.",
+      "birthDateRequired": "La fecha de nacimiento es obligatoria.",
+      "dniRequired": "El DNI es obligatorio.",
+      "dniMin": "El DNI debe tener al menos 7 caracteres.",
+      "phoneRequired": "El teléfono es obligatorio.",
+      "phoneMin": "El teléfono debe tener al menos 7 caracteres.",
+      "titleRequired": "El título profesional es obligatorio.",
+      "licenseNumberRequired": "El número de matrícula es obligatorio.",
+      "licenseTypeRequired": "El tipo de licencia es obligatorio.",
+      "streetRequired": "La calle es obligatoria.",
+      "cityRequired": "La ciudad es obligatoria.",
+      "provinceRequired": "La provincia es obligatoria.",
+      "postalCodeRequired": "El código postal es obligatorio."
+    },
+    "ResetPassword": {
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
+      "confirmPasswordRequired": "Debes confirmar la contraseña.",
+      "confirmPasswordMin": "La confirmación debe tener al menos 8 caracteres.",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden."
+    }
+  },
+  "Sidebar": {
+    "panelTitle": "Admin",
+    "dashboardLink": "Dashboard",
+    "usersLink": "Usuarios",
+    "settingsLink": "Ajustes",
+    "logout": "Cerrar sesión"
+  },
+  "AdminDashboard": {
+    "title": "Panel de Administración",
+    "description": "Bienvenido al panel. Aquí podés gestionar tu sistema."
+  }
+}
