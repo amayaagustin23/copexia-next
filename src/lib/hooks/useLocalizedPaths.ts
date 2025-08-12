@@ -33,15 +33,12 @@ export const useLocalizedPaths = () => {
     secciones: {
       inicio: link("inicio"),
       servicios: link("servicios"),
-      sobreNosotros: link("sobre-nosotros"), // <- esta es la que vas a usar
+      sobreNosotros: link("sobre-nosotros"),
       learning: link("learning"),
       valores: link("valores"),
       contacto: link("contacto"),
     },
-    sub: {
-      servicios: serviciosIds,
-      learning: learningIds,
-    },
+    sub: { servicios: serviciosIds, learning: learningIds },
     link,
   };
 };

@@ -21,6 +21,18 @@
         "methods": "Metodologías de trabajo y gestión del cambio",
         "dynamics": "Dinámicas para equipos y liderazgo"
       }
+    },
+    "brandAlt": "Copexia",
+    "aria": {
+      "siteHeader": "Encabezado del sitio",
+      "primaryNav": "Navegación principal",
+      "mobileMenu": "Menú móvil",
+      "goHome": "Ir al inicio",
+      "openMenu": "Abrir menú",
+      "closeMenu": "Cerrar menú",
+      "openSubmenu": "Abrir submenú de {item}",
+      "closeSubmenu": "Cerrar submenú de {item}",
+      "submenuOf": "Submenú de {item}"
     }
   },
   "Footer": {
