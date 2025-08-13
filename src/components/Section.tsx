@@ -17,7 +17,7 @@ export default function Section({
     <motion.section
       id={id}
       aria-label={ariaLabel ?? title}
-      className="w-full max-w-6xl mx-auto px-6 py-16 md:py-20"
+      className="w-full mx-auto px-6 py-16 md:py-20"
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }}

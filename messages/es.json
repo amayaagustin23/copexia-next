@@ -63,25 +63,25 @@
   },
 
   "Services": {
-    "title": "Nuestros servicios",
-    "items": [
-      {
-        "name": "Transformación cultural y organizacional",
-        "desc": "Procesos de cambio que alinean cultura, liderazgo y formas de trabajo."
+    "cta": "Saber más →",
+    "items": {
+      "transformacion": {
+        "title": "Transformación cultural y organizacional",
+        "desc": "Procesos de cambio que alinean cultura, liderazgo y formas de trabajo con la visión y los desafíos del negocio."
       },
-      {
-        "name": "Adopción tecnológica",
-        "desc": "Implementación realista de herramientas para generar uso con sentido y continuidad."
+      "adopcion": {
+        "title": "Adopción e implementación de soluciones digitales",
+        "desc": "Incorporación realista de herramientas para asegurar uso con sentido, continuidad y valor en equipos y liderazgo."
       },
-      {
-        "name": "Optimización de procesos",
-        "desc": "Eficiencia, simplicidad y mejora continua aplicada a tu operación."
+      "optimizacion": {
+        "title": "Optimización de procesos y mejora operativa",
+        "desc": "Detección y ajuste de oportunidades para ganar eficiencia y simplicidad, impulsando mejora continua."
       },
-      {
-        "name": "Investigaciones internas",
-        "desc": "Clima, madurez, liderazgo y recomendaciones accionables."
+      "investigaciones": {
+        "title": "Investigaciones internas",
+        "desc": "Diagnósticos de clima, madurez y liderazgo con recomendaciones accionables para evolucionar desde adentro."
       }
-    ]
+    }
   },
 
   "Learning": {

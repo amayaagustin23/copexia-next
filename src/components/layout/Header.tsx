@@ -15,7 +15,7 @@ export const Header = () => {
 
   const [openMobile, setOpenMobile] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [scrollOpacity, setScrollOpacity] = useState(0.4);
+  const [scrollOpacity, setScrollOpacity] = useState(0);
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown((prev) => (prev === name ? null : name));
@@ -24,7 +24,7 @@ export const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const max = 220;
-      const o = Math.min(0.4 + window.scrollY / max, 0.9);
+      const o = Math.min(window.scrollY / max, 0.9);
       setScrollOpacity(o);
     };
     handleScroll();
