@@ -117,5 +117,20 @@
     "message": "Mensaje",
     "send": "Enviar",
     "success": "¡Gracias! Te responderemos a la brevedad."
+  },
+  "whatsapp": {
+    "chooseMessage": "Elegí un mensaje",
+    "other": "Otro…",
+    "placeholder": "Escribí tu mensaje...",
+    "cancel": "Cancelar",
+    "send": "Enviar",
+    "ariaOpen": "Abrir WhatsApp",
+    "presets": {
+      "info": "Hola, me gustaría recibir más información sobre los servicios de Copexia.",
+      "meeting": "Quiero coordinar una reunión con su equipo de consultoría.",
+      "proposal": "¿Podrían enviarme una propuesta y los plazos estimados?",
+      "training": "Estoy interesado en una capacitación para mi organización.",
+      "adoptionConsult": "Tengo una consulta sobre la adopción tecnológica que ofrecen."
+    }
   }
 }

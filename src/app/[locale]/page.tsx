@@ -1,6 +1,7 @@
 // src/app/[locale]/page.tsx
 "use client";
 
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import ValuesCompact from "@/components/home/about/ValuesCompact";
 import HeroIntro from "@/components/home/hero/HeroIntro";
 import LearningOverview from "@/components/home/learning/LearningOverview";
@@ -45,6 +46,8 @@ export default function HomePage() {
       >
         <LearningOverview />
       </Section>
+
+      <FloatingWhatsApp />
     </main>
   );
 }

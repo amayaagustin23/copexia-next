@@ -44,19 +44,19 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #ffffff; /* cuerpo blanco */
-  --foreground: #0f1c2e; /* navy oscuro para texto */
+  --background: #ffffff;
+  --foreground: #0f1c2e;
 
-  --primary: #b79653; /* dorado medio */
+  --primary: #b79653;
   --primary-foreground: #0f0f0f;
 
-  --secondary: #0f1c2e; /* navy */
+  --secondary: #0f1c2e;
   --secondary-foreground: #ffffff;
 
-  --accent: #dfcd81; /* dorado claro */
+  --accent: #dfcd81;
   --accent-foreground: #0f0f0f;
 
-  --muted: #f5f7fb; /* gris azulado suave */
+  --muted: #f5f7fb;
   --muted-foreground: #4a5568;
 
   --destructive: #8b1e1e;
@@ -65,12 +65,12 @@
   --input: #f2f4f8;
   --ring: #b79653;
 
-  --card: #ffffff; /* tarjetas claras */
+  --card: #ffffff;
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--card-foreground);
 
-  --sidebar: #0f1c2e; /* nav/sidebar oscuro opcional */
+  --sidebar: #0f1c2e;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #dfcd81;
   --sidebar-primary-foreground: #0f0f0f;
@@ -87,28 +87,27 @@
   );
 }
 
-/***** Modo oscuro *****/
 .dark {
-  --background: #0a0f1a; /* navy más profundo */
+  --background: #0a0f1a;
   --foreground: #ffffff;
 
-  --primary: #dfcd81; /* dorado claro destaca en dark */
+  --primary: #dfcd81;
   --primary-foreground: #0a0a0a;
 
-  --secondary: #b79653; /* dorado medio */
+  --secondary: #b79653;
   --secondary-foreground: #0a0a0a;
 
-  --accent: #ac7400; /* dorado oscuro/cobre */
+  --accent: #ac7400;
   --accent-foreground: #0a0a0a;
 
-  --muted: #0f1c2e; /* paneles */
+  --muted: #0f1c2e;
   --muted-foreground: #d6d9e0;
 
   --border: rgba(255, 255, 255, 0.14);
   --input: #0e1624;
   --ring: #dfcd81;
 
-  --card: #111827; /* panel oscuro elegante */
+  --card: #111827;
   --card-foreground: var(--foreground);
 }
 
