@@ -44,80 +44,72 @@
 
 :root {
   --radius: 0.625rem;
-  font-family: var(--font-lato), system-ui, -apple-system, Segoe UI, Roboto,
-    Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
-  --background: #0f1c2e;
-  --foreground: #ffffff;
+  --background: #ffffff; /* cuerpo blanco */
+  --foreground: #0f1c2e; /* navy oscuro para texto */
 
-  --secondary: #ac7400;
-  --primary-foreground: #ffffff;
+  --primary: #b79653; /* dorado medio */
+  --primary-foreground: #0f0f0f;
 
-  --primary: #b79653;
-  --secondary-foreground: #0f0f0f;
+  --secondary: #0f1c2e; /* navy */
+  --secondary-foreground: #ffffff;
 
-  --accent: #dfcd81;
+  --accent: #dfcd81; /* dorado claro */
   --accent-foreground: #0f0f0f;
 
-  --muted: #1a1a1a;
-  --muted-foreground: #cccccc;
+  --muted: #f5f7fb; /* gris azulado suave */
+  --muted-foreground: #4a5568;
 
   --destructive: #8b1e1e;
 
-  --border: rgba(255, 255, 255, 0.18);
-  --input: #151515;
-  --ring: #dfcd81;
+  --border: rgba(15, 28, 46, 0.12);
+  --input: #f2f4f8;
+  --ring: #b79653;
 
-  --card: #151515;
+  --card: #ffffff; /* tarjetas claras */
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--card-foreground);
 
-  --sidebar: var(--background);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
+  --sidebar: #0f1c2e; /* nav/sidebar oscuro opcional */
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #dfcd81;
+  --sidebar-primary-foreground: #0f0f0f;
+  --sidebar-accent: #b79653;
+  --sidebar-accent-foreground: #0f0f0f;
+  --sidebar-border: rgba(255, 255, 255, 0.16);
+  --sidebar-ring: #dfcd81;
+
+  --gold-gradient: linear-gradient(
+    135deg,
+    #dfcd81 0%,
+    #b79653 50%,
+    #ac7400 100%
+  );
 }
 
+/***** Modo oscuro *****/
 .dark {
-  --background: #0a0a0a;
+  --background: #0a0f1a; /* navy más profundo */
   --foreground: #ffffff;
 
-  --primary: #ac7400;
-  --primary-foreground: #ffffff;
+  --primary: #dfcd81; /* dorado claro destaca en dark */
+  --primary-foreground: #0a0a0a;
 
-  --secondary: #b79653;
+  --secondary: #b79653; /* dorado medio */
   --secondary-foreground: #0a0a0a;
 
-  --accent: #dfcd81;
+  --accent: #ac7400; /* dorado oscuro/cobre */
   --accent-foreground: #0a0a0a;
 
-  --muted: #141414;
-  --muted-foreground: #d6d6d6;
+  --muted: #0f1c2e; /* paneles */
+  --muted-foreground: #d6d9e0;
 
-  --destructive: #8b1e1e;
-
-  --border: rgba(255, 255, 255, 0.16);
-  --input: #121212;
+  --border: rgba(255, 255, 255, 0.14);
+  --input: #0e1624;
   --ring: #dfcd81;
 
-  --card: #121212;
+  --card: #111827; /* panel oscuro elegante */
   --card-foreground: var(--foreground);
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
-
-  --sidebar: var(--background);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
 }
 
 :root {
@@ -131,16 +123,27 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--background);
+    color: var(--foreground);
   }
   html {
     scroll-behavior: smooth;
   }
-
   [id] {
     scroll-margin-top: 88px;
+  }
+  .gold-text {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .will-animate {
+    opacity: 0;
+    transform: translateY(22px);
+    will-change: opacity, transform;
   }
 }

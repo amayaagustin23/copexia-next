@@ -1,41 +1,49 @@
+// src/app/[locale]/page.tsx
 "use client";
 
-import AboutCards from "@/components/home/AboutCards";
-import ContactForm from "@/components/home/ContactForm";
-import HomeHero from "@/components/home/HomeHero";
-import LearningGrid from "@/components/home/LearningGrid";
-import ServicesGrid from "@/components/home/ServicesGrid";
-import ValuesList from "@/components/home/ValuesList";
+import ValuesCompact from "@/components/home/about/ValuesCompact";
+import HeroIntro from "@/components/home/hero/HeroIntro";
+import LearningOverview from "@/components/home/learning/LearningOverview";
+import ServicesOverview from "@/components/home/services/ServicesOverview";
 import Section from "@/components/Section";
-import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
 
 export default function HomePage() {
-  const rutas = useLocalizedPaths();
-
   return (
     <main className="min-h-screen flex flex-col items-center">
-      <Section id="inicio" title="Lo que hacemos">
-        <HomeHero contactoHref={rutas.secciones.contacto} />
+      <Section
+        id="inicio"
+        title=""
+        itemSelector="[data-animate]"
+        staggerChildren
+      >
+        <HeroIntro />
       </Section>
 
-      <Section id="servicios" title="Nuestros servicios">
-        <ServicesGrid rutas={rutas} />
+      <Section
+        id="valores"
+        title="Valores de Copexia"
+        itemSelector="[data-animate]"
+        staggerChildren
+      >
+        <ValuesCompact />
       </Section>
 
-      <Section id="sobre-nosotros" title="Sobre nosotros">
-        <AboutCards />
+      <Section
+        id="servicios"
+        title="Nuestros servicios"
+        itemSelector="[data-animate]"
+        staggerChildren
+      >
+        <ServicesOverview />
       </Section>
 
-      <Section id="learning" title="Learning">
-        <LearningGrid rutas={rutas} />
-      </Section>
-
-      <Section id="valores" title="Valores">
-        <ValuesList />
-      </Section>
-
-      <Section id="contacto" title="Contacto">
-        <ContactForm />
+      <Section
+        id="learning"
+        title="Copexia Learning"
+        itemSelector="[data-animate]"
+        staggerChildren
+      >
+        <LearningOverview />
       </Section>
     </main>
   );

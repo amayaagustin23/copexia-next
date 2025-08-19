@@ -21,9 +21,12 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: "Copexia | Creamos soluciones a medida",
   description:
-    "En Copexia acompañamos a organizaciones que quieren evolucionar combinando herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
+    "En Copexia, desde San Miguel de Tucumán - Argentina, acompañamos a organizaciones que quieren evolucionar combinando herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
   keywords: [
     "Copexia",
+    "Tucumán",
+    "San Miguel de Tucumán",
+    "Argentina",
     "transformación cultural",
     "soluciones digitales",
     "optimización de procesos",
@@ -40,14 +43,14 @@ export const metadata: Metadata = {
     url: "https://copexia.com",
     title: "Copexia | Soluciones humanas y tecnológicas para tu organización",
     description:
-      "Impulsamos la excelencia de tu organización mediante consultoría estratégica, adopción tecnológica, optimización de procesos y formación con impacto.",
+      "Impulsamos la excelencia de tu organización desde San Miguel de Tucumán, Argentina, mediante consultoría estratégica, adopción tecnológica, optimización de procesos y formación con impacto.",
     siteName: "Copexia",
     images: [
       {
         url: "https://copexia.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Copexia - Transformamos tu organización",
+        alt: "Copexia - Transformamos tu organización en Tucumán, Argentina",
       },
     ],
   },
@@ -55,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Copexia | Soluciones humanas y tecnológicas",
     description:
-      "Acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
+      "Desde San Miguel de Tucumán, Argentina, acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
     images: ["https://copexia.com/og-image.jpg"],
   },
   metadataBase: new URL("https://copexia.com"),

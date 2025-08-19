@@ -2,11 +2,33 @@
 
 import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
 import { getMenu } from "@/lib/menu/getMenu";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { animate, createSpring, stagger } from "animejs";
+
+function primeStyles(
+  targets: Element | NodeListOf<Element> | Element[] | null | undefined,
+  styles: Partial<CSSStyleDeclaration>
+) {
+  if (!targets) return;
+  const list =
+    targets instanceof NodeList
+      ? Array.from(targets)
+      : Array.isArray(targets)
+      ? targets
+      : [targets];
+
+  for (const el of list) {
+    const node = el as HTMLElement;
+    for (const [k, v] of Object.entries(styles)) {
+      node.style[k] = String(v);
+    }
+  }
+}
 
 export const Header = () => {
   const t = useTranslations("Header");
@@ -15,22 +37,37 @@ export const Header = () => {
 
   const [openMobile, setOpenMobile] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [scrollOpacity, setScrollOpacity] = useState(0);
 
-  const toggleDropdown = (name: string) => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
+  const headerRef = useRef<HTMLElement | null>(null);
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const mobileSheetRef = useRef<HTMLDivElement | null>(null);
+
+  const underlineSpring = useMemo(
+    () => createSpring({ stiffness: 340, damping: 24 }),
+    []
+  );
+  const liftSpring = useMemo(
+    () => createSpring({ stiffness: 260, damping: 22 }),
+    []
+  );
+
+  const onHoverIn = (el: HTMLElement | null) => {
+    if (!el) return;
+    const u = el.querySelector<HTMLElement>(".underline-el");
+    if (u) animate(u, { scaleX: 1, duration: 280, easing: underlineSpring });
+    animate(el, { translateY: -2, duration: 220, easing: liftSpring });
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const max = 220;
-      const o = Math.min(window.scrollY / max, 0.9);
-      setScrollOpacity(o);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const onHoverOut = (el: HTMLElement | null) => {
+    if (!el) return;
+    const u = el.querySelector<HTMLElement>(".underline-el");
+    if (u) animate(u, { scaleX: 0, duration: 220, easing: underlineSpring });
+    animate(el, { translateY: 0, duration: 180, easing: liftSpring });
+  };
+
+  const toggleDropdown = (name: string) =>
+    setOpenDropdown((prev) => (prev === name ? null : name));
 
   useEffect(() => {
     document.body.style.overflow = openMobile ? "hidden" : "";
@@ -53,17 +90,93 @@ export const Header = () => {
       ? t("aria.closeSubmenu", { item: name })
       : t("aria.openSubmenu", { item: name });
 
+  useEffect(() => {
+    if (!headerRef.current) return;
+
+    primeStyles(headerRef.current, {
+      opacity: "0",
+      transform: "translateY(-12px)",
+    });
+    animate(headerRef.current, {
+      opacity: [0, 1],
+      translateY: [-12, 0],
+      duration: 520,
+      easing: "easeOutQuad",
+    });
+
+    const links = navRef.current?.querySelectorAll("[data-navlink]");
+    if (links && links.length) {
+      primeStyles(links, { opacity: "0", transform: "translateY(8px)" });
+      animate(links, {
+        opacity: [0, 1],
+        translateY: [8, 0],
+        delay: stagger(70, { start: 180 }),
+        duration: 360,
+        easing: "easeOutQuad",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const panel = dropdownRef.current?.querySelector<HTMLElement>(
+      "[data-dropdown-panel]"
+    );
+    if (!panel) return;
+
+    if (openDropdown) {
+      primeStyles(panel, {
+        opacity: "0",
+        transform: "translateY(6px) scale(0.98)",
+      });
+      animate(panel, {
+        opacity: [0, 1],
+        translateY: [6, 0],
+        scale: [0.98, 1],
+        duration: 220,
+        easing: "easeOutQuad",
+      });
+    } else {
+      animate(panel, {
+        opacity: [1, 0],
+        translateY: [0, 6],
+        scale: [1, 0.98],
+        duration: 180,
+        easing: "easeInQuad",
+      });
+    }
+  }, [openDropdown]);
+
+  // ▶️ Mobile sheet
+  useEffect(() => {
+    const node = mobileSheetRef.current;
+    if (!node) return;
+
+    if (openMobile) {
+      primeStyles(node, { transform: "translateY(-100%)" });
+      animate(node, {
+        translateY: "0%",
+        duration: 260,
+        easing: "easeOutQuad",
+      });
+    } else {
+      animate(node, {
+        translateY: "-100%",
+        duration: 220,
+        easing: "easeInQuad",
+      });
+    }
+  }, [openMobile]);
+
   return (
     <header
+      ref={headerRef}
       className={`sticky top-0 z-50 transition-colors duration-300 ${
         openMobile ? "" : "backdrop-blur-md"
-      }`}
-      style={{ backgroundColor: `rgba(0,0,0,${scrollOpacity})` }}
+      } bg-secondary`}
       aria-label={t("aria.siteHeader")}
     >
       <div className="mx-auto max-w-7xl px-4">
-        {/* MOBILE TOP BAR */}
-        <div className="flex items-center justify-between py-3 md:hidden">
+        <div className="flex justify-between py-3 md:hidden">
           <Link
             href={rutas.raiz}
             className="flex items-center gap-2"
@@ -80,7 +193,7 @@ export const Header = () => {
             />
           </Link>
           <button
-            className="rounded-lg p-2 hover:bg-secondary/60"
+            className="rounded-lg p-2 hover:bg-[--secondary]/60 text-secondary-foreground drop-shadow-sm"
             onClick={() => {
               setOpenDropdown(null);
               setOpenMobile(true);
@@ -94,7 +207,7 @@ export const Header = () => {
         </div>
 
         {/* DESKTOP */}
-        <div className="hidden md:flex md:flex-col md:items-center md:gap-3 md:py-4">
+        <div className="hidden md:flex  md:justify-between md:gap-3 md:py-4">
           <Link
             href={rutas.raiz}
             className="inline-flex items-center justify-center"
@@ -112,33 +225,45 @@ export const Header = () => {
           </Link>
 
           <nav
+            ref={navRef}
             className="relative flex items-center justify-center gap-6"
             aria-label={t("aria.primaryNav")}
           >
             {menuItems.map((item) =>
               item.submenu ? (
-                <div key={item.href} className="relative">
+                <div key={item.href} className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => toggleDropdown(item.name)}
-                    className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-white/90 transition hover:text-white"
+                    className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-secondary-foreground drop-shadow-sm transition hover:text-[--accent]"
                     aria-expanded={openDropdown === item.name}
                     aria-label={ariaForSubmenu(item.name)}
+                    data-navlink
+                    onMouseEnter={(e) => onHoverIn(e.currentTarget)}
+                    onMouseLeave={(e) => onHoverOut(e.currentTarget)}
                   >
-                    {item.name}
+                    <span className="relative inline-flex items-center">
+                      {item.name}
+                      <span
+                        className="underline-el absolute -bottom-0.5 left-0 h-[2px] w-full origin-left scale-x-0"
+                        style={{ background: "var(--accent)" }}
+                        aria-hidden
+                      />
+                    </span>
                     <ChevronDown className="h-4 w-4" />
                   </button>
 
                   {openDropdown === item.name && (
                     <div
-                      className="absolute left-1/2 top-full mt-2 min-w-[220px] -translate-x-1/2 rounded-md border border-border bg-[#0b1220] shadow-lg"
+                      className="absolute left-1/2 top-full mt-2 min-w-[220px] -translate-x-1/2 rounded-md border border-border bg-secondary shadow-lg"
                       role="menu"
                       aria-label={t("aria.submenuOf", { item: item.name })}
+                      data-dropdown-panel
                     >
                       {item.submenu.map((sub) => (
                         <Link
                           key={sub.href}
                           href={sub.href}
-                          className="block px-4 py-2 text-sm text-foreground/90 hover:bg-secondary/70"
+                          className="block px-4 py-2 text-sm text-secondary-foreground drop-shadow-sm hover:bg-white/10"
                           role="menuitem"
                         >
                           {sub.name}
@@ -151,126 +276,19 @@ export const Header = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative rounded-md px-2 py-1 text-sm text-white/90 transition hover:text-white"
+                  className="relative rounded-md px-2 py-1 text-sm text-secondary-foreground drop-shadow-sm transition"
+                  data-navlink
+                  onMouseEnter={(e) => onHoverIn(e.currentTarget)}
+                  onMouseLeave={(e) => onHoverOut(e.currentTarget)}
                 >
-                  <span className="after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
+                  <span className="relative inline-block">
                     {item.name}
+                    <span
+                      className="underline-el absolute -bottom-0.5 left-0 h-[2px] w-full origin-left scale-x-0"
+                      style={{ background: "var(--accent)" }}
+                      aria-hidden
+                    />
                   </span>
-                </Link>
-              )
-            )}
-          </nav>
-        </div>
-      </div>
-
-      {/* MOBILE SHEET */}
-      <div
-        id="mobile-sheet"
-        className={`md:hidden fixed inset-0 z-[60] transition-transform duration-300
-          ${
-            openMobile
-              ? "translate-y-0 pointer-events-auto"
-              : "-translate-y-full pointer-events-none"
-          }`}
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!openMobile}
-        aria-label={t("aria.mobileMenu")}
-      >
-        {/* Fondo sólido */}
-        <div className="absolute inset-0 bg-[#0b1220]" />
-
-        {/* Contenedor */}
-        <div className="relative flex h-full flex-col bg-[#0b1220]">
-          {/* Top bar con X */}
-          <div className="flex items-center justify-between px-5 pt-[max(env(safe-area-inset-top),0.75rem)] pb-3 border-b border-border/60">
-            <Link
-              href={rutas.raiz}
-              onClick={handleNavigate}
-              className="flex items-center gap-2"
-              aria-label={t("aria.goHome")}
-            >
-              <Image
-                src="/images/logo-copexia.png"
-                alt={t("brandAlt")}
-                width={120}
-                height={40}
-                className="h-10 w-auto object-contain"
-                priority
-              />
-            </Link>
-            <button
-              className="rounded-lg p-2 text-white hover:bg-secondary/60"
-              onClick={() => {
-                setOpenMobile(false);
-                setOpenDropdown(null);
-              }}
-              aria-label={t("aria.closeMenu")}
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          {/* Contenido scrollable */}
-          <nav
-            className="flex-1 overflow-y-auto px-3 py-4"
-            aria-label={t("aria.primaryNav")}
-          >
-            {menuItems.map((item) =>
-              item.submenu ? (
-                <div key={item.href} className="rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="flex-1 text-left rounded-lg px-3 py-3 text-base font-medium flex justify-between items-center hover:bg-secondary/70 text-white"
-                      onClick={() =>
-                        setOpenDropdown((prev) =>
-                          prev === item.name ? null : item.name
-                        )
-                      }
-                      aria-expanded={openDropdown === item.name}
-                      aria-label={ariaForSubmenu(item.name)}
-                    >
-                      {item.name}
-                      <ChevronDown
-                        className={`h-5 w-5 shrink-0 transition-transform ${
-                          openDropdown === item.name ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                  </div>
-
-                  <div
-                    className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out ${
-                      openDropdown === item.name
-                        ? "grid-rows-[1fr] opacity-100"
-                        : "grid-rows-[0fr] opacity-0"
-                    } bg-[#0b1220] border-t border-border/60`}
-                    role="region"
-                    aria-label={t("aria.submenuOf", { item: item.name })}
-                  >
-                    <div className="overflow-hidden">
-                      {item.submenu.map((sub) => (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          className="block rounded-md px-4 py-2.5 text-sm text-white hover:bg-secondary/60"
-                          onClick={handleNavigate}
-                          role="menuitem"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-lg px-3 py-3 text-base text-white hover:bg-secondary/70 block"
-                  onClick={handleNavigate}
-                >
-                  {item.name}
                 </Link>
               )
             )}
