@@ -1,15 +1,19 @@
+// src/components/Section.tsx
 "use client";
 
-import { animate, createScope, createSpring } from "animejs";
+import { animate, createScope, createSpring, stagger } from "animejs";
 import React, { useEffect, useRef } from "react";
 
 type Props = {
-  id: string;
-  title: string;
+  id?: string;
+  title?: string;
   children: React.ReactNode;
   ariaLabel?: string;
   staggerChildren?: boolean;
   itemSelector?: string;
+  className?: string; // <- NUEVO: clases para el wrapper
+  titleClassName?: string; // <- NUEVO: clases para el h2
+  threshold?: number; // <- NUEVO: umbral IO
 };
 
 const Section = ({
@@ -18,7 +22,10 @@ const Section = ({
   children,
   ariaLabel,
   staggerChildren = false,
-  itemSelector, // <- NUEVO
+  itemSelector,
+  className = "w-full mx-auto",
+  titleClassName = "text-3xl md:text-4xl font-semibold tracking-tight mb-6",
+  threshold = 0.2,
 }: Props) => {
   const rootRef = useRef<HTMLElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
@@ -29,14 +36,12 @@ const Section = ({
     const inner = innerRef.current;
     if (!root || !inner) return;
 
-    // el contenedor debe ser visible
     root.style.opacity = "1";
 
     const prefersReduced =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-    // --- NUEVO: selecciona items por selector; si no hay, usa hijos directos o el inner
     let items: HTMLElement[] = [];
     if (itemSelector) {
       items = Array.from(inner.querySelectorAll<HTMLElement>(itemSelector));
@@ -47,7 +52,6 @@ const Section = ({
     }
     if (items.length === 0) items = [inner];
 
-    // estado inicial
     items.forEach((el) => {
       el.style.opacity = "0";
       el.style.transform = "translateY(20px)";
@@ -70,21 +74,20 @@ const Section = ({
               return;
             }
 
-            items.forEach((el, i) => {
-              animate(el, {
-                opacity: [0, 1],
-                translateY: [20, 0],
-                delay: staggerChildren || itemSelector ? i * 120 : 0,
-                duration: 800,
-                ease: createSpring({ stiffness: 220, damping: 26 }),
-                complete: () => (el.style.willChange = "auto"),
-              });
+            animate(items, {
+              opacity: [0, 1],
+              translateY: [20, 0],
+              delay: staggerChildren || itemSelector ? stagger(100) : 0,
+              duration: 800,
+              ease: createSpring({ stiffness: 220, damping: 26 }),
+              complete: () =>
+                items.forEach((el) => (el.style.willChange = "auto")),
             });
 
             io.disconnect();
           }
         },
-        { threshold: 0.2 }
+        { threshold }
       );
 
       io.observe(root);
@@ -95,19 +98,16 @@ const Section = ({
       scopeRef.current?.methods?.cleanupIO?.();
       scopeRef.current?.revert?.();
     };
-  }, [staggerChildren, itemSelector]);
+  }, [staggerChildren, itemSelector, threshold]);
 
   return (
     <section
       ref={rootRef}
       id={id}
       aria-label={ariaLabel ?? title}
-      className="w-full mx-auto px-6 py-16 md:py-20"
-      // style={{ opacity: 0 }}
+      className={className}
     >
-      <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-6">
-        {title}
-      </h2>
+      {title ? <h2 className={titleClassName}>{title}</h2> : null}
       <div ref={innerRef}>{children}</div>
     </section>
   );

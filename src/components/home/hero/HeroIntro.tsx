@@ -25,7 +25,6 @@ const HeroIntro = () => {
           data-animate
         >
           Diagnóstico honesto, implementación simple y resultados sostenibles.
-          Sin humo.
         </p>
         <div className="mt-8 flex items-center gap-3" data-animate>
           <a

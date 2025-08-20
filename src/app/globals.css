@@ -42,30 +42,33 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* === PALETA “DARKER LIGHT” (no dark-mode) === */
 :root {
   --radius: 0.625rem;
-  --background: #ffffff;
-  --foreground: #0f1c2e;
 
-  --primary: #b79653;
-  --primary-foreground: #0f0f0f;
+  /* Fondo base + tokens afinados */
+  --background: #0f1c2e; /* ahora azul oscuro */
+  --foreground: #e3e8f0; /* texto claro */
 
-  --secondary: #0f1c2e;
-  --secondary-foreground: #ffffff;
+  --primary: #dfcd81; /* dorado se ve bien sobre fondo oscuro */
+  --primary-foreground: #0a0a0a;
 
-  --accent: #dfcd81;
-  --accent-foreground: #0f0f0f;
+  --secondary: #b79653;
+  --secondary-foreground: #0f0f0f;
 
-  --muted: #f5f7fb;
-  --muted-foreground: #4a5568;
+  --accent: #ac7400;
+  --accent-foreground: #ffffff;
 
-  --destructive: #8b1e1e;
+  --muted: #1a2436; /* un azul más claro que el fondo */
+  --muted-foreground: #d7deea;
 
-  --border: rgba(15, 28, 46, 0.12);
-  --input: #f2f4f8;
-  --ring: #b79653;
+  --destructive: #e57373; /* rojo más visible sobre oscuro */
 
-  --card: #ffffff;
+  --border: rgba(255, 255, 255, 0.14);
+  --input: #1e2a3f;
+  --ring: #dfcd81;
+
+  --card: #182335; /* un tono apenas distinto al fondo */
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--card-foreground);
@@ -82,11 +85,29 @@
   --gold-gradient: linear-gradient(
     135deg,
     #dfcd81 0%,
-    #b79653 50%,
+    #b79653 45%,
     #ac7400 100%
+  );
+
+  --bg-gradient: radial-gradient(
+      1200px 600px at 95% -10%,
+      rgba(223, 205, 129, 0.07),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 520px at 0% 110%,
+      rgba(183, 150, 83, 0.06),
+      transparent 55%
+    );
+
+  --section-alt-gradient: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0)
   );
 }
 
+/* dark mode (sin cambios grandes) */
 .dark {
   --background: #0a0f1a;
   --foreground: #ffffff;
@@ -109,40 +130,62 @@
 
   --card: #111827;
   --card-foreground: var(--foreground);
-}
 
-:root {
-  --gold-gradient: linear-gradient(
-    135deg,
-    #dfcd81 0%,
-    #b79653 45%,
-    #ac7400 100%
-  );
+  --bg-gradient: radial-gradient(
+      1200px 600px at 95% -10%,
+      rgba(223, 205, 129, 0.07),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 520px at 0% 110%,
+      rgba(183, 150, 83, 0.06),
+      transparent 55%
+    );
 }
 
 @layer base {
   * {
     border-color: var(--border);
   }
+
   body {
-    background: var(--background);
+    /* 🎨 degradés sutiles sobre el color base */
+    background: var(--bg-gradient), var(--background);
     color: var(--foreground);
   }
+
   html {
     scroll-behavior: smooth;
   }
   [id] {
     scroll-margin-top: 88px;
   }
+
   .gold-text {
     background: var(--gold-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent; /* Safari/Chromium */
+    display: inline-block;
   }
+
   .will-animate {
     opacity: 0;
     transform: translateY(22px);
     will-change: opacity, transform;
+  }
+
+  /* 🔹 sección alternada rápida */
+  .section-alt {
+    background: var(--section-alt-gradient), var(--muted);
+  }
+
+  /* 🔹 superficies “flotantes” coherentes con el nuevo fondo */
+  .surface {
+    background: var(--card);
+    box-shadow: 0 10px 30px rgba(15, 28, 46, 0.1);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
   }
 }

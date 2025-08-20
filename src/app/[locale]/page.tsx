@@ -2,11 +2,11 @@
 "use client";
 
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
-import ValuesCompact from "@/components/home/about/ValuesCompact";
-import HeroIntro from "@/components/home/hero/HeroIntro";
 import LearningOverview from "@/components/home/learning/LearningOverview";
-import ServicesOverview from "@/components/home/services/ServicesOverview";
 import Section from "@/components/Section";
+import AboutSection from "@/components/Sections/AboutSection";
+import HeroSection from "@/components/Sections/HeroSection";
+import ValuesSection from "@/components/Sections/ValuesSection";
 
 export default function HomePage() {
   return (
@@ -17,25 +17,25 @@ export default function HomePage() {
         itemSelector="[data-animate]"
         staggerChildren
       >
-        <HeroIntro />
+        <HeroSection />
       </Section>
 
       <Section
         id="valores"
-        title="Valores de Copexia"
+        title=""
         itemSelector="[data-animate]"
         staggerChildren
       >
-        <ValuesCompact />
+        <AboutSection />
       </Section>
 
       <Section
         id="servicios"
-        title="Nuestros servicios"
+        title=""
         itemSelector="[data-animate]"
         staggerChildren
       >
-        <ServicesOverview />
+        <ValuesSection />
       </Section>
 
       <Section
