@@ -1,10 +1,16 @@
-// src/context/AuthContext.tsx
+// src/lib/context/AuthContext.tsx
 "use client";
 
-import { getMyProfile, UserProfile } from "@/services/authService";
+import {
+  authService,
+  ChangePasswordPayload,
+  LoginPayload,
+  LoginResponse,
+  RecoverPasswordPayload,
+  User,
+} from "@/services/authService";
 import {
   createContext,
-  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -12,65 +18,136 @@ import {
   useState,
 } from "react";
 
-interface AuthContextType {
-  user: UserProfile | null;
-  isLoading: boolean;
-  login: (user) => void; // Ya no se pasa el token aquí
-  logout: () => void;
-}
+type AuthState = {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+type AuthContextValue = AuthState & {
+  login: (payload: LoginPayload) => Promise<void>;
+  logout: () => Promise<void>;
+  recoverPassword: (payload: RecoverPasswordPayload) => Promise<void>;
+  changePassword: (payload: ChangePasswordPayload) => Promise<void>;
+  refreshSession: () => Promise<void>;
+  clearError: () => void;
+};
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const login = useCallback((userData) => {
-    setUser(userData);
-  }, []);
-
-  const logout = useCallback(() => {
-    setUser(null);
+  const refreshSession = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res: LoginResponse = await authService.me();
+      setUser(res.user);
+      setError(null);
+    } catch {
+      setUser(null);
+      setError(null); // no mostramos error en boot
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    const loadAuthStatus = async () => {
+    refreshSession();
+  }, [refreshSession]);
+
+  const login = useCallback(async (payload: LoginPayload) => {
+    setLoading(true);
+    try {
+      const res = await authService.login(payload);
+      setUser(res.user);
+      setError(null);
+    } catch (e: any) {
+      setUser(null);
+      setError(e?.message || "No se pudo iniciar sesión");
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    setLoading(true);
+    try {
+      await authService.logout();
+      setUser(null);
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message || "No se pudo cerrar sesión");
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const recoverPassword = useCallback(
+    async (payload: RecoverPasswordPayload) => {
+      setLoading(true);
       try {
-        const profile = await getMyProfile();
-        setUser(profile);
-      } catch (error) {
-        console.error("Error al revalidar sesión o cargar perfil:", error);
-        logout();
+        await authService.recoverPassword(payload);
+        setError(null);
+      } catch (e: any) {
+        setError(e?.message || "No se pudo enviar la recuperación");
+        throw e;
+      } finally {
+        setLoading(false);
       }
-      setIsLoading(false);
-    };
+    },
+    []
+  );
 
-    loadAuthStatus();
-  }, [logout]);
+  const changePassword = useCallback(async (payload: ChangePasswordPayload) => {
+    setLoading(true);
+    try {
+      await authService.changePassword(payload);
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message || "No se pudo cambiar la contraseña");
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const contextValue = useMemo(
+  const clearError = useCallback(() => setError(null), []);
+
+  const value = useMemo<AuthContextValue>(
     () => ({
       user,
-      isLoading,
+      loading,
+      error,
       login,
       logout,
+      recoverPassword,
+      changePassword,
+      refreshSession,
+      clearError,
     }),
-    [user, isLoading, login, logout]
+    [
+      user,
+      loading,
+      error,
+      login,
+      logout,
+      recoverPassword,
+      changePassword,
+      refreshSession,
+      clearError,
+    ]
   );
 
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
-  }
-  return context;
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 }

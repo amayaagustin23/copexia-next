@@ -2,22 +2,21 @@
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { PUBLIC_ROUTES } from "@/lib/config/routesPublics";
+import { isAdminPath, isAuthPath } from "@/lib/config/routes";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-type LayoutWrapperProps = {
-  children: ReactNode;
-};
+type LayoutWrapperProps = { children: ReactNode };
 
 export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
 
-  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+  const hideForAuth = isAuthPath(pathname);
+  const hideForAdmin = isAdminPath(pathname);
 
-  const isAdmin = pathname.includes("/admin");
+  const hideForPublic = false; // o: isPublicPath(pathname)
 
-  const shouldHideLayout = isPublic || isAdmin;
+  const shouldHideLayout = hideForAuth || hideForAdmin || hideForPublic;
 
   return (
     <>

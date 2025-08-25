@@ -35,15 +35,108 @@
       "submenuOf": "Submenú de {item}"
     }
   },
+  "Sidebar": {
+    "panelTitle": "Panel de administración",
+    "logout": "Cerrar sesión",
+    "dashboard": "Dashboard",
+    "posts": "Publicaciones",
+    "categories": "Categorías",
+    "dashboardLink": "Dashboard",
+    "postsLink": "Publicaciones",
+    "categoriesLink": "Categorías"
+  },
   "Footer": {
     "brandName": "Copexia",
     "rightsReserved": "Todos los derechos reservados",
     "description": "Creamos soluciones a medida. Impulsamos la excelencia de tu organización."
   },
-
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "emailLabel": "Correo electrónico",
+      "passwordLabel": "Contraseña",
+      "submitButton": "Ingresar",
+      "submitting": "Ingresando...",
+      "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+      "changePasswordLink": "Cambiar contraseña"
+    },
+    "recover": {
+      "title": "Recuperar contraseña",
+      "emailLabel": "Correo electrónico",
+      "submit": "Enviar",
+      "submitting": "Enviando...",
+      "sent": "Se ha enviado un correo para restablecer tu contraseña.",
+      "backToLogin": "Volver a iniciar sesión"
+    },
+    "change": {
+      "title": "Cambiar contraseña",
+      "newLabel": "Nueva contraseña",
+      "confirmLabel": "Confirmar contraseña",
+      "submit": "Actualizar contraseña",
+      "submitting": "Actualizando...",
+      "done": "Tu contraseña fue actualizada correctamente.",
+      "missingToken": "Falta el token de recuperación en el enlace.",
+      "genericError": "No se pudo cambiar la contraseña.",
+      "backToLogin": "Volver a iniciar sesión",
+      "goToRecover": "Ir a recuperar contraseña"
+    }
+  },
+  "AdminDashboard": {
+    "title": "Panel de administración",
+    "description": "Resumen de actividad y accesos rápidos.",
+    "kpi": {
+      "posts": "Publicaciones",
+      "categories": "Categorías",
+      "visits": "Visitas",
+      "conversions": "Consultas"
+    },
+    "kpiDelta": {
+      "week": "Última semana",
+      "month": "Último mes"
+    },
+    "recentPosts": {
+      "title": "Últimas publicaciones",
+      "in": "en"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas",
+      "newPost": "Nueva publicación",
+      "manageCategories": "Gestionar categorías",
+      "viewAnalytics": "Ver analíticas"
+    }
+  },
+  "AdminPosts": {
+    "title": "Publicaciones",
+    "newPost": "Nueva publicación",
+    "searchPlaceholder": "Buscar por título o slug...",
+    "loading": "Cargando…",
+    "empty": "No hay publicaciones para mostrar.",
+    "table": {
+      "title": "Título",
+      "category": "Categoría",
+      "status": "Estado",
+      "publishedAt": "Publicada",
+      "actions": "Acciones"
+    },
+    "status": {
+      "all": "Todos",
+      "draft": "Borrador",
+      "published": "Publicado"
+    },
+    "actions": {
+      "edit": "Editar",
+      "view": "Ver"
+    },
+    "perPage": "{n} por página",
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "summary": "{from}–{to} de {total}"
+    }
+  },
   "home": {
     "hero": {
-    "brandAlt": "Copexia",
+      "brandAlt": "Copexia",
       "title": "Transformamos tu organización con soluciones humanas y tecnológicas.",
       "subtitle": "Acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
       "cta": {
@@ -136,6 +229,24 @@
       "proposal": "¿Podrían enviarme una propuesta y los plazos estimados?",
       "training": "Estoy interesado en una capacitación para mi organización.",
       "adoptionConsult": "Tengo una consulta sobre la adopción tecnológica que ofrecen."
+    }
+  },
+  "validations": {
+    "login": {
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Formato de correo inválido",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMin": "La contraseña debe tener al menos 6 caracteres"
+    },
+    "recover": {
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Formato de correo inválido"
+    },
+    "change": {
+      "newRequired": "La nueva contraseña es obligatoria",
+      "newMin": "La contraseña debe tener al menos 8 caracteres",
+      "confirmRequired": "Debes confirmar la nueva contraseña",
+      "confirmMatch": "Las contraseñas no coinciden"
     }
   }
 }

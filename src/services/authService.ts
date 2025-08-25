@@ -1,177 +1,90 @@
+// src/lib/services/auth.ts
+"use client";
+
 import api from "@/lib/axios";
-import { BackendEndpoints } from "@/lib/config/apiPath";
-import { ApiErrorResponse, isAxiosErrorType } from "@/types/api";
-import {
-  ForgotPasswordData,
-  LoginData,
-  RegisterProfessionalData,
-  ResetPasswordData,
-} from "@/types/auth";
-import { toast } from "sonner";
+import { AxiosError } from "axios";
 
-interface RegisterResponse {
-  message: string;
-  user: {
-    id: string;
-    email: string;
-    username: string;
-  };
-}
+// ===== Tipos =====
+export type LoginPayload = { email: string; password: string };
+export type RecoverPasswordPayload = { email: string };
+export type ChangePasswordPayload =
+  | { token: string; newPassword: string } // reset por token
+  | { currentPassword: string; newPassword: string }; // cambio logueado
 
-export enum Role {
-  ADMIN = "ADMIN",
-  USER = "USER",
-}
+export type User = { id: string; email: string; name?: string };
 
-export enum Title {
-  BACHELOR = "BACHELOR",
-  TECHNICIAN = "TECHNICIAN",
-}
+export type LoginResponse = { user: User };
+export type GenericResponse = { ok: boolean; message?: string };
 
-export enum LicenseType {
-  NATIONAL = "NATIONAL",
-  PROVINCIAL = "PROVINCIAL",
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  role: Role;
-  firstName: string;
-  lastName: string;
-  birthDate: Date;
-  dni: string;
-  phone: string;
-  professionalId: string;
-  title: Title;
-  licenseNumber: string;
-  licenseType: LicenseType;
-  street: string;
-  city: string;
-  province: string;
-  postalCode: string;
-}
-
-interface LoginResponse {
-  message: string;
-  user: UserProfile;
-}
-
-function getErrorMessage(error: unknown): string {
-  if (isAxiosErrorType<ApiErrorResponse>(error)) {
-    const axiosError = error;
-    if (axiosError.response?.data?.message) {
-      return axiosError.response.data.message;
-    } else if (axiosError.response) {
-      return `Error del servidor: ${
-        axiosError.response.statusText || "Desconocido"
-      } (Estado: ${axiosError.response.status})`;
-    } else if (axiosError.request) {
-      return "No se pudo conectar al servidor. Verifica tu conexión a internet o la URL del backend.";
-    } else {
-      return "Error al configurar la petición.";
-    }
-  } else if (error instanceof Error) {
-    return error.message;
+// ===== Helpers =====
+function toMessage(err: unknown, fallback = "Ocurrió un error") {
+  if (!err) return fallback;
+  if (typeof err === "string") return err;
+  if (err instanceof AxiosError) {
+    const data = err.response?.data as any;
+    return data?.message || err.message || fallback;
   }
-  return "Ocurrió un error inesperado.";
-}
-
-export async function loginUser(
-  credentials: LoginData,
-  t?: (key: string) => string
-): Promise<LoginResponse | undefined> {
+  if (err instanceof Error) return err.message || fallback;
   try {
-    const response = await api.post<LoginResponse>(
-      BackendEndpoints.auth.login,
-      credentials
-    );
-    return response.data;
-  } catch (error: unknown) {
-    toast.error(t?.("loginError") || getErrorMessage(error));
-  }
-}
-
-export async function registerUser(
-  userData: RegisterProfessionalData,
-  t?: (key: string) => string
-): Promise<RegisterResponse | undefined> {
-  try {
-    const response = await api.post<RegisterResponse>(
-      BackendEndpoints.auth.register,
-      userData
-    );
-    return response.data;
-  } catch (error: unknown) {
-    toast.error(t?.("registerError") || getErrorMessage(error));
-  }
-}
-
-export async function logoutUser(t?: (key: string) => string): Promise<void> {
-  try {
-    await api.post(BackendEndpoints.auth.logout, {}, { withCredentials: true });
-  } catch (error: unknown) {
-    toast.error(t?.("logoutError") || getErrorMessage(error));
-  }
-}
-
-export async function isLoggedIn(): Promise<boolean> {
-  try {
-    const res = await api.get<{ isAuthenticated: boolean }>(
-      BackendEndpoints.auth.status
-    );
-    return res.data.isAuthenticated;
+    return JSON.stringify(err);
   } catch {
-    return false;
+    return fallback;
   }
 }
 
-export async function getMyProfile(
-  t?: (key: string) => string
-): Promise<UserProfile | undefined> {
+async function postJSON<T>(url: string, body: unknown): Promise<T> {
+  const res = await api.post<T>(url, body, { withCredentials: true });
+  return res.data;
+}
 
-  const authenticated = await isLoggedIn();
-  try {
-    if (authenticated) {
-      const response = await api.get<UserProfile>(BackendEndpoints.auth.me);
-      return response.data;
+async function getJSON<T>(url: string): Promise<T> {
+  const res = await api.get<T>(url, { withCredentials: true });
+  return res.data;
+}
+
+// ===== Endpoints =====
+// Ajustá los paths si en tu backend son otros
+export const authService = {
+  async login(data: LoginPayload): Promise<LoginResponse> {
+    try {
+      return await postJSON<LoginResponse>("/auth/login", data);
+    } catch (e) {
+      throw new Error(toMessage(e, "No se pudo iniciar sesión"));
     }
-  } catch (error: unknown) {
-    if (
-      isAxiosErrorType<ApiErrorResponse>(error) &&
-      error.response?.status === 403
-    ) {
-      await logoutUser(t);
+  },
+
+  async recoverPassword(
+    data: RecoverPasswordPayload
+  ): Promise<GenericResponse> {
+    try {
+      return await postJSON<GenericResponse>("/auth/recover-password", data);
+    } catch (e) {
+      throw new Error(toMessage(e, "No se pudo enviar la recuperación"));
     }
-  }
-}
+  },
 
-export async function requestPasswordReset(
-  data: ForgotPasswordData,
-  t?: (key: string) => string
-): Promise<void> {
-  try {
-    await api.post(BackendEndpoints.auth.recoveryPassword, data);
-    toast.success(t?.("passwordResetSuccess"));
-  } catch (error: unknown) {
-    toast.error(getErrorMessage(error));
-  }
-}
+  async changePassword(data: ChangePasswordPayload): Promise<GenericResponse> {
+    try {
+      return await postJSON<GenericResponse>("/auth/change-password", data);
+    } catch (e) {
+      throw new Error(toMessage(e, "No se pudo cambiar la contraseña"));
+    }
+  },
 
-export async function resetPassword(
-  token: string,
-  data: ResetPasswordData,
-  t?: (key: string) => string
-): Promise<{ message: string }> {
-  try {
-    const res = await api.post<{ message: string }>(
-      `${BackendEndpoints.auth.resetPassword}/${token}`,
-      data
-    );
-    toast.success(t?.("passwordChangeSuccess"));
-    return res.data;
-  } catch (error: unknown) {
-    toast.error(getErrorMessage(error));
-    throw error;
-  }
-}
+  async me(): Promise<LoginResponse> {
+    try {
+      return await getJSON<LoginResponse>("/auth/me");
+    } catch (e) {
+      // si no hay sesión, devolvemos error normal para que el context limpie user
+      throw new Error(toMessage(e, "Sesión no válida"));
+    }
+  },
+
+  async logout(): Promise<GenericResponse> {
+    try {
+      return await postJSON<GenericResponse>("/auth/logout", {});
+    } catch (e) {
+      throw new Error(toMessage(e, "No se pudo cerrar sesión"));
+    }
+  },
+};

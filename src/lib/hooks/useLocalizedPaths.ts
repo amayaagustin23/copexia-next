@@ -1,44 +1,85 @@
 "use client";
 import { useLocale } from "next-intl";
 
-type SeccionId =
+type SectionId =
   | "inicio"
   | "servicios"
   | "sobre-nosotros"
-  | "learning"
   | "valores"
   | "contacto";
+
+type ServicesAnchors = {
+  transformacion: string;
+  adopcion: string;
+  optimizacion: string;
+  investigaciones: string;
+};
+
+type AuthPaths = {
+  signIn: string;
+  recoverPassword: string;
+  changePassword: string;
+};
+
+type Sections = {
+  home: string;
+  services: string;
+  aboutUs: string;
+  values: string;
+  contact: string;
+};
+
+type AdminPaths = {
+  root: string; // /:locale/admin
+  dashboard: string; // /:locale/admin
+  posts: string; // /:locale/admin/posts
+  categories: string; // /:locale/admin/categories
+};
 
 export const useLocalizedPaths = () => {
   const locale = useLocale();
   const base = `/${locale}`;
-  const link = (id: SeccionId) => `${base}#${id}`;
 
-  const serviciosIds = {
+  const anchor = (id: SectionId) => `${base}#${id}`;
+
+  const servicesAnchors: ServicesAnchors = {
     transformacion: `${base}#servicios-transformacion`,
     adopcion: `${base}#servicios-adopcion`,
     optimizacion: `${base}#servicios-optimizacion`,
     investigaciones: `${base}#servicios-investigaciones`,
   } as const;
 
-  const learningIds = {
-    powerbi: `${base}#learning-powerbi`,
-    adopcionTecnologica: `${base}#learning-adopcion-tecnologica`,
-    metodologias: `${base}#learning-metodologias`,
-    dinamicas: `${base}#learning-dinamicas`,
+  const auth: AuthPaths = {
+    signIn: `${base}/ingresar`,
+    recoverPassword: `${base}/recuperar-contrasena`,
+    changePassword: `${base}/cambiar-contrasena`,
   } as const;
 
+  const admin: AdminPaths = {
+    root: `${base}/admin`,
+    dashboard: `${base}/admin`,
+    posts: `${base}/admin/posts`,
+    categories: `${base}/admin/categories`,
+  } as const;
+
+  const sections: Sections = {
+    home: anchor("inicio"),
+    services: anchor("servicios"),
+    aboutUs: anchor("sobre-nosotros"),
+    values: anchor("valores"),
+    contact: anchor("contacto"),
+  } as const;
+
+  const path = (subpath = "") =>
+    subpath ? `${base}/${subpath.replace(/^\/+/, "")}` : base;
+
   return {
-    raiz: base,
-    secciones: {
-      inicio: link("inicio"),
-      servicios: link("servicios"),
-      sobreNosotros: link("sobre-nosotros"),
-      learning: link("learning"),
-      valores: link("valores"),
-      contacto: link("contacto"),
-    },
-    sub: { servicios: serviciosIds, learning: learningIds },
-    link,
+    root: base,
+    sections,
+    sub: { services: servicesAnchors },
+    auth,
+    admin,
+    anchor,
+    path,
   };
 };

@@ -1,30 +1,64 @@
+// middleware.ts
+import {
+  isAdminPath,
+  isAuthPath,
+  SUPPORTED_LOCALES,
+} from "@/lib/config/routes";
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
-const intlMiddleware = createMiddleware({
-  locales: ["es", "en"],
+const intl = createMiddleware({
+  locales: [...SUPPORTED_LOCALES],
   defaultLocale: "es",
   localePrefix: "as-needed",
 });
 
-export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+const SESSION_COOKIE = "session";
 
-  // 1. Primero aplicar next-intl
-  const intlResponse = intlMiddleware(req);
-  if (intlResponse instanceof NextResponse && intlResponse.redirected) {
-    return intlResponse;
+export function middleware(req: NextRequest) {
+  const { pathname, search } = req.nextUrl;
+
+  // 1) i18n primero (gestiona prefixing/rewrite de locales)
+  const intlRes = intl(req);
+  if (intlRes instanceof NextResponse && intlRes.redirected) {
+    return intlRes;
   }
 
-  // 2. Redirigir "/" a "/es"
+  // 2) Forzar "/" -> "/es"
   if (pathname === "/") {
     return NextResponse.redirect(new URL("/es", req.url));
   }
 
-  // 3. Permitir libre acceso a todo lo demás
+  // Helpers de locale
+  const seg = pathname.split("/").filter(Boolean)[0];
+  const locale = SUPPORTED_LOCALES.includes(seg as any) ? seg : "es";
+
+  const hasSession = !!req.cookies.get(SESSION_COOKIE)?.value;
+
+  // 3) Si intenta ir al login estando autenticado -> enviar a /:locale/admin
+  if (isAuthPath(pathname) && hasSession) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${locale}/admin`;
+    url.search = ""; // limpiamos query
+    return NextResponse.redirect(url);
+  }
+
+  // 4) Proteger rutas admin (ignorar páginas de auth)
+  if (isAdminPath(pathname) && !isAuthPath(pathname)) {
+    if (!hasSession) {
+      const url = req.nextUrl.clone();
+      url.pathname = `/${locale}/ingresar`;
+      // Conservamos la ruta original + query como redirect
+    }
+  }
+
+  // 5) Continuar normalmente
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|static|favicon.ico).*)"],
+  matcher: [
+    // Excluímos assets/next/api/etc.
+    "/((?!_next|api|static|assets|images|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest).*)",
+  ],
 };
