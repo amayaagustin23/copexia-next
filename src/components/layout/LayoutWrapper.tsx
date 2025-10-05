@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 type LayoutWrapperProps = { children: ReactNode };
 
 export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const pathname = usePathname() || "/";
+  const pathname = usePathname() || '/';
 
   const hideForAuth = isAuthPath(pathname);
   const hideForAdmin = isAdminPath(pathname);
@@ -17,6 +17,9 @@ export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const hideForPublic = false; // o: isPublicPath(pathname)
 
   const shouldHideLayout = hideForAuth || hideForAdmin || hideForPublic;
+
+  // For auth pages, we still need the basic layout but without Header/Footer
+  const isAuthPage = hideForAuth;
 
   return (
     <>

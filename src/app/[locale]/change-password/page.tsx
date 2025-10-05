@@ -3,8 +3,8 @@
 import { useAuth } from "@/context/AuthContext";
 import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
 import {
-  ChangeWithTokenSchema,
-  makeChangeWithTokenSchema,
+	ChangeWithTokenSchema,
+	makeChangeWithTokenSchema,
 } from "@/lib/validators/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";

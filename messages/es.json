@@ -5,6 +5,7 @@
       "home": "Inicio",
       "services": "Servicios",
       "about": "Sobre nosotros",
+      "values": "Valores",
       "learning": "Copexia Learning",
       "contact": "Contacto"
     },
@@ -36,7 +37,7 @@
     }
   },
   "Sidebar": {
-    "panelTitle": "Panel de administración",
+    "panelTitle": "Panel",
     "logout": "Cerrar sesión",
     "dashboard": "Dashboard",
     "posts": "Publicaciones",
@@ -54,7 +55,9 @@
     "login": {
       "title": "Iniciar sesión",
       "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "Tu correo electrónico",
       "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Tu contraseña",
       "submitButton": "Ingresar",
       "submitting": "Ingresando...",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
@@ -82,8 +85,9 @@
     }
   },
   "AdminDashboard": {
-    "title": "Panel de administración",
+    "title": "Panel",
     "description": "Resumen de actividad y accesos rápidos.",
+    "logout": "Cerrar sesión",
     "kpi": {
       "posts": "Publicaciones",
       "categories": "Categorías",
@@ -134,6 +138,36 @@
       "summary": "{from}–{to} de {total}"
     }
   },
+  "AdminCategories": {
+    "title": "Categorías",
+    "newCategory": "Nueva categoría",
+    "searchPlaceholder": "Buscar categorías...",
+    "loading": "Cargando categorías...",
+    "empty": "No hay categorías para mostrar.",
+    "description": "Gestiona las categorías de tus publicaciones",
+    "searchTitle": "Buscar Categorías",
+    "searchInputPlaceholder": "Buscar por nombre o descripción...",
+    "listTitle": "Categorías ({count})",
+    "listDescription": "Lista de todas las categorías disponibles",
+    "loadingMessage": "Cargando categorías...",
+    "noResults": "No se encontraron categorías",
+    "noResultsDescription": "Intenta con otros términos de búsqueda.",
+    "noCategories": "No hay categorías",
+    "noCategoriesDescription": "Crea tu primera categoría para organizar tus publicaciones.",
+    "order": "Orden",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "stats": {
+      "total": "Total Categorías",
+      "active": "Activas",
+      "inactive": "Inactivas"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "view": "Ver"
+    }
+  },
   "home": {
     "hero": {
       "brandAlt": "Copexia",
@@ -141,6 +175,7 @@
       "subtitle": "Acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
       "cta": {
         "services": "Ver servicios",
+        "values": "Conocer valores",
         "learning": "Copexia Learning"
       }
     },
@@ -214,6 +249,74 @@
         "title": "Excelencia como Condición",
         "desc": "Si no podemos hacerlo excelente, no lo hacemos."
       }
+    },
+    "contact": {
+      "eyebrow": "Contacto",
+      "heading": "Hablemos de tu proyecto",
+      "subtitle": "Estamos listos para acompañarte en tu transformación digital. Cuéntanos sobre tus desafíos y objetivos.",
+      "info": {
+        "title": "Información de contacto",
+        "email": {
+          "title": "Email"
+        },
+        "phone": {
+          "title": "Teléfono"
+        },
+        "location": {
+          "title": "Ubicación",
+          "address": "Buenos Aires, Argentina"
+        }
+      },
+      "schedule": {
+        "title": "Horarios de atención",
+        "weekdays": "Lunes a Viernes: 9:00 - 18:00",
+        "weekend": "Sábados: 10:00 - 14:00",
+        "note": "Respondemos consultas por email en un plazo máximo de 24 horas."
+      },
+      "form": {
+        "title": "Envíanos un mensaje",
+        "name": {
+          "label": "Nombre completo",
+          "placeholder": "Tu nombre completo"
+        },
+        "email": {
+          "label": "Correo electrónico",
+          "placeholder": "tu@email.com"
+        },
+        "subject": {
+          "label": "Asunto",
+          "placeholder": "¿En qué podemos ayudarte?"
+        },
+        "message": {
+          "label": "Mensaje",
+          "placeholder": "Cuéntanos más sobre tu proyecto, desafíos o consultas..."
+        },
+        "submit": "Enviar mensaje",
+        "submitting": "Enviando..."
+      },
+      "validation": {
+        "nameRequired": "El nombre es requerido",
+        "nameMin": "El nombre debe tener al menos 2 caracteres",
+        "emailRequired": "El email es requerido",
+        "emailInvalid": "Por favor ingresa un email válido",
+        "subjectRequired": "El asunto es requerido",
+        "subjectMin": "El asunto debe tener al menos 3 caracteres",
+        "messageRequired": "El mensaje es requerido",
+        "messageMin": "El mensaje debe tener al menos 10 caracteres"
+      }
+    }
+  },
+  "metadata": {
+    "title": "Copexia | Creamos soluciones a medida",
+    "description": "En Copexia, desde San Miguel de Tucumán - Argentina, acompañamos a organizaciones que quieren evolucionar combinando herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
+    "og": {
+      "title": "Copexia | Soluciones humanas y tecnológicas para tu organización",
+      "description": "Impulsamos la excelencia de tu organización desde San Miguel de Tucumán, Argentina, mediante consultoría estratégica, adopción tecnológica, optimización de procesos y formación con impacto.",
+      "alt": "Copexia - Transformamos tu organización en Tucumán, Argentina"
+    },
+    "twitter": {
+      "title": "Copexia | Soluciones humanas y tecnológicas",
+      "description": "Desde San Miguel de Tucumán, Argentina, acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas."
     }
   },
   "whatsapp": {
@@ -247,6 +350,107 @@
       "newMin": "La contraseña debe tener al menos 8 caracteres",
       "confirmRequired": "Debes confirmar la nueva contraseña",
       "confirmMatch": "Las contraseñas no coinciden"
+    }
+  },
+  "posts": {
+    "title": "Últimos Artículos",
+    "description": "Descubre las últimas tendencias, consejos y conocimientos sobre transformación digital y gestión organizacional.",
+    "readMore": "Leer más",
+    "viewAllPosts": "Ver todos los artículos",
+    "noPosts": "No hay artículos disponibles en este momento.",
+    "errorLoading": "Error al cargar los posts",
+    "locale": "es-ES"
+  },
+  "postDetail": {
+    "back": "Volver",
+    "notFound": "Post no encontrado",
+    "notFoundDescription": "El post que buscas no existe o ha sido eliminado.",
+    "by": "Por",
+    "views": "vistas",
+    "comments": "comentarios",
+    "like": "Me gusta",
+    "liked": "Te gusta",
+    "viewMoreArticles": "Ver más artículos"
+  },
+  "AdminPosts": {
+    "title": "Posts",
+    "description": "Gestiona tus artículos",
+    "create": "Crear Post",
+    "edit": "Editar Post",
+    "delete": "Eliminar",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este post?",
+    "published": "Publicado",
+    "draft": "Borrador",
+    "noPosts": "No hay posts creados",
+    "createFirst": "Crear tu primer post",
+    "newPost": "Nuevo Post",
+    "searchPlaceholder": "Buscar posts...",
+    "loading": "Cargando...",
+    "empty": "No se encontraron posts",
+    "perPage": "{n} por página",
+    "errorLoading": "No se pudo cargar el listado",
+    "pinned": "Fijado",
+    "by": "Por",
+    "views": "vistas",
+    "likes": "likes",
+    "comments": "comentarios",
+    "more": "más",
+    "locale": "es-ES",
+    "createPage": {
+      "title": "Crear Nuevo Post",
+      "description": "Crea un nuevo artículo para tu blog",
+      "back": "Volver",
+      "preview": "Vista Previa",
+      "edit": "Editar",
+      "basicInfo": "Información Básica",
+      "titleLabel": "Título *",
+      "titlePlaceholder": "Título del post",
+      "slugLabel": "Slug *",
+      "slugPlaceholder": "url-del-post",
+      "slugHelp": "Se genera automáticamente desde el título",
+      "excerptLabel": "Resumen",
+      "excerptPlaceholder": "Breve descripción del post",
+      "content": "Contenido",
+      "contentLabel": "Contenido HTML *",
+      "contentPlaceholder": "<p>Escribe tu contenido en HTML aquí...</p>",
+      "contentHelp": "Puedes usar HTML para formatear tu contenido. Usa etiquetas como &lt;p&gt;, &lt;h1&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, etc.",
+      "publish": "Publicación",
+      "publishImmediately": "Publicar inmediatamente",
+      "save": "Guardando...",
+      "createPost": "Crear Post",
+      "seo": "SEO",
+      "metaTitleLabel": "Meta Título",
+      "metaTitlePlaceholder": "Título para SEO",
+      "metaDescriptionLabel": "Meta Descripción",
+      "metaDescriptionPlaceholder": "Descripción para SEO",
+      "featuredImageLabel": "Imagen Destacada",
+      "featuredImagePlaceholder": "URL de la imagen",
+      "tags": "Etiquetas",
+      "tagsLabel": "Etiquetas (separadas por comas)",
+      "tagsPlaceholder": "javascript, react, tutorial",
+      "errorCreating": "Error al crear el post"
+    },
+    "status": {
+      "all": "Todos",
+      "published": "Publicado",
+      "draft": "Borrador"
+    },
+    "table": {
+      "title": "Título",
+      "category": "Categoría",
+      "status": "Estado",
+      "publishedAt": "Fecha de publicación",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "edit": "Editar",
+      "view": "Ver",
+      "delete": "Eliminar"
+    },
+    "pagination": {
+      "summary": "Mostrando {from} a {to} de {total} resultados",
+      "prev": "Anterior",
+      "next": "Siguiente"
     }
   }
 }

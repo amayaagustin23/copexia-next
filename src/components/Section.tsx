@@ -1,97 +1,131 @@
-// src/components/Section.tsx
-"use client";
+'use client';
 
-import { animate, createScope, createSpring, stagger } from "animejs";
-import React, { useEffect, useRef } from "react";
+import { animate, createScope, createSpring, stagger } from 'animejs';
+import React, { useEffect, useRef, useState } from 'react';
 
-type Props = {
+// Types
+interface SectionProps {
   id?: string;
   title?: string;
   children: React.ReactNode;
   ariaLabel?: string;
   staggerChildren?: boolean;
   itemSelector?: string;
-  className?: string; // <- NUEVO: clases para el wrapper
-  titleClassName?: string; // <- NUEVO: clases para el h2
-  threshold?: number; // <- NUEVO: umbral IO
+  className?: string;
+  titleClassName?: string;
+  threshold?: number;
+}
+
+// Constants
+const DEFAULT_ANIMATION_CONFIG = {
+  threshold: 0.15,
+  duration: 900,
+  delay: 120,
+  spring: { stiffness: 240, damping: 28 },
+  initialOffset: 30,
 };
 
-const Section = ({
+const Section: React.FC<SectionProps> = ({
   id,
   title,
   children,
   ariaLabel,
   staggerChildren = false,
   itemSelector,
-  className = "w-full mx-auto",
-  titleClassName = "text-3xl md:text-4xl font-semibold tracking-tight mb-6",
-  threshold = 0.2,
-}: Props) => {
+  className = 'w-full',
+  titleClassName = 'text-3xl md:text-4xl font-semibold tracking-tight mb-6 text-center',
+  threshold = DEFAULT_ANIMATION_CONFIG.threshold,
+}) => {
   const rootRef = useRef<HTMLElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
   const scopeRef = useRef<any>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const root = rootRef.current;
     const inner = innerRef.current;
     if (!root || !inner) return;
 
-    root.style.opacity = "1";
-
+    // Verificar si el usuario prefiere animaciones reducidas
     const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    let items: HTMLElement[] = [];
-    if (itemSelector) {
-      items = Array.from(inner.querySelectorAll<HTMLElement>(itemSelector));
-    } else if (staggerChildren) {
-      items = Array.from(inner.children) as HTMLElement[];
-    } else {
-      items = [inner];
-    }
-    if (items.length === 0) items = [inner];
+    // Preparar elementos para animación
+    const getElementsToAnimate = (): HTMLElement[] => {
+      if (itemSelector) {
+        return Array.from(inner.querySelectorAll<HTMLElement>(itemSelector));
+      } else if (staggerChildren) {
+        return Array.from(inner.children) as HTMLElement[];
+      }
+      return [inner];
+    };
 
-    items.forEach((el) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(20px)";
-      el.style.willChange = "opacity, transform";
-    });
+    const elements =
+      getElementsToAnimate().length > 0 ? getElementsToAnimate() : [inner];
 
+    // Configurar estado inicial de animación mejorado
+    const setupInitialState = () => {
+      elements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = `translateY(${DEFAULT_ANIMATION_CONFIG.initialOffset}px) scale(0.95)`;
+        el.style.willChange = 'opacity, transform';
+        el.style.transition = 'none'; // Evitar transiciones CSS durante la animación JS
+      });
+    };
+
+    // Limpiar animaciones reducidas
+    const cleanupReducedMotion = () => {
+      elements.forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.willChange = 'auto';
+        el.style.transition = '';
+      });
+    };
+
+    setupInitialState();
+
+    // Configurar animación principal
     scopeRef.current = createScope({ root }).add((self: any) => {
-      const io = new IntersectionObserver(
+      const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (!entry.isIntersecting) continue;
 
             if (prefersReduced) {
-              items.forEach((el) => {
-                el.style.opacity = "1";
-                el.style.transform = "none";
-                el.style.willChange = "auto";
-              });
-              io.disconnect();
+              cleanupReducedMotion();
+              observer.disconnect();
               return;
             }
 
-            animate(items, {
+            animate(elements, {
               opacity: [0, 1],
-              translateY: [20, 0],
-              delay: staggerChildren || itemSelector ? stagger(100) : 0,
-              duration: 800,
-              ease: createSpring({ stiffness: 220, damping: 26 }),
+              translateY: [DEFAULT_ANIMATION_CONFIG.initialOffset, 0],
+              scale: [0.95, 1],
+              delay:
+                staggerChildren || itemSelector
+                  ? stagger(DEFAULT_ANIMATION_CONFIG.delay)
+                  : 0,
+              duration: DEFAULT_ANIMATION_CONFIG.duration,
+              ease: createSpring(DEFAULT_ANIMATION_CONFIG.spring),
               complete: () =>
-                items.forEach((el) => (el.style.willChange = "auto")),
+                elements.forEach((el) => {
+                  el.style.willChange = 'auto';
+                  el.style.transition = '';
+                }),
             });
 
-            io.disconnect();
+            setHasAnimated(true);
+            observer.disconnect();
           }
         },
         { threshold }
       );
 
-      io.observe(root);
-      self.add("cleanupIO", () => io.disconnect());
+      observer.observe(root);
+      self.add('cleanupIO', () => observer.disconnect());
     });
 
     return () => {
@@ -100,15 +134,73 @@ const Section = ({
     };
   }, [staggerChildren, itemSelector, threshold]);
 
+  // Animaciones de hover
+  const handleMouseEnter = () => {
+    if (hasAnimated) {
+      setIsHovered(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  // Animación de hover
+  useEffect(() => {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isHovered || !hasAnimated || prefersReduced) return;
+
+    const root = rootRef.current;
+    const inner = innerRef.current;
+    if (!root || !inner) return;
+
+    const getElementsToAnimate = (): HTMLElement[] => {
+      if (itemSelector) {
+        return Array.from(inner.querySelectorAll<HTMLElement>(itemSelector));
+      } else if (staggerChildren) {
+        return Array.from(inner.children) as HTMLElement[];
+      }
+      return [inner];
+    };
+
+    const elements = getElementsToAnimate();
+
+    // Animación sutil de hover
+    animate(elements, {
+      scale: [1, 1.02],
+      duration: 300,
+      easing: 'easeOutQuad',
+      complete: () => {
+        // Volver a escala normal después de un momento
+        setTimeout(() => {
+          if (!isHovered) {
+            animate(elements, {
+              scale: [1.02, 1],
+              duration: 200,
+              easing: 'easeOutQuad',
+            });
+          }
+        }, 500);
+      },
+    });
+  }, [isHovered, hasAnimated, itemSelector, staggerChildren]);
+
   return (
     <section
       ref={rootRef}
       id={id}
       aria-label={ariaLabel ?? title}
       className={className}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      {title ? <h2 className={titleClassName}>{title}</h2> : null}
-      <div ref={innerRef}>{children}</div>
+      <div className="w-full max-w-7xl mx-auto px-6 py-20">
+        {title && <h2 className={titleClassName}>{title}</h2>}
+        <div ref={innerRef}>{children}</div>
+      </div>
     </section>
   );
 };

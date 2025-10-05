@@ -23,10 +23,18 @@ const IconMap = {
   FolderTree,
 } as const;
 
-export const Sidebar = () => {
-  const pathname = usePathname() || "/";
+interface SidebarProps {
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+}
+
+export const Sidebar = ({
+  isCollapsed: externalCollapsed,
+  onToggleCollapse,
+}: SidebarProps = {}) => {
+  const pathname = usePathname() || '/';
   const router = useRouter();
-  const t = useTranslations("Sidebar");
+  const t = useTranslations('Sidebar');
   const paths = useLocalizedPaths();
   const { logout } = useAuth();
 
@@ -42,12 +50,19 @@ export const Sidebar = () => {
     });
   }, [rawLinks]);
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+  // Usar el estado externo si está disponible, sino usar el interno
+  const isCollapsed =
+    externalCollapsed !== undefined ? externalCollapsed : internalCollapsed;
+  const setIsCollapsed = onToggleCollapse || setInternalCollapsed;
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 768px)");
-    setIsCollapsed(media.matches);
-  }, []);
+    if (externalCollapsed === undefined) {
+      const media = window.matchMedia('(max-width: 768px)');
+      setInternalCollapsed(media.matches);
+    }
+  }, [externalCollapsed]);
 
   const handleLogout = async () => {
     try {
@@ -60,59 +75,115 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "border-r border-border min-h-screen flex flex-col transition-all duration-300 bg-card",
-        isCollapsed ? "w-16" : "w-64"
+        'border-r border-border min-h-screen flex flex-col transition-all duration-300 bg-card fixed left-0 top-0 z-40',
+        isCollapsed ? 'w-16' : 'w-64',
+        // En móviles, ocultar cuando está colapsado
+        isCollapsed && 'md:translate-x-0 -translate-x-full'
       )}
     >
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <Link href={paths.admin.dashboard} className="flex items-center gap-2">
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b border-border">
+        <Link
+          href={paths.admin.dashboard}
+          className={cn(
+            'flex items-center min-w-0',
+            isCollapsed ? 'flex-1' : 'gap-2'
+          )}
+        >
           <Image
-            src="/images/logo.png"
+            src="/images/logo-copexia.png"
             alt="Logo"
-            width={48}
-            height={48}
-            className="object-contain"
-            style={{ height: "auto" }}
+            width={40}
+            height={40}
+            className={cn(
+              'object-contain transition-all duration-300',
+              isCollapsed ? 'w-10 h-10' : 'w-10 h-10'
+            )}
+            style={{ height: 'auto' }}
           />
           {!isCollapsed && (
-            <span className="font-bold text-lg transition-opacity">
-              {t("panelTitle")}
+            <span className="font-bold text-sm sm:text-base lg:text-lg transition-opacity truncate">
+              {t('panelTitle')}
             </span>
           )}
         </Link>
         <button
           onClick={() => setIsCollapsed((prev) => !prev)}
-          aria-label="Toggle sidebar"
-          className="ml-auto text-muted-foreground hover:text-foreground"
+          aria-label={isCollapsed ? 'Expand sidebar' : 'Toggle sidebar'}
+          className={cn(
+            'text-muted-foreground hover:text-foreground transition-colors',
+            isCollapsed ? 'p-1' : 'ml-auto p-1'
+          )}
           type="button"
         >
-          <List className="w-5 h-5" />
+          <List className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
-        {links.map(({ href, label, iconName }, idx) => {
-          const Icon = IconMap[iconName as keyof typeof IconMap];
-          const isActive =
-            pathname === href ||
-            pathname === `${href}/` ||
-            pathname.startsWith(`${href}/`);
-          return (
-            <Link
-              key={`${href}#${idx}`}
-              href={href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent",
-                isActive && "bg-accent text-accent-foreground",
-                isCollapsed && "justify-center"
-              )}
-              aria-current={isActive ? "page" : undefined}
-            >
-              {Icon && <Icon className="w-5 h-5" />}
-              {!isCollapsed && <span>{label}</span>}
-            </Link>
-          );
-        })}
+        {(() => {
+          // Primero determinar cuál enlace debe estar activo
+          const activeLink = (() => {
+            // Buscar coincidencia exacta primero
+            const exactMatch = links.find(
+              (link) => pathname === link.href || pathname === `${link.href}/`
+            );
+            if (exactMatch) return exactMatch;
+
+            // Buscar la coincidencia más específica para rutas anidadas
+            const pathSegments = pathname.split('/').filter(Boolean);
+            let bestMatch = null;
+            let maxMatchingSegments = 0;
+
+            for (const link of links) {
+              const hrefSegments = link.href.split('/').filter(Boolean);
+
+              // Si la ruta actual comienza con esta href
+              if (pathSegments.length >= hrefSegments.length) {
+                const matchingSegments = hrefSegments.filter(
+                  (segment, index) => pathSegments[index] === segment
+                ).length;
+
+                if (
+                  matchingSegments === hrefSegments.length &&
+                  matchingSegments > maxMatchingSegments
+                ) {
+                  bestMatch = link;
+                  maxMatchingSegments = matchingSegments;
+                }
+              }
+            }
+
+            return bestMatch;
+          })();
+
+          return links.map(({ href, label, iconName }, idx) => {
+            const Icon = IconMap[iconName as keyof typeof IconMap];
+            const isActive = activeLink?.href === href;
+
+            return (
+              <Link
+                key={`${href}#${idx}`}
+                href={href}
+                className={cn(
+                  'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent',
+                  isActive && 'bg-accent text-accent-foreground',
+                  isCollapsed && 'justify-center'
+                )}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {Icon && (
+                  <Icon
+                    className={cn(
+                      'transition-all duration-300',
+                      isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+                    )}
+                  />
+                )}
+                {!isCollapsed && <span>{label}</span>}
+              </Link>
+            );
+          });
+        })()}
       </nav>
 
       <div className="p-4 border-t border-border">
@@ -120,12 +191,17 @@ export const Sidebar = () => {
           onClick={handleLogout}
           type="button"
           className={cn(
-            "flex items-center gap-3 px-3 py-2 w-full text-sm text-destructive hover:underline",
-            isCollapsed && "justify-center"
+            'flex items-center gap-3 px-3 py-2 w-full text-sm text-destructive hover:underline',
+            isCollapsed ? 'justify-center' : ''
           )}
         >
-          <LogOut className="w-5 h-5" />
-          {!isCollapsed && t("logout")}
+          <LogOut
+            className={cn(
+              'flex-shrink-0 transition-all duration-300',
+              isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+            )}
+          />
+          {!isCollapsed && <span className="truncate">{t('logout')}</span>}
         </button>
       </div>
     </aside>

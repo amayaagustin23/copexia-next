@@ -4,83 +4,202 @@ import { animate, createSpring } from "animejs";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-export default function HeroSection() {
-  const t = useTranslations("home.hero");
+const ANIMATION_CONFIG = {
+  spring: { stiffness: 320, damping: 18 },
+  scale: [1, 1.03, 1],
+  scaleDuration: 260,
+  progressDuration: { enter: 900, leave: 300 },
+};
+
+const HeroSection = () => {
+  const t = useTranslations('home.hero');
   const ctasRef = useRef<HTMLDivElement | null>(null);
+  const logoRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const subtitleRef = useRef<HTMLParagraphElement | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const spring = useMemo(
-    () => createSpring({ stiffness: 320, damping: 18 }),
-    []
-  );
+  const spring = useMemo(() => createSpring(ANIMATION_CONFIG.spring), []);
+
+  useEffect(() => {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) {
+      [logoRef, titleRef, subtitleRef, ctasRef].forEach((ref) => {
+        if (ref.current) {
+          ref.current.style.opacity = '1';
+          ref.current.style.transform = 'none';
+        }
+      });
+      return;
+    }
+
+    const elements = [
+      { ref: logoRef, delay: 0, scale: [0.9, 1] },
+      { ref: titleRef, delay: 300, scale: [0.95, 1] },
+      { ref: subtitleRef, delay: 500, scale: [0.95, 1] },
+      { ref: ctasRef, delay: 700, scale: [0.9, 1] },
+    ].filter((item) => item.ref.current);
+
+    elements.forEach(({ ref }) => {
+      const el = ref.current;
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(40px) scale(0.9)';
+        el.style.willChange = 'opacity, transform';
+      }
+    });
+
+    const timeline = elements.map(({ ref, delay, scale }) => {
+      const el = ref.current;
+      if (!el) return null;
+
+      return animate(el, {
+        opacity: [0, 1],
+        translateY: [40, 0],
+        scale: scale || [0.9, 1],
+        delay,
+        duration: 1000,
+        ease: spring,
+        complete: () => {
+          el.style.willChange = 'auto';
+        },
+      });
+    });
+
+    return () => {
+      timeline.forEach((anim) => anim?.pause());
+    };
+  }, [spring]);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) return;
+
+    const elements = [
+      logoRef.current,
+      titleRef.current,
+      subtitleRef.current,
+    ].filter(Boolean);
+
+    animate(elements, {
+      scale: [1, 1.02],
+      duration: 400,
+      easing: 'easeOutQuad',
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced) return;
+
+    const elements = [
+      logoRef.current,
+      titleRef.current,
+      subtitleRef.current,
+    ].filter(Boolean);
+
+    animate(elements, {
+      scale: [1.02, 1],
+      duration: 300,
+      easing: 'easeOutQuad',
+    });
+  };
 
   useEffect(() => {
     const root = ctasRef.current;
     if (!root) return;
 
     const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReduced) return;
 
     const buttons = Array.from(
-      root.querySelectorAll<HTMLAnchorElement>("[data-cta]")
+      root.querySelectorAll<HTMLAnchorElement>('[data-cta]')
     );
     if (!buttons.length) return;
 
-    const cleanups: Array<() => void> = [];
-
-    for (const anchor of buttons) {
-      let bar = anchor.querySelector<HTMLElement>("[data-progress]");
+    const createProgressBar = (anchor: HTMLAnchorElement): HTMLElement => {
+      let bar = anchor.querySelector<HTMLElement>('[data-progress]');
       if (!bar) {
-        bar = document.createElement("span");
-        bar.setAttribute("data-progress", "true");
+        bar = document.createElement('span');
+        bar.setAttribute('data-progress', 'true');
         Object.assign(bar.style, {
-          position: "absolute",
-          insetInlineStart: "0",
-          insetBlockEnd: "0",
-          height: "2px",
-          width: "0%",
-          background: "var(--ring)",
-          transformOrigin: "left center",
-          transition: "opacity .18s ease",
-          opacity: "0.95",
+          position: 'absolute',
+          insetInlineStart: '0',
+          insetBlockEnd: '0',
+          height: '2px',
+          width: '0%',
+          background: 'var(--ring)',
+          transformOrigin: 'left center',
+          transition: 'opacity .18s ease',
+          opacity: '0.95',
         } as Partial<CSSStyleDeclaration>);
-        anchor.style.position = "relative";
+        anchor.style.position = 'relative';
         anchor.appendChild(bar);
       }
+      return bar;
+    };
 
-      const onEnter = () => {
-        animate(anchor, { scale: [1, 1.03, 1], duration: 260, ease: spring });
-        animate(bar!, {
-          width: ["0%", "100%"],
-          duration: 900,
-          easing: "easeInOutQuad",
+    const setupButtonAnimation = (anchor: HTMLAnchorElement) => {
+      const bar = createProgressBar(anchor);
+
+      const handleEnter = () => {
+        animate(anchor, {
+          scale: ANIMATION_CONFIG.scale,
+          duration: ANIMATION_CONFIG.scaleDuration,
+          ease: spring,
+        });
+        animate(bar, {
+          width: ['0%', '100%'],
+          duration: ANIMATION_CONFIG.progressDuration.enter,
+          easing: 'easeInOutQuad',
         });
       };
-      const onLeave = () => {
-        animate(bar!, {
-          width: ["100%", "0%"],
-          duration: 300,
-          easing: "easeOutQuad",
+
+      const handleLeave = () => {
+        animate(bar, {
+          width: ['100%', '0%'],
+          duration: ANIMATION_CONFIG.progressDuration.leave,
+          easing: 'easeOutQuad',
         });
       };
 
-      anchor.addEventListener("mouseenter", onEnter);
-      anchor.addEventListener("mouseleave", onLeave);
-      cleanups.push(() => {
-        anchor.removeEventListener("mouseenter", onEnter);
-        anchor.removeEventListener("mouseleave", onLeave);
-      });
-    }
+      anchor.addEventListener('mouseenter', handleEnter);
+      anchor.addEventListener('mouseleave', handleLeave);
 
-    return () => cleanups.forEach((off) => off());
+      return () => {
+        anchor.removeEventListener('mouseenter', handleEnter);
+        anchor.removeEventListener('mouseleave', handleLeave);
+      };
+    };
+
+    const cleanups = buttons.map(setupButtonAnimation);
+    return () => cleanups.forEach((cleanup) => cleanup());
   }, [spring]);
 
   return (
-    <div className="relative isolate flex flex-col items-center justify-center text-center px-6 text-foreground overflow-hidden rounded-[var(--radius)]">
+    <div
+      className="relative isolate flex flex-col items-center justify-center text-center w-full h-screen text-foreground"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div
         aria-hidden
         className="hero-bg pointer-events-none absolute inset-0 -z-10 opacity-[0.95]"
@@ -90,37 +209,42 @@ export default function HeroSection() {
         className="gold-layer pointer-events-none absolute inset-0 -z-10 mix-blend-soft-light"
       />
 
-      <div className="my-10">
+      <div ref={logoRef} className="mb-4">
         <Image
           src="/images/logo-copexia.png"
-          alt={t("brandAlt")}
-          width={500} // medida de referencia del asset
-          height={200} // mantiene aspecto
-          priority // mejora LCP del hero
+          alt={t('brandAlt')}
+          width={500}
+          height={200}
+          priority
           quality={90}
           sizes="(min-width: 1024px) 144px, (min-width: 768px) 120px, 96px"
           className="w-auto h-24 md:h-28 lg:h-36 object-contain"
         />
       </div>
 
-      <div className="max-w-3xl">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-tight">
+      <div className="max-w-4xl mx-auto text-center px-4">
+        <h1
+          ref={titleRef}
+          className="text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-tight"
+        >
           <span
             className="bg-clip-text text-transparent inline-block"
-            style={{ backgroundImage: "var(--gold-gradient)" }}
+            style={{ backgroundImage: 'var(--gold-gradient)' }}
           >
-            {t("title")}
+            {t('title')}
           </span>
         </h1>
 
-        <p className="text-lg md:text-xl text-muted-foreground mb-8">
-          {t("subtitle")}
+        <p
+          ref={subtitleRef}
+          className="text-lg md:text-xl text-muted-foreground mb-8"
+        >
+          {t('subtitle')}
         </p>
 
         <div ref={ctasRef} className="flex flex-wrap justify-center gap-4">
-          {/* CTA principal con sheen + progress bar */}
           <Link
-            href="#servicios"
+            href="#sobre-nosotros"
             data-cta
             className="relative overflow-hidden rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring"
           >
@@ -128,7 +252,18 @@ export default function HeroSection() {
               aria-hidden
               className="sheen pointer-events-none absolute inset-y-0 left-[-140%] w-[140%] skew-x-[-20deg] opacity-0"
             />
-            <span className="relative z-10">{t("cta.services")}</span>
+            <span className="relative z-10">{t('cta.services')}</span>
+          </Link>
+          <Link
+            href="#valores"
+            data-cta
+            className="relative overflow-hidden rounded-lg border border-primary/20 bg-background/50 px-6 py-3 text-sm font-medium text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring"
+          >
+            <span
+              aria-hidden
+              className="sheen pointer-events-none absolute inset-y-0 left-[-140%] w-[140%] skew-x-[-20deg] opacity-0"
+            />
+            <span className="relative z-10">{t('cta.values')}</span>
           </Link>
         </div>
       </div>
@@ -217,4 +352,6 @@ export default function HeroSection() {
       `}</style>
     </div>
   );
-}
+};
+
+export default HeroSection;

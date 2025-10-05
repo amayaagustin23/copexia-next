@@ -1,64 +1,67 @@
-// middleware.ts
 import {
+  getLocaleFromPath,
+  getLocalizedPath,
   isAdminPath,
   isAuthPath,
+  mapToEnglishRoute,
+  shouldRedirectToEnglishRoute,
+  stripLocale,
   SUPPORTED_LOCALES,
-} from "@/lib/config/routes";
-import createMiddleware from "next-intl/middleware";
-import { NextRequest, NextResponse } from "next/server";
+} from '@/lib/config/routes';
+import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
 
 const intl = createMiddleware({
   locales: [...SUPPORTED_LOCALES],
-  defaultLocale: "es",
-  localePrefix: "as-needed",
+  defaultLocale: 'es',
+  localePrefix: 'always',
 });
 
-const SESSION_COOKIE = "session";
+const SESSION_COOKIE = 'token';
 
 export function middleware(req: NextRequest) {
-  const { pathname, search } = req.nextUrl;
+  const { pathname } = req.nextUrl;
 
-  // 1) i18n primero (gestiona prefixing/rewrite de locales)
   const intlRes = intl(req);
   if (intlRes instanceof NextResponse && intlRes.redirected) {
     return intlRes;
   }
 
-  // 2) Forzar "/" -> "/es"
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/es", req.url));
-  }
+  const locale = getLocaleFromPath(pathname);
+  const pathWithoutLocale = stripLocale(pathname);
 
-  // Helpers de locale
-  const seg = pathname.split("/").filter(Boolean)[0];
-  const locale = SUPPORTED_LOCALES.includes(seg as any) ? seg : "es";
-
-  const hasSession = !!req.cookies.get(SESSION_COOKIE)?.value;
-
-  // 3) Si intenta ir al login estando autenticado -> enviar a /:locale/admin
-  if (isAuthPath(pathname) && hasSession) {
+  if (shouldRedirectToEnglishRoute(pathWithoutLocale)) {
+    const englishRoute = mapToEnglishRoute(pathWithoutLocale);
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}/admin`;
-    url.search = ""; // limpiamos query
+    url.pathname = `/${locale}${englishRoute}`;
     return NextResponse.redirect(url);
   }
 
-  // 4) Proteger rutas admin (ignorar páginas de auth)
+  const hasSession = !!req.cookies.get(SESSION_COOKIE)?.value;
+
+  // Regla 1: Si existe token, nunca permitir acceso a rutas de autenticación (login, forgot-password, etc.)
+  if (isAuthPath(pathname) && hasSession) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${locale}/admin`;
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+
+  // Regla 2: Solo permitir acceso a rutas admin si existe token
   if (isAdminPath(pathname) && !isAuthPath(pathname)) {
     if (!hasSession) {
       const url = req.nextUrl.clone();
-      url.pathname = `/${locale}/ingresar`;
-      // Conservamos la ruta original + query como redirect
+      url.pathname = `/${locale}${getLocalizedPath('login', locale)}`;
+      url.search = '';
+      return NextResponse.redirect(url);
     }
   }
 
-  // 5) Continuar normalmente
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    // Excluímos assets/next/api/etc.
-    "/((?!_next|api|static|assets|images|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest).*)",
+    '/((?!_next|api|static|assets|images|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest).*)',
   ],
 };

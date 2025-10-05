@@ -1,51 +1,203 @@
-// src/app/[locale]/page.tsx
-"use client";
+'use client';
 
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
-import LearningOverview from "@/components/home/learning/LearningOverview";
-import Section from "@/components/Section";
-import AboutSection from "@/components/Sections/AboutSection";
-import HeroSection from "@/components/Sections/HeroSection";
-import ValuesSection from "@/components/Sections/ValuesSection";
+// Components
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import Section from '@/components/Section';
+import AboutSection from '@/components/Sections/AboutSection';
+import ContactSection from '@/components/Sections/ContactSection';
+import HeroSection from '@/components/Sections/HeroSection';
+import LearningOverview from '@/components/Sections/LearningOverview';
+import PostsSection from '@/components/Sections/PostsSection';
+import ValuesSection from '@/components/Sections/ValuesSection';
+
+// Hooks
+import { useEffect } from 'react';
+
+// Types
+interface SectionConfig {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
 
 export default function HomePage() {
+  // Configuración global de animaciones
+  useEffect(() => {
+    // Preload fonts for better animation performance
+    if (typeof document !== 'undefined') {
+      document.fonts.ready.then(() => {
+        // Fonts loaded, animations can start smoothly
+      });
+    }
+  }, []);
+
+  // Sección de configuración centralizada para mejor mantenimiento
+  const sections: SectionConfig[] = [
+    {
+      id: 'inicio',
+      title: '',
+      children: <HeroSection />,
+      className: 'h-screen w-full bg-background',
+    },
+    {
+      id: 'sobre-nosotros',
+      title: '',
+      children: <AboutSection />,
+      className: 'section-about bg-muted/5',
+    },
+    {
+      id: 'valores',
+      title: '',
+      children: <ValuesSection />,
+      className: 'section-values bg-background',
+    },
+    {
+      id: 'servicios',
+      title: 'Copexia Learning',
+      children: <LearningOverview />,
+      className: 'section-learning bg-muted/5',
+    },
+    {
+      id: 'blog',
+      title: '',
+      children: <PostsSection />,
+      className: 'section-posts bg-background',
+    },
+    {
+      id: 'contacto',
+      title: '',
+      children: <ContactSection />,
+      className: 'section-contact bg-muted/5',
+    },
+  ];
+
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <Section
-        id="inicio"
-        title=""
-        itemSelector="[data-animate]"
-        staggerChildren
-      >
-        <HeroSection />
-      </Section>
+    <main className="min-h-screen">
+      <style jsx global>{`
+        /* Configuración global de animaciones */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-      <Section
-        id="valores"
-        title=""
-        itemSelector="[data-animate]"
-        staggerChildren
-      >
-        <AboutSection />
-      </Section>
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
 
-      <Section
-        id="servicios"
-        title=""
-        itemSelector="[data-animate]"
-        staggerChildren
-      >
-        <ValuesSection />
-      </Section>
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
 
-      <Section
-        id="learning"
-        title="Copexia Learning"
-        itemSelector="[data-animate]"
-        staggerChildren
-      >
-        <LearningOverview />
-      </Section>
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Optimizaciones de rendimiento */
+        * {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+
+        /* Smooth scrolling para navegación */
+        html {
+          scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          html {
+            scroll-behavior: auto;
+          }
+        }
+
+        /* Mejoras de rendimiento para animaciones */
+        [data-animate],
+        .transition-all,
+        .will-change-transform {
+          will-change: transform, opacity;
+        }
+
+        /* Optimización para elementos animados */
+        .animate-fade-up {
+          animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-fade-scale {
+          animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        .animate-slide-left {
+          animation: slideInLeft 0.7s ease-out forwards;
+        }
+
+        .animate-slide-right {
+          animation: slideInRight 0.7s ease-out forwards;
+        }
+      `}</style>
+
+      {sections.map((section, index) => {
+        if (section.id === 'inicio') {
+          // Hero section sin padding ni restricciones
+          return (
+            <section key={section.id} className={section.className}>
+              {section.children}
+            </section>
+          );
+        }
+
+        return (
+          <Section
+            key={section.id}
+            id={section.id}
+            title={section.title}
+            className={section.className}
+            itemSelector="[data-animate]"
+            staggerChildren={true}
+            threshold={0.15}
+          >
+            {section.children}
+          </Section>
+        );
+      })}
 
       <FloatingWhatsApp />
     </main>

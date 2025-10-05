@@ -1,12 +1,14 @@
 "use client";
-import { useLocale } from "next-intl";
+import { getLocalizedPath } from '@/lib/config/routes';
+import { useLocale } from 'next-intl';
 
 type SectionId =
-  | "inicio"
-  | "servicios"
-  | "sobre-nosotros"
-  | "valores"
-  | "contacto";
+  | 'inicio'
+  | 'servicios'
+  | 'sobre-nosotros'
+  | 'valores'
+  | 'contacto'
+  | 'learning';
 
 type ServicesAnchors = {
   transformacion: string;
@@ -27,6 +29,7 @@ type Sections = {
   aboutUs: string;
   values: string;
   contact: string;
+  learning: string;
 };
 
 type AdminPaths = {
@@ -50,9 +53,9 @@ export const useLocalizedPaths = () => {
   } as const;
 
   const auth: AuthPaths = {
-    signIn: `${base}/ingresar`,
-    recoverPassword: `${base}/recuperar-contrasena`,
-    changePassword: `${base}/cambiar-contrasena`,
+    signIn: `${base}${getLocalizedPath('login', locale)}`,
+    recoverPassword: `${base}${getLocalizedPath('forgotPassword', locale)}`,
+    changePassword: `${base}${getLocalizedPath('changePassword', locale)}`,
   } as const;
 
   const admin: AdminPaths = {
@@ -63,15 +66,16 @@ export const useLocalizedPaths = () => {
   } as const;
 
   const sections: Sections = {
-    home: anchor("inicio"),
-    services: anchor("servicios"),
-    aboutUs: anchor("sobre-nosotros"),
-    values: anchor("valores"),
-    contact: anchor("contacto"),
+    home: anchor('inicio'),
+    services: anchor('servicios'),
+    aboutUs: anchor('sobre-nosotros'),
+    values: anchor('valores'),
+    contact: anchor('contacto'),
+    learning: anchor('learning'),
   } as const;
 
-  const path = (subpath = "") =>
-    subpath ? `${base}/${subpath.replace(/^\/+/, "")}` : base;
+  const path = (subpath = '') =>
+    subpath ? `${base}/${subpath.replace(/^\/+/, '')}` : base;
 
   return {
     root: base,

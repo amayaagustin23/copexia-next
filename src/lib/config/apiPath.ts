@@ -1,4 +1,5 @@
-const BACKEND_API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL;
+const BACKEND_API_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://localhost:8000/api';
 export const BackendEndpoints = {
   auth: {
     login: `${BACKEND_API_BASE_URL}/auth/login`,
