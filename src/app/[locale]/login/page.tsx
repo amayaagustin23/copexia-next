@@ -62,7 +62,7 @@ export default function LoginPage() {
           <Image
             src="/images/logo-copexia.png"
             alt="Copexia"
-            width={250}
+            width={150}
             height={50}
             className="mb-1"
           />

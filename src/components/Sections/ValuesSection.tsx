@@ -147,28 +147,28 @@ export default function ValuesSection() {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`w-full transition-all duration-300 ${
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-10 xs:py-12 sm:py-16 lg:py-20 transition-all duration-300 ${
           isHovered ? 'transform translate-y-[-1px]' : ''
         }`}
       >
         <header
-          className={`mb-8 text-center transition-all duration-700 will-change-transform ${
+          className={`mb-4 xs:mb-6 sm:mb-8 text-center transition-all duration-700 will-change-transform ${
             inView
               ? 'opacity-100 translate-y-0 scale-100'
               : 'opacity-0 translate-y-6 scale-95'
           }`}
         >
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+          <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight leading-tight">
             {t('heading')}
           </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground px-2">
             {t('subheading')}
           </p>
         </header>
 
         {/* Ribbon */}
         <div
-          className={`relative mx-auto max-w-5xl transition-all duration-600 will-change-transform ${
+          className={`relative mx-auto max-w-full w-full transition-all duration-600 will-change-transform ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           } ${isHovered ? 'scale-[1.01]' : ''}`}
           style={{ transitionDelay: inView ? '200ms' : '0ms' }}
@@ -178,12 +178,12 @@ export default function ValuesSection() {
           tabIndex={0}
         >
           {/* Línea base */}
-          <div className="relative h-2 rounded-full bg-muted border border-border" />
+          <div className="relative h-1.5 xs:h-2 rounded-full bg-muted border border-border" />
 
           {/* Progreso */}
           <div
             ref={barRef}
-            className="absolute left-0 top-0 h-2 rounded-full"
+            className="absolute left-0 top-0 h-1.5 xs:h-2 rounded-full"
             style={{
               background: 'var(--ring)',
               width: '0%',
@@ -193,7 +193,7 @@ export default function ValuesSection() {
           />
 
           {/* Checkpoints con íconos */}
-          <div className="absolute top-[-14px] left-0 right-0 flex justify-between">
+          <div className="absolute top-[-10px] xs:top-[-12px] sm:top-[-14px] left-0 right-0 flex justify-between px-1">
             {items.map((it, i) => {
               const isActive = i === active;
               const Icon = it.icon; // ✅ cada botón usa su propio icono
@@ -206,18 +206,18 @@ export default function ValuesSection() {
                   id={`value-tab-${i}`}
                   onClick={() => handleUserInteraction(i)}
                   onMouseEnter={() => handleUserInteraction(i)}
-                  className="group grid place-items-center focus:outline-none"
+                  className="group grid place-items-center focus:outline-none touch-manipulation"
                 >
                   <span
                     className={[
-                      'grid h-8 w-8 place-items-center rounded-full border transition-transform',
+                      'grid h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 place-items-center rounded-full border transition-transform',
                       isActive
                         ? 'bg-primary text-primary-foreground border-primary shadow-sm scale-110'
                         : 'bg-card text-foreground/80 border-border group-hover:scale-105',
                     ].join(' ')}
                     aria-hidden
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-2.5 w-2.5 xs:h-3 xs:w-3 sm:h-4 sm:w-4" />
                   </span>
                 </button>
               );
@@ -231,7 +231,7 @@ export default function ValuesSection() {
           id={`value-panel-${active}`}
           role="tabpanel"
           aria-labelledby={`value-tab-${active}`}
-          className={`mx-auto mt-6 max-w-3xl rounded-2xl border border-border bg-card p-6 shadow-sm flex flex-col items-center text-center transition-all duration-600 will-change-transform ${
+          className={`mx-auto mt-3 xs:mt-4 sm:mt-6 max-w-full w-full rounded-lg xs:rounded-xl sm:rounded-2xl border border-border bg-card p-3 xs:p-4 sm:p-6 shadow-sm flex flex-col items-center text-center transition-all duration-600 will-change-transform ${
             inView
               ? 'opacity-100 translate-y-0 scale-100'
               : 'opacity-0 translate-y-4 scale-95'
@@ -241,21 +241,23 @@ export default function ValuesSection() {
             transitionDelay: inView ? '400ms' : '0ms',
           }}
         >
-          <ActiveIcon className="h-8 w-8 text-primary mb-3" />
-          <h3 className="text-lg font-medium">{items[active].title}</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <ActiveIcon className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 text-primary mb-2 xs:mb-3" />
+          <h3 className="text-sm xs:text-base sm:text-lg font-medium leading-tight">
+            {items[active].title}
+          </h3>
+          <p className="mt-2 text-[10px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed px-2">
             {items[active].desc}
           </p>
         </div>
 
         {/* Auto-play indicator and mobile helper */}
         <div
-          className={`mt-3 text-center text-xs text-muted-foreground transition-all duration-600 will-change-transform ${
+          className={`mt-2 xs:mt-3 text-center text-[10px] xs:text-xs text-muted-foreground transition-all duration-600 will-change-transform ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           }`}
           style={{ transitionDelay: inView ? '600ms' : '0ms' }}
         >
-          <p className="md:hidden">
+          <p className="md:hidden px-4">
             <span className="font-medium">Tip:</span> deslizá la fila de íconos
             o tocá cada uno.
           </p>

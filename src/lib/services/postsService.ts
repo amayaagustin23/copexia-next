@@ -1,4 +1,12 @@
-import type { GetPostsParams, GetPostsResponse } from '@/types/posts';
+import type {
+  Comment,
+  CreateCommentData,
+  CreatePostData,
+  GetPostsParams,
+  GetPostsResponse,
+  Post,
+  UpdatePostData,
+} from '@/types/posts';
 import { BaseService } from './baseService';
 
 /**
@@ -24,14 +32,14 @@ export class PostsService extends BaseService {
   /**
    * Create a new post (admin)
    */
-  async create(postData: any): Promise<any> {
+  async create(postData: CreatePostData): Promise<Post> {
     return this.adminRequest('POST', this.routes.ADMIN.POSTS.CREATE, postData);
   }
 
   /**
    * Update an existing post (admin)
    */
-  async update(id: string, postData: any): Promise<any> {
+  async update(id: string, postData: UpdatePostData): Promise<Post> {
     return this.adminRequest(
       'PUT',
       this.routes.ADMIN.POSTS.UPDATE(id),
@@ -42,21 +50,21 @@ export class PostsService extends BaseService {
   /**
    * Delete a post (admin)
    */
-  async deletePost(id: string): Promise<any> {
+  async deletePost(id: string): Promise<void> {
     return this.adminRequest('DELETE', this.routes.ADMIN.POSTS.DELETE(id));
   }
 
   /**
    * Get post by ID (admin)
    */
-  async getById(id: string): Promise<any> {
+  async getById(id: string): Promise<Post> {
     return this.adminRequest('GET', this.routes.ADMIN.POSTS.GET_BY_ID(id));
   }
 
   /**
    * Get dashboard data (admin)
    */
-  async getDashboard(): Promise<any> {
+  async getDashboard(): Promise<unknown> {
     return this.adminRequest('GET', this.routes.ADMIN.POSTS.DASHBOARD);
   }
 
@@ -77,42 +85,45 @@ export class PostsService extends BaseService {
   /**
    * Get public post by ID
    */
-  async getPublicPostById(id: string): Promise<any> {
+  async getPublicPostById(id: string): Promise<Post> {
     return this.get(this.routes.PUBLIC.POSTS.GET_BY_ID(id));
   }
 
   /**
    * Get public post by slug
    */
-  async getPublicPostBySlug(slug: string): Promise<any> {
+  async getPublicPostBySlug(slug: string): Promise<Post> {
     return this.get(this.routes.PUBLIC.POSTS.GET_BY_SLUG(slug));
   }
 
   /**
    * Like a post
    */
-  async likePost(id: string): Promise<any> {
+  async likePost(id: string): Promise<unknown> {
     return this.post(this.routes.PUBLIC.POSTS.LIKE(id));
   }
 
   /**
    * Unlike a post
    */
-  async unlikePost(id: string): Promise<any> {
+  async unlikePost(id: string): Promise<unknown> {
     return this.deleteRequest(this.routes.PUBLIC.POSTS.UNLIKE(id));
   }
 
   /**
    * Get comments for a post
    */
-  async getComments(postId: string): Promise<any> {
+  async getComments(postId: string): Promise<Comment[]> {
     return this.get(this.routes.PUBLIC.POSTS.COMMENTS(postId));
   }
 
   /**
    * Create a comment on a post
    */
-  async createComment(postId: string, commentData: any): Promise<any> {
+  async createComment(
+    postId: string,
+    commentData: CreateCommentData
+  ): Promise<Comment> {
     return this.post(
       this.routes.PUBLIC.POSTS.CREATE_COMMENT(postId),
       commentData
@@ -122,7 +133,7 @@ export class PostsService extends BaseService {
   /**
    * Increment view count for a post
    */
-  async incrementView(postId: string): Promise<any> {
+  async incrementView(postId: string): Promise<unknown> {
     return this.post(this.routes.PUBLIC.POSTS.INCREMENT_VIEW(postId));
   }
 
@@ -131,21 +142,21 @@ export class PostsService extends BaseService {
   /**
    * @deprecated Use create() instead
    */
-  async createPost(postData: any): Promise<any> {
+  async createPost(postData: CreatePostData): Promise<Post> {
     return this.create(postData);
   }
 
   /**
    * @deprecated Use update() instead
    */
-  async updatePost(id: string, postData: any): Promise<any> {
+  async updatePost(id: string, postData: UpdatePostData): Promise<Post> {
     return this.update(id, postData);
   }
 
   /**
    * @deprecated Use deletePost() instead
    */
-  async delete(id: string): Promise<any> {
+  async delete(id: string): Promise<void> {
     return this.deletePost(id);
   }
 }

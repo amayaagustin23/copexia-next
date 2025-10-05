@@ -7,7 +7,6 @@ type Paths = {
     sobreNosotros: string;
     contacto: string;
     valores: string;
-    learning: string;
     [k: string]: string;
   };
   link: (id: string) => string;
@@ -43,7 +42,6 @@ export const getMenu = (
     },
     { name: t('menu.about'), href: paths.secciones.sobreNosotros },
     { name: t('menu.values'), href: paths.secciones.valores },
-    { name: t('menu.learning'), href: paths.secciones.learning },
     { name: t('menu.contact'), href: paths.secciones.contacto },
   ];
 

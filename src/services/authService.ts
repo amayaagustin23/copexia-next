@@ -54,17 +54,12 @@ export async function logoutUser(
   }
 }
 
-export async function getMyProfile(
-  router?: ReturnType<typeof useRouter>,
-  redirectTo?: string
-): Promise<UserProfile | undefined> {
-  // Solo hacer llamada a /me si hay cookies
+export async function getMyProfile(): Promise<UserProfile | undefined> {
   if (typeof window !== 'undefined') {
     const hasCookies =
       document.cookie.includes('token=') ||
       document.cookie.includes('refreshT=');
     if (!hasCookies) {
-      console.log('AuthService: No cookies found, skipping /me call');
       return undefined;
     }
   }
@@ -77,8 +72,6 @@ export async function getMyProfile(
       isAxiosErrorType<ApiErrorResponse>(error) &&
       (error.response?.status === 401 || error.response?.status === 403)
     ) {
-      // Don't call logout here as it might cause redirect loops
-      // The axios interceptor will handle the logout
     }
   }
 

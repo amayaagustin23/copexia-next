@@ -2,8 +2,7 @@
 
 import { animate, createScope, createSpring, stagger } from 'animejs';
 import React, { useEffect, useRef, useState } from 'react';
-
-// Types
+                
 interface SectionProps {
   id?: string;
   title?: string;
@@ -16,7 +15,6 @@ interface SectionProps {
   threshold?: number;
 }
 
-// Constants
 const DEFAULT_ANIMATION_CONFIG = {
   threshold: 0.15,
   duration: 900,
@@ -33,7 +31,7 @@ const Section: React.FC<SectionProps> = ({
   staggerChildren = false,
   itemSelector,
   className = 'w-full',
-  titleClassName = 'text-3xl md:text-4xl font-semibold tracking-tight mb-6 text-center',
+  titleClassName = 'text-xl xs:text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-4 xs:mb-6 text-center leading-tight',
   threshold = DEFAULT_ANIMATION_CONFIG.threshold,
 }) => {
   const rootRef = useRef<HTMLElement | null>(null);
@@ -47,12 +45,10 @@ const Section: React.FC<SectionProps> = ({
     const inner = innerRef.current;
     if (!root || !inner) return;
 
-    // Verificar si el usuario prefiere animaciones reducidas
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    // Preparar elementos para animación
     const getElementsToAnimate = (): HTMLElement[] => {
       if (itemSelector) {
         return Array.from(inner.querySelectorAll<HTMLElement>(itemSelector));
@@ -65,17 +61,15 @@ const Section: React.FC<SectionProps> = ({
     const elements =
       getElementsToAnimate().length > 0 ? getElementsToAnimate() : [inner];
 
-    // Configurar estado inicial de animación mejorado
     const setupInitialState = () => {
       elements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = `translateY(${DEFAULT_ANIMATION_CONFIG.initialOffset}px) scale(0.95)`;
         el.style.willChange = 'opacity, transform';
-        el.style.transition = 'none'; // Evitar transiciones CSS durante la animación JS
+        el.style.transition = 'none';
       });
     };
 
-    // Limpiar animaciones reducidas
     const cleanupReducedMotion = () => {
       elements.forEach((el) => {
         el.style.opacity = '1';
@@ -87,7 +81,6 @@ const Section: React.FC<SectionProps> = ({
 
     setupInitialState();
 
-    // Configurar animación principal
     scopeRef.current = createScope({ root }).add((self: any) => {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -134,7 +127,6 @@ const Section: React.FC<SectionProps> = ({
     };
   }, [staggerChildren, itemSelector, threshold]);
 
-  // Animaciones de hover
   const handleMouseEnter = () => {
     if (hasAnimated) {
       setIsHovered(true);
@@ -145,7 +137,6 @@ const Section: React.FC<SectionProps> = ({
     setIsHovered(false);
   };
 
-  // Animación de hover
   useEffect(() => {
     const prefersReduced =
       typeof window !== 'undefined' &&
@@ -168,13 +159,11 @@ const Section: React.FC<SectionProps> = ({
 
     const elements = getElementsToAnimate();
 
-    // Animación sutil de hover
     animate(elements, {
       scale: [1, 1.02],
       duration: 300,
       easing: 'easeOutQuad',
       complete: () => {
-        // Volver a escala normal después de un momento
         setTimeout(() => {
           if (!isHovered) {
             animate(elements, {
@@ -197,7 +186,7 @@ const Section: React.FC<SectionProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-full mx-auto py-20">
+      <div className="w-full py-12 xs:py-16 lg:py-20">
         {title && <h2 className={titleClassName}>{title}</h2>}
         <div ref={innerRef}>{children}</div>
       </div>

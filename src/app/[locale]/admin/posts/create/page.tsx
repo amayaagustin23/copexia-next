@@ -2,11 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { HTMLEditor } from '@/components/ui/html-editor';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { Textarea } from '@/components/ui/textarea';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { classifyError } from '@/lib/utils/errorHandler';
 import { postsService } from '@/services/postsService';
 import { ArrowLeft, Eye, Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -88,9 +90,10 @@ export default function CreatePostPage() {
 
       await postsService.createPost(postData);
       router.push(paths.admin.posts);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error creating post:', err);
-      setError(err.response?.data?.message || t('errorCreating'));
+      const classifiedError = classifyError(err);
+      setError(classifiedError.message || t('errorCreating'));
     } finally {
       setLoading(false);
     }
@@ -197,20 +200,11 @@ export default function CreatePostPage() {
                 ) : (
                   <div>
                     <Label htmlFor="content">{t('contentLabel')}</Label>
-                    <Textarea
-                      id="content"
+                    <HTMLEditor
                       value={formData.content}
-                      onChange={(e) =>
-                        handleInputChange('content', e.target.value)
-                      }
+                      onChange={(value) => handleInputChange('content', value)}
                       placeholder={t('contentPlaceholder')}
-                      rows={15}
-                      className="font-mono text-sm"
-                      required
                     />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {t('contentHelp')}
-                    </p>
                   </div>
                 )}
               </CardContent>

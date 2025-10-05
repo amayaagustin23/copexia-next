@@ -1,6 +1,7 @@
 'use client';
   
 import { CommentForm } from '@/components/CommentForm';
+import SEOHead from '@/components/SEO/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -8,7 +9,7 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
-import { Post } from '@/types/posts';
+import { Comment, Post } from '@/types/posts';
 import {
   ArrowLeft,
   Calendar,
@@ -185,7 +186,7 @@ export default function PostDetailPage() {
     }
   };
 
-  const handleCommentCreated = (newComment: any) => {
+  const handleCommentCreated = (newComment: Comment) => {
     setComments((prev) => [newComment, ...prev]);
 
     if (post) {
@@ -224,177 +225,199 @@ export default function PostDetailPage() {
     );
   }
 
+  const postTags = post.categories.map((cat) => cat.category.name);
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <Button
-              variant="ghost"
-              onClick={() => router.back()}
-              className="hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t('back')}
-            </Button>
-          </div>
-
-          <header className="mb-8">
-            <div className="flex flex-wrap gap-2 mb-4">
-              {post.categories.map((postCategory) => (
-                <Badge
-                  key={postCategory.id}
-                  variant="secondary"
-                  className="bg-primary/10 text-primary"
-                >
-                  <Tag className="h-3 w-3 mr-1" />
-                  {postCategory.category.name}
-                </Badge>
-              ))}
-            </div>
-
-            <h1 className="text-4xl font-bold mb-4 leading-tight">
-              {post.title}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-6 text-muted-foreground mb-6">
-              {post.publishedAt && (
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(post.publishedAt)}</span>
-                </div>
-              )}
-
-              <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4" />
-                <span>
-                  {post.viewCount} {t('views')}
-                </span>
-              </div>
-            </div>
-          </header>
-
-          {post.featuredImage && (
+    <>
+      <SEOHead
+        title={post.title}
+        description={post.excerpt || post.title}
+        keywords={postTags}
+        image={post.featuredImage}
+        url={paths.path(`posts/${post.slug}`)}
+        type="article"
+        author="Copexia Team"
+        publishedTime={post.publishedAt}
+        modifiedTime={post.updatedAt}
+        section={post.categories[0]?.category.name}
+        tags={postTags}
+        breadcrumbs={[
+          { name: 'Inicio', url: paths.path('home') },
+          { name: 'Artículos', url: paths.path('posts') },
+          { name: post.title, url: paths.path(`posts/${post.slug}`) },
+        ]}
+      />
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
             <div className="mb-8">
-              <Image
-                src={post.featuredImage}
-                alt={post.title}
-                width={800}
-                height={400}
-                className="w-full h-64 md:h-96 object-cover rounded-lg"
-              />
+              <Button
+                variant="ghost"
+                onClick={() => router.back()}
+                className="hover:bg-muted transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                {t('back')}
+              </Button>
             </div>
-          )}
 
-          <Card className="mb-8">
-            <CardContent className="p-8">
-              <div
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-6 text-muted-foreground">
-                  <button
-                    onClick={handleToggleComments}
-                    className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer"
+            <header className="mb-8">
+              <div className="flex flex-wrap gap-2 mb-4">
+                {post.categories.map((postCategory) => (
+                  <Badge
+                    key={postCategory.id}
+                    variant="secondary"
+                    className="bg-primary/10 text-primary"
                   >
-                    <MessageCircle className="h-4 w-4" />
-                    <span>
-                      {post.commentCount} {t('comments')}
-                    </span>
-                  </button>
-                </div>
+                    <Tag className="h-3 w-3 mr-1" />
+                    {postCategory.category.name}
+                  </Badge>
+                ))}
+              </div>
 
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={handleLike}
-                    disabled={liking || likesLoading}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      isLiked(post.id)
-                        ? 'text-red-500 bg-red-50 hover:bg-red-100'
-                        : 'text-muted-foreground hover:text-red-500 hover:bg-red-50'
-                    } ${
-                      liking || likesLoading
-                        ? 'opacity-50 cursor-not-allowed'
-                        : ''
-                    }`}
-                  >
-                    <Heart
-                      className={`h-4 w-4 transition-transform ${
-                        isLiked(post.id) ? 'fill-current' : ''
-                      } ${liking ? 'animate-pulse' : ''}`}
-                    />
-                    <span className="font-medium">
-                      {isLiked(post.id) ? t('liked') : t('like')}
-                    </span>
-                  </button>
+              <h1 className="text-4xl font-bold mb-4 leading-tight">
+                {post.title}
+              </h1>
 
-                  <Button variant="outline" asChild>
-                    <Link href={paths.path('posts')}>
-                      {t('viewMoreArticles')}
-                    </Link>
-                  </Button>
+              <div className="flex flex-wrap items-center gap-6 text-muted-foreground mb-6">
+                {post.publishedAt && (
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>{formatDate(post.publishedAt)}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  <span>
+                    {post.viewCount} {t('views')}
+                  </span>
                 </div>
               </div>
-            </CardHeader>
-          </Card>
+            </header>
 
-          {showComments && (
-            <>
-              <Card className="mt-4">
-                <CardHeader>
-                  <h3 className="text-lg font-semibold">
-                    {t('commentsSection.title')}
-                  </h3>
-                </CardHeader>
-                <CardContent>
-                  {loadingComments ? (
-                    <div className="flex items-center justify-center py-12">
-                      <LoadingSpinner size="md" />
-                    </div>
-                  ) : comments.length > 0 ? (
-                    <div className="space-y-4">
-                      {comments.map((comment) => (
-                        <div key={comment.id} className="flex gap-3">
-                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <User className="h-4 w-4 text-primary" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium text-sm">
-                                {comment.authorName}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {formatDate(comment.createdAt)}
-                              </span>
+            {post.featuredImage && (
+              <div className="mb-8">
+                <Image
+                  src={post.featuredImage}
+                  alt={post.title}
+                  width={800}
+                  height={400}
+                  className="w-full h-64 md:h-96 object-cover rounded-lg"
+                />
+              </div>
+            )}
+
+            <Card className="mb-8">
+              <CardContent className="p-8">
+                <div
+                  className="prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-6 text-muted-foreground">
+                    <button
+                      onClick={handleToggleComments}
+                      className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>
+                        {post.commentCount} {t('comments')}
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={handleLike}
+                      disabled={liking || likesLoading}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                        isLiked(post.id)
+                          ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                          : 'text-muted-foreground hover:text-red-500 hover:bg-red-50'
+                      } ${
+                        liking || likesLoading
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
+                    >
+                      <Heart
+                        className={`h-4 w-4 transition-transform ${
+                          isLiked(post.id) ? 'fill-current' : ''
+                        } ${liking ? 'animate-pulse' : ''}`}
+                      />
+                      <span className="font-medium">
+                        {isLiked(post.id) ? t('liked') : t('like')}
+                      </span>
+                    </button>
+
+                    <Button variant="outline" asChild>
+                      <Link href={paths.path('posts')}>
+                        {t('viewMoreArticles')}
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+
+            {showComments && (
+              <>
+                <Card className="mt-4">
+                  <CardHeader>
+                    <h3 className="text-lg font-semibold">
+                      {t('commentsSection.title')}
+                    </h3>
+                  </CardHeader>
+                  <CardContent>
+                    {loadingComments ? (
+                      <div className="flex items-center justify-center py-12">
+                        <LoadingSpinner size="md" />
+                      </div>
+                    ) : comments.length > 0 ? (
+                      <div className="space-y-4">
+                        {comments.map((comment) => (
+                          <div key={comment.id} className="flex gap-3">
+                            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                              <User className="h-4 w-4 text-primary" />
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              {comment.content}
-                            </p>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-sm">
+                                  {comment.authorName}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {formatDate(comment.createdAt)}
+                                </span>
+                              </div>
+                              <p className="text-sm text-muted-foreground">
+                                {comment.content}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground text-center py-8">
-                      {t('commentsSection.noComments')}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-              <CommentForm
-                postId={post.id}
-                onCommentCreated={handleCommentCreated}
-              />
-            </>
-          )}
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-center py-8">
+                        {t('commentsSection.noComments')}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+                <CommentForm
+                  postId={post.id}
+                  onCommentCreated={handleCommentCreated}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

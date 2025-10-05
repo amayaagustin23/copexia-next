@@ -46,21 +46,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await logoutUser();
     } catch (e) {
-      console.error('Error al cerrar sesión:', e);
     } finally {
-      // Limpiar caché al hacer logout
       authCache = null;
       setUser(null);
-      router.push(paths.auth.signIn); // redirige al login según idioma
+      router.push(paths.auth.signIn);
     }
   }, [router, paths.auth.signIn]);
 
   useEffect(() => {
-    setLogoutCallback(logout); // ← lo registra globalmente
+    setLogoutCallback(logout);
   }, [logout]);
 
   const setDataUser = useCallback(async () => {
-    const profile = await getMyProfile(); // Removido router y redirectTo
+    const profile = await getMyProfile();
     // Actualizar caché cuando se actualiza el usuario
     authCache = {
       user: profile || null,
@@ -78,28 +76,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        // Verificar si tenemos datos en caché válidos
         const now = Date.now();
         if (authCache && now - authCache.timestamp < CACHE_DURATION) {
-          console.log('AuthContext: Using cached auth data');
           setUser(authCache.user);
           setIsLoading(false);
           return;
         }
 
-        console.log('AuthContext: Loading user profile...');
-        if (typeof window !== 'undefined') {
-          console.log('AuthContext: Document cookies:', document.cookie);
-        }
+        await isLoggedIn();
 
-        // Verificar primero si está logueado
-        const isLoggedInStatus = await isLoggedIn();
-        console.log('AuthContext: isLoggedIn status:', isLoggedInStatus);
+        const profile = await getMyProfile();
 
-        const profile = await getMyProfile(); // Removido router y redirectTo
-        console.log('AuthContext: Profile loaded:', profile);
-
-        // Actualizar caché
         authCache = {
           user: profile || null,
           timestamp: now,
@@ -110,12 +97,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(profile);
         }
       } catch (error) {
-        console.error('AuthContext: Error loading profile:', error);
-        // Limpiar caché en caso de error
         authCache = null;
-        setUser(null); // Solo limpiar usuario, no hacer logout automático
+        setUser(null);
       } finally {
-        console.log('AuthContext: Setting isLoading to false');
         setIsLoading(false);
       }
     };

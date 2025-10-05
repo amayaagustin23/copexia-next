@@ -3,6 +3,7 @@
 import { LoadingSpinner } from '@/components/ui/loading';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { cn } from '@/lib/utils';
+import { classifyError } from '@/lib/utils/errorHandler';
 import { postsService } from '@/services/postsService';
 import type { Post } from '@/types/posts';
 import { FilePlus2, Search } from 'lucide-react';
@@ -44,8 +45,9 @@ export default function PostsList() {
       setTotal(data.total);
       setPage(data.page);
       setPageSize(data.size);
-    } catch (e: any) {
-      setError(e?.message || t('errorLoading'));
+    } catch (e: unknown) {
+      const classifiedError = classifyError(e);
+      setError(classifiedError.message || t('errorLoading'));
     } finally {
       setLoading(false);
     }

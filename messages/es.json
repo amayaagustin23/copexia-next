@@ -6,7 +6,6 @@
       "services": "Servicios",
       "about": "Sobre nosotros",
       "values": "Valores",
-      "learning": "Copexia Learning",
       "contact": "Contacto"
     },
     "submenu": {
@@ -15,12 +14,6 @@
         "adoption": "Adopción e implementación de soluciones digitales",
         "optimization": "Optimización de procesos y mejora operativa",
         "research": "Investigaciones internas"
-      },
-      "learning": {
-        "powerbi": "Power BI aplicado",
-        "adoption": "Adopción tecnológica",
-        "methods": "Metodologías de trabajo y gestión del cambio",
-        "dynamics": "Dinámicas para equipos y liderazgo"
       }
     },
     "brandAlt": "COPEXIA",
@@ -235,8 +228,7 @@
       "subtitle": "Acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas.",
       "cta": {
         "services": "Ver servicios",
-        "values": "Conocer valores",
-        "learning": "Copexia Learning"
+        "values": "Conocer valores"
       }
     },
     "about": {
@@ -367,16 +359,16 @@
     }
   },
   "metadata": {
-    "title": "Copexia | Creamos soluciones a medida",
-    "description": "En Copexia, desde San Miguel de Tucumán - Argentina, acompañamos a organizaciones que quieren evolucionar combinando herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
+    "title": "Copexia | Transformación Digital y Consultoría Organizacional en Tucumán",
+    "description": "Consultora especializada en transformación digital, optimización de procesos y desarrollo organizacional desde San Miguel de Tucumán, Argentina. Soluciones personalizadas para empresas que buscan evolucionar con metodologías ágiles, Power BI y gestión del cambio.",
     "og": {
-      "title": "Copexia | Soluciones humanas y tecnológicas para tu organización",
-      "description": "Impulsamos la excelencia de tu organización desde San Miguel de Tucumán, Argentina, mediante consultoría estratégica, adopción tecnológica, optimización de procesos y formación con impacto.",
-      "alt": "Copexia - Transformamos tu organización en Tucumán, Argentina"
+      "title": "Copexia | Consultoría en Transformación Digital y Organizacional",
+      "description": "Líderes en transformación digital desde Tucumán, Argentina. Ofrecemos consultoría estratégica, adopción tecnológica, optimización de procesos, capacitación empresarial y desarrollo organizacional con enfoque humano y metodologías ágiles.",
+      "alt": "Copexia - Consultora en Transformación Digital y Organizacional en Tucumán, Argentina"
     },
     "twitter": {
-      "title": "Copexia | Soluciones humanas y tecnológicas",
-      "description": "Desde San Miguel de Tucumán, Argentina, acompañamos a empresas y equipos en su camino hacia la mejora continua, la adopción tecnológica y el desarrollo de habilidades internas."
+      "title": "Copexia | Transformación Digital y Consultoría Organizacional",
+      "description": "Desde San Miguel de Tucumán, Argentina, transformamos organizaciones con soluciones digitales, optimización de procesos, Power BI, metodologías ágiles y capacitación empresarial personalizada."
     }
   },
   "whatsapp": {
@@ -517,7 +509,7 @@
       "excerptPlaceholder": "Breve descripción del post",
       "content": "Contenido",
       "contentLabel": "Contenido HTML *",
-      "contentPlaceholder": "<p>Escribe tu contenido en HTML aquí...</p>",
+      "contentPlaceholder": "Escribe tu contenido en HTML aquí...",
       "contentHelp": "Puedes usar HTML para formatear tu contenido. Usa etiquetas como &lt;p&gt;, &lt;h1&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, etc.",
       "publish": "Publicación",
       "publishImmediately": "Publicar inmediatamente",

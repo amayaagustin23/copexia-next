@@ -8,10 +8,10 @@ export const Footer = () => {
 
   return (
     <footer className="bg-muted text-muted-foreground border-t border-border py-6 text-center">
-      <div className="max-w-7xl mx-auto px-4 space-y-2 text-sm">
-        <p>{t("description")}</p>
+      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 space-y-2 text-sm">
+        <p>{t('description')}</p>
         <p>
-          © {year} {t("brandName")}. {t("rightsReserved")}
+          © {year} {t('brandName')}. {t('rightsReserved')}
         </p>
       </div>
     </footer>

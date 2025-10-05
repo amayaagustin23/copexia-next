@@ -35,38 +35,42 @@ export default function HomePage() {
   const sections: SectionConfig[] = [
     {
       id: 'inicio',
-      title: '',
+      title: 'Inicio - Copexia Transformación Digital',
       children: <HeroSection />,
       className: 'h-screen w-full bg-background',
     },
     {
       id: 'sobre-nosotros',
-      title: '',
+      title: 'Sobre Nosotros - Consultoría Organizacional',
       children: <AboutSection />,
       className: 'section-about bg-muted/5',
     },
     {
       id: 'valores',
-      title: '',
+      title: 'Nuestros Valores - Metodologías de Trabajo',
       children: <ValuesSection />,
       className: 'section-values bg-background',
     },
     {
       id: 'blog',
-      title: '',
+      title: 'Artículos - Transformación Digital y Organizacional',
       children: <PostsSection />,
       className: 'section-posts bg-background',
     },
     {
       id: 'contacto',
-      title: '',
+      title: 'Contacto - Consulta sobre nuestros servicios',
       children: <ContactSection />,
       className: 'section-contact bg-muted/5',
     },
   ];
 
   return (
-    <main className="min-h-screen">
+    <main
+      className="min-h-screen w-full"
+      role="main"
+      aria-label="Página principal de Copexia"
+    >
       <style jsx global>{`
         /* Configuración global de animaciones */
         @keyframes fadeInUp {
@@ -169,9 +173,9 @@ export default function HomePage() {
 
       {sections.map((section, index) => {
         if (section.id === 'inicio') {
-          // Hero section sin padding ni restricciones
+          // Hero section con ancho completo pero respetando container
           return (
-            <section key={section.id} className={section.className}>
+            <section key={section.id} className={`${section.className} w-full`}>
               {section.children}
             </section>
           );

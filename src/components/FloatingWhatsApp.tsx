@@ -102,17 +102,28 @@ export default function FloatingWhatsApp({
   const canSend = Boolean(messageToSend);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div
+      className="fixed bottom-6 right-6 flex flex-col items-end max-h-[100vh] overflow-visible pointer-events-none"
+      style={{
+        zIndex: 2147483647,
+        isolation: 'isolate',
+        position: 'fixed',
+      }}
+    >
       {/* Panel */}
       {render && (
         <div
           ref={panelRef}
-          className="mb-3 w-80 max-w-[92vw] rounded-2xl border border-border bg-card text-card-foreground shadow-lg"
+          className="pointer-events-auto mb-3 w-80 max-w-[calc(100vw-3rem)] rounded-2xl border border-border bg-card text-card-foreground shadow-lg max-h-[calc(100vh-8rem)] overflow-y-auto"
+          style={{
+            position: 'relative',
+            zIndex: 2147483647,
+          }}
         >
           {/* Presets */}
           <div className="p-3">
-            <p className="mb-2 text-xs font-medium text-muted-foreground">
-              {t("chooseMessage")}
+            <p className="mb-2 text-sm font-medium text-muted-foreground">
+              {t('chooseMessage')}
             </p>
 
             <div className="flex flex-wrap gap-2">
@@ -123,10 +134,10 @@ export default function FloatingWhatsApp({
                     key={i}
                     type="button"
                     onClick={() => setSelected(i)}
-                    className={`rounded-full px-3 py-1.5 text-xs transition border ${
+                    className={`rounded-full px-3 py-1.5 text-sm transition border ${
                       active
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-muted border-border text-foreground/80 hover:bg-muted/80"
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted border-border text-foreground/80 hover:bg-muted/80'
                     }`}
                   >
                     {text}
@@ -137,30 +148,30 @@ export default function FloatingWhatsApp({
               {/* Otro */}
               <button
                 type="button"
-                onClick={() => setSelected("otro")}
-                className={`rounded-full px-3 py-1.5 text-xs transition border ${
-                  selected === "otro"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-muted border-border text-foreground/80 hover:bg-muted/80"
+                onClick={() => setSelected('otro')}
+                className={`rounded-full px-3 py-1.5 text-sm transition border ${
+                  selected === 'otro'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-muted border-border text-foreground/80 hover:bg-muted/80'
                 }`}
               >
-                {t("other")}
+                {t('other')}
               </button>
             </div>
           </div>
 
           {/* Campo libre (Otro) */}
-          {selected === "otro" && (
+          {selected === 'otro' && (
             <div className="px-3">
               <textarea
                 value={customMsg}
                 onChange={(e) => setCustomMsg(e.target.value)}
-                placeholder={t("placeholder")}
-                className="mt-2 w-full resize-none rounded-xl border border-border bg-input p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                placeholder={t('placeholder')}
+                className="mt-2 w-full resize-none rounded-xl border border-border bg-input p-3 text-base outline-none focus:ring-2 focus:ring-ring"
                 rows={4}
                 maxLength={1000}
               />
-              <div className="mt-1 text-right text-[11px] text-muted-foreground">
+              <div className="mt-1 text-right text-xs text-muted-foreground">
                 {customMsg.length}/1000
               </div>
             </div>
@@ -169,9 +180,9 @@ export default function FloatingWhatsApp({
           <div className="mt-2 flex items-center justify-between p-3 border-t border-border">
             <button
               onClick={() => setOpen(false)}
-              className="px-3 py-1.5 text-xs rounded-lg bg-muted text-foreground/80 hover:bg-muted/80"
+              className="px-3 py-1.5 text-sm rounded-lg bg-muted text-foreground/80 hover:bg-muted/80"
             >
-              {t("cancel")}
+              {t('cancel')}
             </button>
 
             <Link
@@ -182,14 +193,14 @@ export default function FloatingWhatsApp({
                 if (!canSend) return;
                 setOpen(false);
               }}
-              className={`px-3 py-1.5 text-xs rounded-lg transition ${
+              className={`px-3 py-1.5 text-sm rounded-lg transition ${
                 canSend
-                  ? "bg-primary text-primary-foreground hover:opacity-90"
-                  : "bg-muted text-muted-foreground cursor-not-allowed"
+                  ? 'bg-primary text-primary-foreground hover:opacity-90'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
               aria-disabled={!canSend}
             >
-              {t("send")}
+              {t('send')}
             </Link>
           </div>
         </div>
@@ -200,8 +211,12 @@ export default function FloatingWhatsApp({
         ref={btnRef}
         onMouseEnter={handleMouseEnter}
         onClick={() => setOpen((v) => !v)}
-        className="flex h- w- items-center justify-center rounded-full "
-        aria-label={t("ariaOpen")}
+        className="pointer-events-auto flex h-[50px] w-[50px] items-center justify-center rounded-full shadow-lg bg-transparent"
+        aria-label={t('ariaOpen')}
+        style={{
+          position: 'relative',
+          zIndex: 2147483647,
+        }}
       >
         <Image
           src="/images/whatsapp.svg"

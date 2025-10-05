@@ -2,7 +2,7 @@ import api from '@/lib/axios';
 import { API_ROUTES } from '@/lib/config/apiRoutes';
 
 // Request deduplication map
-const pendingRequests = new Map<string, Promise<any>>();
+const pendingRequests = new Map<string, Promise<unknown>>();
 
 /**
  * Base service class for common HTTP operations
@@ -17,7 +17,7 @@ export class BaseService {
   private createRequestKey(
     method: string,
     url: string,
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   ): string {
     const sortedParams = params
       ? Object.keys(params)
@@ -33,13 +33,13 @@ export class BaseService {
    */
   protected async get<T>(
     url: string,
-    params?: Record<string, any>
+    params?: Record<string, unknown>
   ): Promise<T> {
     const requestKey = this.createRequestKey('GET', url, params);
 
     // Check if there's already a pending request for this key
     if (pendingRequests.has(requestKey)) {
-      return pendingRequests.get(requestKey)!;
+      return pendingRequests.get(requestKey)! as Promise<T>;
     }
 
     // Create new request and store it
@@ -63,7 +63,11 @@ export class BaseService {
   /**
    * Generic POST request
    */
-  protected async post<T>(url: string, data?: any, config?: any): Promise<T> {
+  protected async post<T>(
+    url: string,
+    data?: unknown,
+    config?: unknown
+  ): Promise<T> {
     const response = await this.api.post<T>(url, data, config);
     return response.data;
   }
@@ -71,7 +75,11 @@ export class BaseService {
   /**
    * Generic PUT request
    */
-  protected async put<T>(url: string, data?: any, config?: any): Promise<T> {
+  protected async put<T>(
+    url: string,
+    data?: unknown,
+    config?: unknown
+  ): Promise<T> {
     const response = await this.api.put<T>(url, data, config);
     return response.data;
   }
@@ -79,7 +87,11 @@ export class BaseService {
   /**
    * Generic PATCH request
    */
-  protected async patch<T>(url: string, data?: any, config?: any): Promise<T> {
+  protected async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: unknown
+  ): Promise<T> {
     const response = await this.api.patch<T>(url, data, config);
     return response.data;
   }
@@ -87,7 +99,7 @@ export class BaseService {
   /**
    * Generic DELETE request
    */
-  protected async deleteRequest<T>(url: string, config?: any): Promise<T> {
+  protected async deleteRequest<T>(url: string, config?: unknown): Promise<T> {
     const response = await this.api.delete<T>(url, config);
     return response.data;
   }
@@ -98,8 +110,8 @@ export class BaseService {
   protected async adminRequest<T>(
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     url: string,
-    data?: any,
-    params?: Record<string, any>
+    data?: unknown,
+    params?: Record<string, unknown>
   ): Promise<T> {
     const config = {
       withCredentials: true,

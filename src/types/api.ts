@@ -1,23 +1,7 @@
 import { AxiosError } from "axios";
 
-export interface ApiErrorResponse {
-  message: string;
-  statusCode?: number;
-  errors?: {
-    [key: string]: string[];
-  };
-  code?: string;
-  type?: string;
-}
-
-export function isApiErrorResponse(error: unknown): error is ApiErrorResponse {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "message" in error &&
-    typeof (error as ApiErrorResponse).message === "string"
-  );
-}
+export { isApiErrorResponse } from '@/schemas/api';
+export type { ApiErrorResponse, ApiResponse } from '@/schemas/api';
 
 export function isAxiosErrorType<T>(error: unknown): error is AxiosError<T> {
   return (

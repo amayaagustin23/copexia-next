@@ -39,12 +39,13 @@ export default function RecoverPasswordForm() {
       await requestPasswordReset({ email }, t);
       setSent(true);
       reset({ email: '' });
-    } catch (e: any) {
-      const msg = (e?.message || '').toLowerCase();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const msg = (error?.message || '').toLowerCase();
       if (msg.includes('correo') || msg.includes('email')) {
-        setError('email', { type: 'server', message: e.message });
+        setError('email', { type: 'server', message: error.message });
       } else {
-        setError('root', { type: 'server', message: e.message });
+        setError('root', { type: 'server', message: error.message });
       }
     } finally {
       setLoading(false);
@@ -70,11 +71,12 @@ export default function RecoverPasswordForm() {
           </div>
         )}
 
-        {'root' in errors && (errors as any).root?.message && (
-          <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            {(errors as any).root.message}
-          </div>
-        )}
+        {'root' in errors &&
+          (errors as Record<string, { message?: string }>).root?.message && (
+            <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {(errors as Record<string, { message?: string }>).root.message}
+            </div>
+          )}
 
         <form onSubmit={onSubmit} noValidate className="space-y-4">
           <div>

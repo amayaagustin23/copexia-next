@@ -18,8 +18,6 @@ export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
 
   const shouldHideLayout = hideForAuth || hideForAdmin || hideForPublic;
 
-  // For auth pages, we still need the basic layout but without Header/Footer
-  const isAuthPage = hideForAuth;
 
   return (
     <>

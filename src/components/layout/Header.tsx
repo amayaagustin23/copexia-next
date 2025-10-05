@@ -41,7 +41,6 @@ export const Header = () => {
       sobreNosotros: rutas.sections.aboutUs,
       contacto: rutas.sections.contact,
       valores: rutas.sections.values,
-      learning: rutas.sections.learning,
     },
     link: rutas.anchor,
   } as const;
@@ -161,7 +160,7 @@ export const Header = () => {
           } as React.CSSProperties
         }
       >
-        <div className="w-full px-6 relative overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 relative overflow-hidden">
           <div
             className="absolute bottom-0 left-0 h-0.5 w-40 pointer-events-none z-10 opacity-70"
             style={{
@@ -177,7 +176,7 @@ export const Header = () => {
               filter: 'blur(2px)',
             }}
           />
-          <div className="flex justify-between py-3 md:hidden">
+          <div className="flex items-center justify-center relative py-3 md:hidden">
             <Link
               href={rutas.root}
               className="flex items-center gap-2"
@@ -187,7 +186,7 @@ export const Header = () => {
               <h2 className="text-secondary text-xl">{t('brandAlt')}</h2>
             </Link>
             <button
-              className="rounded-lg p-2 hover:bg-white/10 text-white drop-shadow-sm"
+              className="absolute left-0 rounded-lg p-2 hover:bg-white/10 text-white drop-shadow-sm"
               onClick={() => setOpenMobile(true)}
               aria-label={t('aria.openMenu')}
               aria-expanded={openMobile}
@@ -263,12 +262,12 @@ export const Header = () => {
 
             <div
               className={[
-                'absolute inset-x-0 top-0 h-[100dvh] bg-background/90 backdrop-blur-lg text-white',
+                'absolute left-0 top-0 w-full h-[100dvh] bg-background/90 backdrop-blur-lg text-white',
                 'transition-transform duration-300 ease-out will-change-transform',
                 openMobile ? 'translate-y-0' : '-translate-y-full',
               ].join(' ')}
             >
-              <div className="w-full px-6 py-3 flex justify-between">
+              <div className="w-full px-3 py-3 flex items-center justify-center relative">
                 <Link
                   href={rutas.root}
                   onClick={handleNavigate}
@@ -278,7 +277,7 @@ export const Header = () => {
                 </Link>
                 <button
                   onClick={() => setOpenMobile(false)}
-                  className="rounded-lg p-2 bg-white/10 hover:bg-white/15"
+                  className="absolute left-3 rounded-lg p-2 bg-white/10 hover:bg-white/15"
                   type="button"
                   aria-label={t('aria.closeMenu')}
                 >
@@ -286,7 +285,7 @@ export const Header = () => {
                 </button>
               </div>
 
-              <nav className="px-6 sm:px-8 space-y-2">
+              <nav className="px-3 space-y-2">
                 {menu.map((item) => {
                   return (
                     <div key={item.href}>

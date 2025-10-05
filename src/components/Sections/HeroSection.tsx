@@ -196,7 +196,7 @@ const HeroSection = () => {
 
   return (
     <div
-      className="relative isolate flex flex-col items-center justify-center text-center w-full h-screen text-foreground"
+      className="relative isolate flex flex-col items-center justify-center text-center w-full min-h-screen py-12 xs:py-16 sm:py-20 lg:py-24 text-foreground"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -209,7 +209,7 @@ const HeroSection = () => {
         className="gold-layer pointer-events-none absolute inset-0 -z-10 mix-blend-soft-light"
       />
 
-      <div ref={logoRef} className="mb-4">
+      <div ref={logoRef} className="mb-3 xs:mb-4 sm:mb-6 md:mb-8">
         <Image
           src="/images/logo-copexia.png"
           alt={t('brandAlt')}
@@ -217,15 +217,15 @@ const HeroSection = () => {
           height={200}
           priority
           quality={90}
-          sizes="(min-width: 1024px) 144px, (min-width: 768px) 120px, 96px"
-          className="w-auto h-24 md:h-28 lg:h-36 object-contain"
+          sizes="(min-width: 1024px) 200px, (min-width: 768px) 160px, (min-width: 475px) 120px, 80px"
+          className="w-auto h-12 xs:h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 object-contain"
         />
       </div>
 
-      <div className="max-w-4xl mx-auto text-center px-4">
+      <div className="w-full text-center px-3 xs:px-4 sm:px-6 md:px-8">
         <h1
           ref={titleRef}
-          className="text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-tight"
+          className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 md:mb-8 leading-tight"
         >
           <span
             className="bg-clip-text text-transparent inline-block"
@@ -237,16 +237,19 @@ const HeroSection = () => {
 
         <p
           ref={subtitleRef}
-          className="text-lg md:text-xl text-muted-foreground mb-8"
+          className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-muted-foreground mb-4 xs:mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed"
         >
           {t('subtitle')}
         </p>
 
-        <div ref={ctasRef} className="flex flex-wrap justify-center gap-4">
+        <div
+          ref={ctasRef}
+          className="flex flex-row flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 max-w-2xl mx-auto"
+        >
           <Link
             href="#sobre-nosotros"
             data-cta
-            className="relative overflow-hidden rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="relative overflow-hidden rounded-lg bg-primary px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-medium text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
           >
             <span
               aria-hidden
@@ -257,7 +260,7 @@ const HeroSection = () => {
           <Link
             href="#valores"
             data-cta
-            className="relative overflow-hidden rounded-lg border border-primary/20 bg-background/50 px-6 py-3 text-sm font-medium text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="relative overflow-hidden rounded-lg border border-primary/20 bg-background/50 px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-medium text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
           >
             <span
               aria-hidden

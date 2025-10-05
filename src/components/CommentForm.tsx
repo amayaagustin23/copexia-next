@@ -6,13 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { postsService } from '@/services/postsService';
+import type { Comment } from '@/types/posts';
 import { MessageCircle, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 interface CommentFormProps {
   postId: string;
-  onCommentCreated: (comment: any) => void;
+  onCommentCreated: (comment: Comment) => void;
 }
 
 export function CommentForm({ postId, onCommentCreated }: CommentFormProps) {

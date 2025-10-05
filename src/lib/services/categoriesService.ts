@@ -1,3 +1,9 @@
+import type {
+  Category,
+  CreateCategoryData,
+  PaginatedCategoriesResponse,
+  UpdateCategoryData,
+} from '@/types/posts';
 import { BaseService } from './baseService';
 
 /**
@@ -14,7 +20,7 @@ export class CategoriesService extends BaseService {
     page?: number;
     size?: number;
     search?: string;
-  }): Promise<any> {
+  }): Promise<PaginatedCategoriesResponse> {
     return this.adminRequest(
       'GET',
       this.routes.ADMIN.CATEGORIES.LIST,
@@ -30,7 +36,7 @@ export class CategoriesService extends BaseService {
   /**
    * Create a new category (admin) - matches backend: POST /admin/categories
    */
-  async create(categoryData: any): Promise<any> {
+  async create(categoryData: CreateCategoryData): Promise<Category> {
     return this.adminRequest(
       'POST',
       this.routes.ADMIN.CATEGORIES.CREATE,
@@ -41,7 +47,10 @@ export class CategoriesService extends BaseService {
   /**
    * Update an existing category (admin) - matches backend: PATCH /admin/categories/:id
    */
-  async update(id: string, categoryData: any): Promise<any> {
+  async update(
+    id: string,
+    categoryData: UpdateCategoryData
+  ): Promise<Category> {
     return this.adminRequest(
       'PATCH',
       this.routes.ADMIN.CATEGORIES.UPDATE(id),
@@ -52,28 +61,28 @@ export class CategoriesService extends BaseService {
   /**
    * Delete a category (admin) - matches backend: DELETE /admin/categories/:id
    */
-  async delete(id: string): Promise<any> {
+  async delete(id: string): Promise<void> {
     return this.adminRequest('DELETE', this.routes.ADMIN.CATEGORIES.DELETE(id));
   }
 
   /**
    * Get category by ID (admin) - matches backend: GET /admin/categories/:id
    */
-  async getById(id: string): Promise<any> {
+  async getById(id: string): Promise<Category> {
     return this.adminRequest('GET', this.routes.ADMIN.CATEGORIES.GET_BY_ID(id));
   }
 
   /**
    * Get category by slug (admin) - matches backend: GET /admin/categories/slug/:slug
    */
-  async getBySlug(slug: string): Promise<any> {
+  async getBySlug(slug: string): Promise<Category> {
     return this.adminRequest('GET', `/admin/categories/slug/${slug}`);
   }
 
   /**
    * Get category statistics (admin) - matches backend: GET /admin/categories/stats
    */
-  async getStats(): Promise<any> {
+  async getStats(): Promise<unknown> {
     return this.adminRequest('GET', `/admin/categories/stats`);
   }
 
@@ -85,7 +94,7 @@ export class CategoriesService extends BaseService {
   async getPublicCategories(params?: {
     page?: number;
     size?: number;
-  }): Promise<any> {
+  }): Promise<PaginatedCategoriesResponse> {
     return this.get(this.routes.PUBLIC.CATEGORIES.LIST, {
       page: params?.page ?? 1,
       size: params?.size ?? 10,
@@ -95,14 +104,14 @@ export class CategoriesService extends BaseService {
   /**
    * Get public category by ID
    */
-  async getPublicCategoryById(id: string): Promise<any> {
+  async getPublicCategoryById(id: string): Promise<Category> {
     return this.get(this.routes.PUBLIC.CATEGORIES.GET_BY_ID(id));
   }
 
   /**
    * Get public category by slug
    */
-  async getPublicCategoryBySlug(slug: string): Promise<any> {
+  async getPublicCategoryBySlug(slug: string): Promise<Category> {
     return this.get(this.routes.PUBLIC.CATEGORIES.GET_BY_SLUG(slug));
   }
 }

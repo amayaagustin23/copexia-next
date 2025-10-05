@@ -94,11 +94,8 @@ export const Sidebar = ({
             alt="Logo"
             width={40}
             height={40}
-            className={cn(
-              'object-contain transition-all duration-300',
-              isCollapsed ? 'w-10 h-10' : 'w-10 h-10'
-            )}
-            style={{ height: 'auto' }}
+            className="object-contain transition-all duration-300"
+            style={{ width: 'auto', height: 'auto' }}
           />
           {!isCollapsed && (
             <span className="font-bold text-sm sm:text-base lg:text-lg transition-opacity truncate">

@@ -22,6 +22,13 @@ const SESSION_COOKIE = 'token';
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Redirigir automáticamente desde la raíz a /es
+  if (pathname === '/') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/es';
+    return NextResponse.redirect(url);
+  }
+
   const intlRes = intl(req);
   if (intlRes instanceof NextResponse && intlRes.redirected) {
     return intlRes;

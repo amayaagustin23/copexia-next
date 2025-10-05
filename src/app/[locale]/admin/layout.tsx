@@ -4,7 +4,6 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { useAuth } from '@/context/AuthContext';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { cn } from '@/lib/utils';
-import { Role } from '@/types/user';
 // import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
@@ -17,7 +16,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && user && user.role !== Role.ADMIN) {
+    if (!isLoading && user && user.role !== 'ADMIN') {
       router.replace(paths.root);
     }
   }, [user, isLoading, router, paths.root]);
@@ -42,7 +41,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div
+      className="min-h-screen bg-background text-foreground overflow-x-hidden"
+      style={{
+        position: 'relative',
+        zIndex: 1,
+      }}
+    >
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -66,6 +71,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           // Desktop colapsado
           isSidebarCollapsed && 'md:ml-16'
         )}
+        style={{
+          position: 'relative',
+          zIndex: 1,
+        }}
       >
         <div className="flex-1 overflow-auto">
           <div className="mx-auto max-w-7xl px-4 py-10">{children}</div>

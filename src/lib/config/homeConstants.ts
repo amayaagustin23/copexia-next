@@ -35,24 +35,7 @@ export const HOME_CONFIG = {
     ]
   },
 
-  // Learning modules
-  learningModules: [
-    {
-      key: "modelado-datos",
-      title: "Modelado de datos",
-      text: "Bases sólidas para reportes y análisis reales."
-    },
-    {
-      key: "storytelling-ux", 
-      title: "Visualización & Storytelling",
-      text: "Tableros que se entienden sin explicación."
-    },
-    {
-      key: "integraciones",
-      title: "Integraciones & Automatización", 
-      text: "Power Automate, Apps y scripts para ir más lejos."
-    }
-  ]
+
 } as const;
 
 // Types

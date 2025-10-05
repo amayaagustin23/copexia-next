@@ -1,38 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import type {
+  Cell,
+  CopexiaItem,
+  CrossSpec,
+  CrosswordGrid,
+} from '@/schemas/crossword';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-// Types
-interface CopexiaItem {
-  k: string;
-  title: string;
-  desc: string;
-}
-
-interface Cell {
-  ch: string;
-  key: string;
-  isAnchor?: boolean;
-  word?: string;
-  letterKey?: string;
-}
-
-interface CrossSpec {
-  word: string;
-  letter: string;
-  /** Ocurrencia de la letra dentro de la palabra a alinear (1 = primera). */
-  occurrence?: number;
-}
-
-interface CrosswordGrid {
-  grid: Map<string, Cell>;
-  minX: number;
-  maxX: number;
-  minY: number;
-  maxY: number;
-  infoByLetter: Map<string, CopexiaItem>;
-}
 
 const ANCHOR = 'COPEXIA';
 
@@ -113,23 +88,25 @@ export default function AboutSection() {
 
   // Crossword grid calculation with proper typing
   const crosswordGrid: CrosswordGrid = useMemo(() => {
-    const map = new Map<string, Cell>();
+    const gridRecord: Record<string, Cell> = {};
     const keyOf = (x: number, y: number) => `${x},${y}`;
 
-    const byLetter = new Map<string, CopexiaItem>();
-    items.forEach((it) => byLetter.set(it.k, it));
+    const byLetterRecord: Record<string, CopexiaItem> = {};
+    items.forEach((it) => {
+      byLetterRecord[it.k] = it;
+    });
 
     // Vertical anchor COPEXIA at centerX to be visually centered
     for (let i = 0; i < ANCHOR.length; i++) {
       const ch = ANCHOR[i];
       const k = keyOf(centerX, i);
-      map.set(k, {
+      gridRecord[k] = {
         ch,
         key: k,
         isAnchor: true,
         letterKey: ch,
         word: ANCHOR,
-      });
+      };
     }
 
     // Horizontal words
@@ -151,17 +128,17 @@ export default function AboutSection() {
         const ch = cw.word[i];
         const k = keyOf(x, y);
 
-        const existing = map.get(k);
+        const existing = gridRecord[k];
         if (existing && existing.ch !== ch) continue;
 
         if (!existing) {
-          map.set(k, {
+          gridRecord[k] = {
             ch,
             key: k,
             isAnchor: x === centerX,
             word: cw.word,
             letterKey: cw.letter,
-          });
+          };
         }
       }
     }
@@ -171,7 +148,7 @@ export default function AboutSection() {
       maxX = 0,
       minY = 0,
       maxY = ANCHOR.length - 1;
-    for (const k of map.keys()) {
+    for (const k of Object.keys(gridRecord)) {
       const [xStr, yStr] = k.split(',');
       const x = parseInt(xStr, 10);
       const y = parseInt(yStr, 10);
@@ -182,12 +159,12 @@ export default function AboutSection() {
     }
 
     return {
-      grid: map,
+      grid: gridRecord,
       minX,
       maxX,
       minY,
       maxY,
-      infoByLetter: byLetter,
+      infoByLetter: byLetterRecord,
     };
   }, [items, crosses, centerX]);
 
@@ -236,11 +213,12 @@ export default function AboutSection() {
   const getCellClasses = useCallback(
     (cell: Cell | undefined, isAnchorCol: boolean) => {
       const baseClasses = [
-        'relative w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm border cursor-pointer will-change-transform',
-        'flex items-center justify-center text-xs sm:text-sm font-bold',
+        'relative w-3 h-3 xs:w-4 xs:h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm border cursor-pointer will-change-transform',
+        'flex items-center justify-center text-[10px] xs:text-xs sm:text-base font-bold leading-none',
         'transition-all duration-700 ease-out',
         'hover:scale-105 sm:hover:scale-110 hover:shadow-xl hover:z-10 hover:-translate-y-0.5 sm:hover:-translate-y-1',
         'hover:transition-all hover:duration-300 hover:ease-in-out',
+        'active:scale-95 active:transition-all active:duration-150',
       ];
 
       if (!cell) {
@@ -386,6 +364,27 @@ export default function AboutSection() {
         @media (max-width: 320px) {
           [data-cell] {
             font-size: 0.65rem;
+            min-width: 0.75rem;
+            min-height: 0.75rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        /* Ajustes para teléfonos pequeños */
+        @media (max-width: 480px) {
+          [data-cell] {
+            font-size: 0.7rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .crossword-grid {
+            gap: 0.1rem 0.1rem;
           }
         }
 
@@ -406,7 +405,7 @@ export default function AboutSection() {
       `}</style>
 
       <div
-        className={`w-full px-4 sm:px-6 lg:px-8 pt-20 pb-20 space-y-16 about-section-hover ${
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 pt-12 xs:pt-16 sm:pt-20 pb-12 xs:pb-16 sm:pb-20 space-y-8 xs:space-y-12 sm:space-y-16 about-section-hover ${
           isHovered ? 'transform translate-y-[-2px]' : ''
         }`}
       >
@@ -418,11 +417,11 @@ export default function AboutSection() {
               : 'opacity-0 translate-y-6 scale-95'
           }`}
         >
-          <div className="max-w-3xl mx-auto">
-            <p className="text-[10px] sm:text-[11px] tracking-wider uppercase text-muted-foreground mb-4">
+          <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
+            <p className="text-[9px] xs:text-[10px] sm:text-[11px] tracking-wider uppercase text-muted-foreground mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight">
+            <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight">
               {t('heading')}
             </h2>
           </div>
@@ -435,7 +434,7 @@ export default function AboutSection() {
           }`}
           style={{ transitionDelay: inView ? '200ms' : '0ms' }}
         >
-          <div className="max-w-3xl mx-auto space-y-4 text-sm sm:text-base text-muted-foreground">
+          <div className="w-full space-y-2 xs:space-y-3 sm:space-y-4 text-[10px] xs:text-xs sm:text-sm md:text-base text-muted-foreground px-3 xs:px-4 sm:px-6 lg:px-8">
             <p>{t('intro1')}</p>
             <p>{t('intro2')}</p>
             <p>{t('differential')}</p>
@@ -444,43 +443,43 @@ export default function AboutSection() {
 
         {/* Crossword Section */}
         <section
-          className={`text-center space-y-12 transition-all duration-600 will-change-transform ${
+          className={`text-center space-y-8 xs:space-y-12 transition-all duration-600 will-change-transform ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
           style={{ transitionDelay: inView ? '400ms' : '0ms' }}
         >
-          <div>
-            <h3 className="text-xl sm:text-2xl font-medium mb-6">
+          <div className="px-3 xs:px-4 sm:px-6">
+            <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl font-medium mb-3 xs:mb-4 sm:mb-6">
               {t('meaningTitle')}
             </h3>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-[10px] xs:text-xs sm:text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('meaningDesc')}
             </p>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center px-2">
             <div
-              className="relative p-4"
+              className="relative p-2 xs:p-4"
               aria-label="Crucigrama COPEXIA"
               role="application"
             >
               <div
-                className="grid justify-items-center mx-auto"
+                className="grid justify-items-center items-center mx-auto crossword-grid"
                 style={{
-                  gridTemplateColumns: `repeat(${cols}, 2.5rem)`,
-                  gridTemplateRows: `repeat(${rows}, 3rem)`,
-                  gap: '0.25rem 0.125rem', // reducido el gap horizontal
+                  gridTemplateColumns: `repeat(${cols}, minmax(0.75rem, 2.5rem))`,
+                  gridTemplateRows: `repeat(${rows}, minmax(1rem, 2.5rem))`,
+                  gap: '0.1rem 0.1rem', // gap reducido para ser más compacto
                   maxWidth: 'fit-content',
                 }}
               >
                 {Array.from({ length: rows * cols }).map((_, i) => {
                   const r = Math.floor(i / cols) + minY;
                   const c = (i % cols) + minX;
-                  const cell = grid.get(`${c},${r}`);
+                  const cell = grid[`${c},${r}`];
                   const has = Boolean(cell);
                   const isAnchorCol = c === centerX && has;
                   const item = cell?.letterKey
-                    ? infoByLetter.get(cell.letterKey)
+                    ? infoByLetter[cell.letterKey]
                     : undefined;
 
                   return (
@@ -499,14 +498,16 @@ export default function AboutSection() {
                     >
                       {cell?.ch ?? ''}
                       {has && item && (
-                        <div className="pointer-events-none absolute z-10 w-64 rounded-xl border border-border bg-popover p-3 shadow-sm opacity-0 translate-y-1 transition-all duration-200 hover:opacity-100 hover:translate-y-0">
+                        <div className="pointer-events-none absolute z-10 w-56 xs:w-64 rounded-xl border border-border bg-popover p-2 xs:p-3 shadow-sm opacity-0 translate-y-1 transition-all duration-200 hover:opacity-100 hover:translate-y-0">
                           <div className="flex items-center gap-2">
-                            <span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
+                            <span className="grid h-5 w-5 xs:h-6 xs:w-6 place-items-center rounded-full bg-primary text-[10px] xs:text-[11px] font-bold text-primary-foreground">
                               {cell!.letterKey}
                             </span>
-                            <p className="font-medium text-sm">{item.title}</p>
+                            <p className="font-medium text-xs xs:text-sm">
+                              {item.title}
+                            </p>
                           </div>
-                          <p className="mt-1 text-xs text-muted-foreground">
+                          <p className="mt-1 text-[10px] xs:text-xs text-muted-foreground leading-relaxed">
                             {item.desc}
                           </p>
                         </div>
@@ -526,13 +527,13 @@ export default function AboutSection() {
           }`}
           style={{ transitionDelay: inView ? '600ms' : '0ms' }}
         >
-          <header className="mb-8">
-            <h4 className="uppercase tracking-wide text-[11px] font-medium text-muted-foreground/70">
+          <header className="mb-6 xs:mb-8 px-2">
+            <h4 className="uppercase tracking-wide text-[10px] xs:text-[11px] font-medium text-muted-foreground/70">
               Significado de cada letra
             </h4>
           </header>
 
-          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 w-full px-60 mx-auto">
+          <div className="grid gap-2 xs:gap-3 sm:gap-4 md:gap-6 grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 w-full px-3 xs:px-4 sm:px-6 lg:px-8">
             {items.map((item, index) => (
               <article
                 key={item.k}
@@ -546,15 +547,15 @@ export default function AboutSection() {
                 }}
                 aria-label={`${item.k}: ${item.title}`}
               >
-                <div className="flex items-center gap-4 p-4 rounded-lg hover:bg-muted/20 transition-all duration-500 hover:shadow-sm border border-transparent hover:border-border/30">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-sm font-bold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 p-2 xs:p-3 sm:p-4 rounded-lg hover:bg-muted/20 transition-all duration-500 hover:shadow-sm border border-transparent hover:border-border/30">
+                  <div className="flex-shrink-0 w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 rounded-md bg-primary/10 flex items-center justify-center text-[10px] xs:text-xs sm:text-sm font-bold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                     {item.k}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors duration-200 text-left">
+                    <h5 className="font-semibold text-[10px] xs:text-xs sm:text-sm mb-1 group-hover:text-primary transition-colors duration-200 text-left leading-tight">
                       {item.title}
                     </h5>
-                    <p className="text-xs text-muted-foreground leading-relaxed text-left">
+                    <p className="text-[9px] xs:text-[10px] sm:text-xs text-muted-foreground leading-relaxed text-left">
                       {item.desc}
                     </p>
                   </div>

@@ -1,4 +1,6 @@
-export const SUPPORTED_LOCALES = ['es', 'en'] as const;
+import type { Locale } from '@/schemas/path';
+
+export const SUPPORTED_LOCALES: readonly Locale[] = ['es', 'en'] as const;
 
 export const PUBLIC_ROUTES_BASE = ['/', '/foro', '/foro/categoria'] as const;
 
@@ -78,13 +80,15 @@ export function getLocalizedPath(
   path: 'login' | 'forgotPassword' | 'changePassword',
   locale: string
 ): string {
-  const validLocale = SUPPORTED_LOCALES.includes(locale as any) ? locale : 'es';
+  const validLocale = SUPPORTED_LOCALES.includes(locale as Locale)
+    ? locale
+    : 'es';
   return LOCALIZED_ROUTES[validLocale as keyof typeof LOCALIZED_ROUTES][path];
 }
 
 export function getLocaleFromPath(pathname: string): string {
   const seg = pathname.split('/').filter(Boolean)[0];
-  return SUPPORTED_LOCALES.includes(seg as any) ? seg : 'es';
+  return SUPPORTED_LOCALES.includes(seg as Locale) ? seg : 'es';
 }
 
 /**

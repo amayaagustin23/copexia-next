@@ -8,7 +8,6 @@ type SectionId =
   | 'sobre-nosotros'
   | 'valores'
   | 'contacto'
-  | 'learning';
 
 type ServicesAnchors = {
   transformacion: string;
@@ -29,7 +28,6 @@ type Sections = {
   aboutUs: string;
   values: string;
   contact: string;
-  learning: string;
 };
 
 type AdminPaths = {
@@ -71,7 +69,6 @@ export const useLocalizedPaths = () => {
     aboutUs: anchor('sobre-nosotros'),
     values: anchor('valores'),
     contact: anchor('contacto'),
-    learning: anchor('learning'),
   } as const;
 
   const path = (subpath = '') =>

@@ -1,0 +1,72 @@
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = 'https://copexia.com';
+
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/admin/',
+          '/api/',
+          '/_next/',
+          '/static/',
+          '/login',
+          '/forgot-password',
+          '/change-password',
+          '/*?*', // Query parameters
+          '/es/admin/',
+          '/en/admin/',
+          '/es/login',
+          '/en/login',
+          '/es/forgot-password',
+          '/en/forgot-password',
+          '/es/change-password',
+          '/en/change-password',
+        ],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: [
+          '/admin/',
+          '/api/',
+          '/login',
+          '/forgot-password',
+          '/change-password',
+          '/es/admin/',
+          '/en/admin/',
+          '/es/login',
+          '/en/login',
+          '/es/forgot-password',
+          '/en/forgot-password',
+          '/es/change-password',
+          '/en/change-password',
+        ],
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: [
+          '/admin/',
+          '/api/',
+          '/login',
+          '/forgot-password',
+          '/change-password',
+          '/es/admin/',
+          '/en/admin/',
+          '/es/login',
+          '/en/login',
+          '/es/forgot-password',
+          '/en/forgot-password',
+          '/es/change-password',
+          '/en/change-password',
+        ],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
+  };
+}

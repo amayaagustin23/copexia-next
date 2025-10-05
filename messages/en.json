@@ -39,7 +39,6 @@
       "services": "Services",
       "about": "About Us",
       "values": "Values",
-      "learning": "Copexia Learning",
       "contact": "Contact"
     },
     "submenu": {
@@ -48,12 +47,6 @@
         "adoption": "Digital solutions adoption and implementation",
         "optimization": "Process optimization and operational improvement",
         "research": "Internal research"
-      },
-      "learning": {
-        "powerbi": "Applied Power BI",
-        "adoption": "Technology adoption",
-        "methods": "Work methodologies and change management",
-        "dynamics": "Team dynamics and leadership"
       }
     },
     "brandAlt": "COPEXIA",
@@ -91,8 +84,7 @@
       "subtitle": "We accompany companies and teams on their path to continuous improvement, technology adoption and internal skills development.",
       "cta": {
         "services": "View services",
-        "values": "Know values",
-        "learning": "Copexia Learning"
+        "values": "Know values"
       }
     },
     "about": {
@@ -223,16 +215,16 @@
     }
   },
   "metadata": {
-    "title": "Copexia | We create tailored solutions",
-    "description": "At Copexia, from San Miguel de Tucumán - Argentina, we accompany organizations that want to evolve by combining technological tools with management methodologies, human approach and strategic vision.",
+    "title": "Copexia | Digital Transformation and Organizational Consulting in Tucumán",
+    "description": "Specialized consulting firm in digital transformation, process optimization and organizational development from San Miguel de Tucumán, Argentina. Customized solutions for companies seeking to evolve with agile methodologies, Power BI and change management.",
     "og": {
-      "title": "Copexia | Human and technological solutions for your organization",
-      "description": "We drive excellence in your organization from San Miguel de Tucumán, Argentina, through strategic consulting, technology adoption, process optimization and impactful training.",
-      "alt": "Copexia - We transform your organization in Tucumán, Argentina"
+      "title": "Copexia | Digital Transformation and Organizational Consulting",
+      "description": "Leaders in digital transformation from Tucumán, Argentina. We offer strategic consulting, technology adoption, process optimization, corporate training and organizational development with human approach and agile methodologies.",
+      "alt": "Copexia - Digital Transformation and Organizational Consulting in Tucumán, Argentina"
     },
     "twitter": {
-      "title": "Copexia | Human and technological solutions",
-      "description": "From San Miguel de Tucumán, Argentina, we accompany companies and teams on their path to continuous improvement, technology adoption and internal skills development."
+      "title": "Copexia | Digital Transformation and Organizational Consulting",
+      "description": "From San Miguel de Tucumán, Argentina, we transform organizations with digital solutions, process optimization, Power BI, agile methodologies and customized corporate training."
     }
   },
   "AboutA": {
@@ -715,7 +707,7 @@
       "excerptPlaceholder": "Brief post description",
       "content": "Content",
       "contentLabel": "HTML Content *",
-      "contentPlaceholder": "<p>Write your HTML content here...</p>",
+      "contentPlaceholder": "Write your HTML content here...",
       "contentHelp": "You can use HTML to format your content. Use tags like &lt;p&gt;, &lt;h1&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, etc.",
       "publish": "Publishing",
       "publishImmediately": "Publish immediately",

@@ -14,6 +14,7 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { Textarea } from '@/components/ui/textarea';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { categoriesService } from '@/lib/services/categoriesService';
+import { classifyError } from '@/lib/utils/errorHandler';
 import { ArrowLeft, Save, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -34,8 +35,22 @@ const colorOptions = [
 ];
 
 const iconOptions = [
-  '📚', '💡', '🔧', '💻', '🎨', '📊', '🌱', '🚀', 
-  '⚡', '🎯', '🔍', '📝', '💼', '🌟', '🎪', '🏆'
+  '📚',
+  '💡',
+  '🔧',
+  '💻',
+  '🎨',
+  '📊',
+  '🌱',
+  '🚀',
+  '⚡',
+  '🎯',
+  '🔍',
+  '📝',
+  '💼',
+  '🌟',
+  '🎪',
+  '🏆',
 ];
 
 interface EditCategoryPageProps {
@@ -48,7 +63,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
   const t = useTranslations('AdminCategories');
   const paths = useLocalizedPaths();
   const router = useRouter();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -56,9 +71,9 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
     color: colorOptions[0],
     icon: iconOptions[0],
     isActive: true,
-    sortOrder: 0
+    sortOrder: 0,
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [loadingCategory, setLoadingCategory] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -69,7 +84,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
         setLoadingCategory(true);
         const response = await categoriesService.getById(params.id);
         const categoryData = response.data || response;
-        
+
         if (categoryData) {
           setFormData({
             name: categoryData.name || '',
@@ -78,7 +93,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
             color: categoryData.color || colorOptions[0],
             icon: categoryData.icon || iconOptions[0],
             isActive: categoryData.isActive !== false,
-            sortOrder: categoryData.sortOrder || 0
+            sortOrder: categoryData.sortOrder || 0,
           });
         }
       } catch (error) {
@@ -92,12 +107,15 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
     fetchCategory();
   }, [params.id, t]);
 
-  const handleInputChange = (field: string, value: string | boolean | number) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | number
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    
+
     // Auto-generate slug from name
     if (field === 'name' && typeof value === 'string') {
       const slug = value
@@ -106,58 +124,55 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .trim();
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        slug
+        slug,
       }));
     }
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [field]: ''
+        [field]: '',
       }));
     }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = t('validation.nameRequired');
     }
-    
+
     if (!formData.slug.trim()) {
       newErrors.slug = t('validation.slugRequired');
     }
-    
+
     if (!formData.description.trim()) {
       newErrors.description = t('validation.descriptionRequired');
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     try {
       setLoading(true);
       await categoriesService.update(params.id, formData);
       router.push(paths.admin.categories);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating category:', error);
-      if (error?.response?.data?.message) {
-        setErrors({ general: error.response.data.message });
-      } else {
-        setErrors({ general: t('errors.updateFailed') });
-      }
+      const classifiedError = classifyError(error);
+      setErrors({ general: classifiedError.message });
     } finally {
       setLoading(false);
     }
@@ -239,13 +254,17 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange('description', e.target.value)
+                  }
                   placeholder={t('descriptionPlaceholder')}
                   rows={4}
                   className={errors.description ? 'border-destructive' : ''}
                 />
                 {errors.description && (
-                  <p className="text-sm text-destructive">{errors.description}</p>
+                  <p className="text-sm text-destructive">
+                    {errors.description}
+                  </p>
                 )}
               </div>
 
@@ -255,7 +274,12 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                   id="sortOrder"
                   type="number"
                   value={formData.sortOrder}
-                  onChange={(e) => handleInputChange('sortOrder', parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    handleInputChange(
+                      'sortOrder',
+                      parseInt(e.target.value) || 0
+                    )
+                  }
                   placeholder="0"
                   min="0"
                 />
@@ -278,7 +302,9 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                       key={color}
                       type="button"
                       className={`w-8 h-8 rounded-full border-2 ${
-                        formData.color === color ? 'border-foreground' : 'border-muted'
+                        formData.color === color
+                          ? 'border-foreground'
+                          : 'border-muted'
                       }`}
                       style={{ backgroundColor: color }}
                       onClick={() => handleInputChange('color', color)}
@@ -295,7 +321,9 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                       key={icon}
                       type="button"
                       className={`w-10 h-10 rounded-lg border-2 text-lg ${
-                        formData.icon === icon ? 'border-foreground' : 'border-muted'
+                        formData.icon === icon
+                          ? 'border-foreground'
+                          : 'border-muted'
                       }`}
                       onClick={() => handleInputChange('icon', icon)}
                     >
@@ -312,7 +340,9 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                     type="checkbox"
                     id="isActive"
                     checked={formData.isActive}
-                    onChange={(e) => handleInputChange('isActive', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange('isActive', e.target.checked)
+                    }
                     className="rounded border-gray-300"
                   />
                   <Label htmlFor="isActive" className="text-sm">
@@ -359,9 +389,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
         {/* Actions */}
         <div className="flex justify-end gap-3">
           <Button type="button" variant="outline" asChild>
-            <Link href={paths.admin.categories}>
-              {t('cancel')}
-            </Link>
+            <Link href={paths.admin.categories}>{t('cancel')}</Link>
           </Button>
           <Button type="submit" disabled={loading}>
             {loading ? (
