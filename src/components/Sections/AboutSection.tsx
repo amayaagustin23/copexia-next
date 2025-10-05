@@ -87,6 +87,30 @@ export default function AboutSection() {
     []
   );
 
+  // Calculate the center column for COPEXIA to be visually centered
+  const centerX = useMemo(() => {
+    let maxLeftOffset = 0;
+    let maxRightOffset = 0;
+
+    for (const cw of crosses) {
+      const row = ANCHOR.indexOf(cw.letter);
+      if (row < 0) continue;
+
+      const idxInside = indexOfOccurrence(
+        cw.word,
+        cw.letter,
+        cw.occurrence ?? 1
+      );
+      if (idxInside < 0) continue;
+
+      maxLeftOffset = Math.max(maxLeftOffset, idxInside);
+      maxRightOffset = Math.max(maxRightOffset, cw.word.length - idxInside - 1);
+    }
+
+    const totalWidth = maxLeftOffset + maxRightOffset + 1; // +1 for COPEXIA column
+    return Math.floor(totalWidth / 2);
+  }, [crosses]);
+
   // Crossword grid calculation with proper typing
   const crosswordGrid: CrosswordGrid = useMemo(() => {
     const map = new Map<string, Cell>();
@@ -95,10 +119,10 @@ export default function AboutSection() {
     const byLetter = new Map<string, CopexiaItem>();
     items.forEach((it) => byLetter.set(it.k, it));
 
-    // Vertical anchor COPEXIA at x=0
+    // Vertical anchor COPEXIA at centerX to be visually centered
     for (let i = 0; i < ANCHOR.length; i++) {
       const ch = ANCHOR[i];
-      const k = keyOf(0, i);
+      const k = keyOf(centerX, i);
       map.set(k, {
         ch,
         key: k,
@@ -120,7 +144,7 @@ export default function AboutSection() {
       );
       if (idxInside < 0) continue;
 
-      const startX = -idxInside; // intersects at x=0
+      const startX = centerX - idxInside; // intersects at centerX
       for (let i = 0; i < cw.word.length; i++) {
         const x = startX + i;
         const y = row;
@@ -134,7 +158,7 @@ export default function AboutSection() {
           map.set(k, {
             ch,
             key: k,
-            isAnchor: x === 0,
+            isAnchor: x === centerX,
             word: cw.word,
             letterKey: cw.letter,
           });
@@ -165,7 +189,7 @@ export default function AboutSection() {
       maxY,
       infoByLetter: byLetter,
     };
-  }, [items, crosses]);
+  }, [items, crosses, centerX]);
 
   // Grid dimensions
   const { grid, minX, maxX, minY, maxY, infoByLetter } = crosswordGrid;
@@ -204,7 +228,7 @@ export default function AboutSection() {
   }, []);
 
   // Animation calculations
-  const centerX = minX + Math.floor(cols / 2);
+  const animationCenterX = minX + Math.floor(cols / 2);
   const centerY = minY + Math.floor(rows / 2);
   const baseDelay = 28; // ms per distance ring from center
 
@@ -212,7 +236,7 @@ export default function AboutSection() {
   const getCellClasses = useCallback(
     (cell: Cell | undefined, isAnchorCol: boolean) => {
       const baseClasses = [
-        'relative w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-sm border cursor-pointer will-change-transform',
+        'relative w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm border cursor-pointer will-change-transform',
         'flex items-center justify-center text-xs sm:text-sm font-bold',
         'transition-all duration-700 ease-out',
         'hover:scale-105 sm:hover:scale-110 hover:shadow-xl hover:z-10 hover:-translate-y-0.5 sm:hover:-translate-y-1',
@@ -246,14 +270,14 @@ export default function AboutSection() {
   // Animation delay calculation mejorado
   const getAnimationDelay = useCallback(
     (c: number, r: number) => {
-      const dist = Math.abs(c - centerX) + Math.abs(r - centerY);
+      const dist = Math.abs(c - animationCenterX) + Math.abs(r - centerY);
       // Animación más fluida con delays escalonados
       const baseDelayMs = dist * baseDelay;
       const maxDelay = Math.max(cols, rows) * baseDelay;
       const normalizedDelay = Math.min(baseDelayMs, maxDelay);
       return inView ? `${normalizedDelay}ms` : undefined;
     },
-    [centerX, centerY, baseDelay, inView, cols, rows]
+    [animationCenterX, centerY, baseDelay, inView, cols, rows]
   );
 
   // Animaciones de hover para AboutSection
@@ -382,7 +406,7 @@ export default function AboutSection() {
       `}</style>
 
       <div
-        className={`w-full px-6 sm:px-8 lg:px-12 pt-20 pb-20 max-w-4xl mx-auto space-y-16 about-section-hover ${
+        className={`w-full px-4 sm:px-6 lg:px-8 pt-20 pb-20 space-y-16 about-section-hover ${
           isHovered ? 'transform translate-y-[-2px]' : ''
         }`}
       >
@@ -441,10 +465,11 @@ export default function AboutSection() {
               role="application"
             >
               <div
-                className="grid gap-1 justify-items-center mx-auto"
+                className="grid justify-items-center mx-auto"
                 style={{
-                  gridTemplateColumns: `repeat(${cols}, 3rem)`,
+                  gridTemplateColumns: `repeat(${cols}, 2.5rem)`,
                   gridTemplateRows: `repeat(${rows}, 3rem)`,
+                  gap: '0.25rem 0.125rem', // reducido el gap horizontal
                   maxWidth: 'fit-content',
                 }}
               >
@@ -453,7 +478,7 @@ export default function AboutSection() {
                   const c = (i % cols) + minX;
                   const cell = grid.get(`${c},${r}`);
                   const has = Boolean(cell);
-                  const isAnchorCol = c === 0 && has;
+                  const isAnchorCol = c === centerX && has;
                   const item = cell?.letterKey
                     ? infoByLetter.get(cell.letterKey)
                     : undefined;
@@ -507,7 +532,7 @@ export default function AboutSection() {
             </h4>
           </header>
 
-          <div className="grid gap-6 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 w-full px-60 mx-auto">
             {items.map((item, index) => (
               <article
                 key={item.k}
@@ -526,10 +551,10 @@ export default function AboutSection() {
                     {item.k}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors duration-200">
+                    <h5 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors duration-200 text-left">
                       {item.title}
                     </h5>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed text-left">
                       {item.desc}
                     </p>
                   </div>

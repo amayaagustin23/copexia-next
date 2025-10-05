@@ -166,6 +166,66 @@
       "edit": "Editar",
       "delete": "Eliminar",
       "view": "Ver"
+    },
+    "backToCategories": "Volver a Categorías",
+    "createTitle": "Crear Nueva Categoría",
+    "createDescription": "Agregar una nueva categoría para organizar tus publicaciones",
+    "editTitle": "Editar Categoría",
+    "editDescription": "Actualizar información y configuración de la categoría",
+    "basicInfo": "Información Básica",
+    "basicInfoDescription": "Detalles principales de la categoría",
+    "appearance": "Apariencia",
+    "appearanceDescription": "Configuración visual y estilo",
+    "name": "Nombre",
+    "namePlaceholder": "Ingresa el nombre de la categoría",
+    "slug": "Slug",
+    "slugPlaceholder": "categoria-slug",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe esta categoría",
+    "sortOrder": "Orden de Clasificación",
+    "color": "Color",
+    "icon": "Icono",
+    "status": "Estado",
+    "preview": "Vista Previa",
+    "previewDescription": "Cómo se verá esta categoría",
+    "categoryName": "Nombre de Categoría",
+    "categoryDescription": "La descripción de la categoría aparecerá aquí",
+    "cancel": "Cancelar",
+    "create": "Crear Categoría",
+    "creating": "Creando...",
+    "update": "Actualizar Categoría",
+    "updating": "Actualizando...",
+    "loading": "Cargando...",
+    "validation": {
+      "nameRequired": "El nombre de la categoría es requerido",
+      "slugRequired": "El slug de la categoría es requerido",
+      "descriptionRequired": "La descripción de la categoría es requerida"
+    },
+    "errors": {
+      "createFailed": "Error al crear la categoría",
+      "updateFailed": "Error al actualizar la categoría",
+      "fetchFailed": "Error al cargar la categoría"
+    },
+    "deleteConfirm": {
+      "title": "Eliminar Categoría",
+      "description": "¿Estás seguro de que quieres eliminar la categoría \"{name}\"? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "deleting": "Eliminando..."
+    },
+    "table": {
+      "icon": "Icono",
+      "name": "Nombre",
+      "slug": "Slug",
+      "description": "Descripción",
+      "order": "Orden",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "pagination": {
+      "showing": "Mostrando {start} a {end} de {total} categorías",
+      "prev": "Anterior",
+      "next": "Siguiente"
     }
   },
   "home": {
@@ -359,7 +419,26 @@
     "viewAllPosts": "Ver todos los artículos",
     "noPosts": "No hay artículos disponibles en este momento.",
     "errorLoading": "Error al cargar los posts",
-    "locale": "es-ES"
+    "locale": "es-ES",
+    "searchPlaceholder": "Buscar artículos...",
+    "filterAllPosts": "Todos los Posts",
+    "filterPublished": "Publicados",
+    "filterDrafts": "Borradores",
+    "showingPosts": "Mostrando {count} de {total} artículos",
+    "pageOf": "Página {current} de {total}",
+    "noArticlesFound": "No se encontraron artículos",
+    "noArticlesFoundDescription": "Intenta ajustar tus criterios de búsqueda o filtro.",
+    "noArticlesAvailable": "No hay artículos disponibles en este momento.",
+    "clearFilters": "Limpiar filtros",
+    "tryAgain": "Intentar de nuevo",
+    "pinned": "Fijado",
+    "views": "vistas",
+    "comments": "comentarios",
+    "likes": "me gusta",
+    "like": "Me gusta",
+    "liked": "Te gusta",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "postDetail": {
     "back": "Volver",
@@ -370,7 +449,33 @@
     "comments": "comentarios",
     "like": "Me gusta",
     "liked": "Te gusta",
-    "viewMoreArticles": "Ver más artículos"
+    "viewMoreArticles": "Ver más artículos",
+    "commentsSection": {
+      "title": "Comentarios",
+      "loading": "Cargando comentarios...",
+      "noComments": "No hay comentarios aún. ¡Sé el primero en comentar!",
+      "commentBy": "Por",
+      "form": {
+        "title": "Deja un comentario",
+        "name": "Nombre *",
+        "email": "Email *",
+        "website": "Sitio web (opcional)",
+        "comment": "Comentario *",
+        "namePlaceholder": "Tu nombre",
+        "emailPlaceholder": "tu@email.com",
+        "websitePlaceholder": "https://tusitio.com",
+        "commentPlaceholder": "Escribe tu comentario aquí...",
+        "submit": "Enviar comentario",
+        "submitting": "Enviando...",
+        "validation": {
+          "contentRequired": "El contenido del comentario es requerido",
+          "nameRequired": "El nombre es requerido",
+          "emailRequired": "El email es requerido",
+          "emailInvalid": "Por favor ingresa un email válido",
+          "errorSending": "Error al crear el comentario. Por favor intenta de nuevo."
+        }
+      }
+    }
   },
   "AdminPosts": {
     "title": "Posts",

@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [logout]);
 
   const setDataUser = useCallback(async () => {
-    const profile = await getMyProfile(router, paths.auth.signIn);
+    const profile = await getMyProfile(); // Removido router y redirectTo
     // Actualizar caché cuando se actualiza el usuario
     authCache = {
       user: profile || null,
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isLoading: false,
     };
     setUser(profile);
-  }, [router, paths.auth.signIn]);
+  }, []);
 
   const clearAuthCache = useCallback(() => {
     console.log('AuthContext: Clearing auth cache');
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const isLoggedInStatus = await isLoggedIn();
         console.log('AuthContext: isLoggedIn status:', isLoggedInStatus);
 
-        const profile = await getMyProfile(router, paths.auth.signIn);
+        const profile = await getMyProfile(); // Removido router y redirectTo
         console.log('AuthContext: Profile loaded:', profile);
 
         // Actualizar caché
@@ -108,32 +108,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (profile) {
           setUser(profile);
-        } else if (isLoggedInStatus === false) {
-          // Si no está logueado, limpiar cualquier cookie corrupta
-          console.log(
-            'AuthContext: User not authenticated, clearing potentially corrupted cookies'
-          );
-          if (typeof window !== 'undefined') {
-            // Limpiar cookies específicas si están presentes pero no válidas
-            const hasCookies =
-              document.cookie.includes('token=') ||
-              document.cookie.includes('refreshT=');
-            if (hasCookies) {
-              console.log(
-                'AuthContext: Found cookies but user not authenticated, clearing them'
-              );
-              document.cookie =
-                'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-              document.cookie =
-                'refreshT=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            }
-          }
         }
       } catch (error) {
         console.error('AuthContext: Error loading profile:', error);
         // Limpiar caché en caso de error
         authCache = null;
-        await logout();
+        setUser(null); // Solo limpiar usuario, no hacer logout automático
       } finally {
         console.log('AuthContext: Setting isLoading to false');
         setIsLoading(false);
@@ -141,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     loadUser();
-  }, [logout, router, paths.auth.signIn]);
+  }, [logout]);
 
   const value = useMemo(
     () => ({

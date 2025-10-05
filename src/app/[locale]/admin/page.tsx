@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Loading } from '@/components/ui/loading';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
 import {
@@ -99,20 +99,20 @@ export default function AdminDashboardPage() {
     return (
       <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
         <header className="space-y-2">
-          <Skeleton className="h-6 sm:h-8 w-40 sm:w-48" />
-          <Skeleton className="h-3 sm:h-4 w-80 sm:w-96" />
+          <Loading className="h-6 sm:h-8 w-40 sm:w-48" />
+          <Loading className="h-3 sm:h-4 w-80 sm:w-96" />
         </header>
 
         <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="p-4">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-                <Skeleton className="h-3 sm:h-4 w-16 sm:w-20" />
-                <Skeleton className="h-3 sm:h-4 w-3 sm:w-4" />
+                <Loading className="h-3 sm:h-4 w-16 sm:w-20" />
+                <Loading className="h-3 sm:h-4 w-3 sm:w-4" />
               </CardHeader>
               <CardContent className="p-0 pt-2">
-                <Skeleton className="h-6 sm:h-8 w-12 sm:w-16" />
-                <Skeleton className="h-2 sm:h-3 w-20 sm:w-24 mt-1" />
+                <Loading className="h-6 sm:h-8 w-12 sm:w-16" />
+                <Loading className="h-2 sm:h-3 w-20 sm:w-24 mt-1" />
               </CardContent>
             </Card>
           ))}
@@ -123,17 +123,17 @@ export default function AdminDashboardPage() {
           {[...Array(3)].map((_, i) => (
             <Card key={i} className="p-4">
               <CardHeader className="p-0 pb-4">
-                <Skeleton className="h-5 sm:h-6 w-24 sm:w-32" />
-                <Skeleton className="h-3 sm:h-4 w-32 sm:w-48" />
+                <Loading className="h-5 sm:h-6 w-24 sm:w-32" />
+                <Loading className="h-3 sm:h-4 w-32 sm:w-48" />
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-3">
                   {[...Array(3)].map((_, j) => (
                     <div key={j} className="flex items-center space-x-3">
-                      <Skeleton className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
+                      <Loading className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
                       <div className="flex-1 space-y-1 min-w-0">
-                        <Skeleton className="h-3 sm:h-4 w-24 sm:w-32" />
-                        <Skeleton className="h-2 sm:h-3 w-16 sm:w-24" />
+                        <Loading className="h-3 sm:h-4 w-24 sm:w-32" />
+                        <Loading className="h-2 sm:h-3 w-16 sm:w-24" />
                       </div>
                     </div>
                   ))}
@@ -148,8 +148,8 @@ export default function AdminDashboardPage() {
           {[...Array(2)].map((_, i) => (
             <Card key={i} className="p-4">
               <CardHeader className="p-0 pb-4">
-                <Skeleton className="h-5 sm:h-6 w-28 sm:w-36" />
-                <Skeleton className="h-3 sm:h-4 w-40 sm:w-48" />
+                <Loading className="h-5 sm:h-6 w-28 sm:w-36" />
+                <Loading className="h-3 sm:h-4 w-40 sm:w-48" />
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-3">
@@ -159,10 +159,10 @@ export default function AdminDashboardPage() {
                       className="flex items-center justify-between space-x-3"
                     >
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
-                        <Skeleton className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
-                        <Skeleton className="h-3 sm:h-4 w-20 sm:w-28 flex-1" />
+                        <Loading className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
+                        <Loading className="h-3 sm:h-4 w-20 sm:w-28 flex-1" />
                       </div>
-                      <Skeleton className="h-5 sm:h-6 w-12 sm:w-16 flex-shrink-0" />
+                      <Loading className="h-5 sm:h-6 w-12 sm:w-16 flex-shrink-0" />
                     </div>
                   ))}
                 </div>

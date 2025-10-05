@@ -33,6 +33,7 @@ export const API_ROUTES = {
       UNLIKE: (id: string) => `/public/posts/${id}/like`,
       COMMENTS: (postId: string) => `/public/posts/${postId}/comments`,
       CREATE_COMMENT: (postId: string) => `/public/posts/${postId}/comments`,
+      INCREMENT_VIEW: (id: string) => `/public/posts/${id}/view`,
     },
     CATEGORIES: {
       LIST: '/public/categories',

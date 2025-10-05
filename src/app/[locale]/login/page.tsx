@@ -11,13 +11,14 @@ import { TranslatedFormMessage } from '@/components/translated-form-message';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { LoadingSpinner } from '@/components/ui/loading';
 
 import { PasswordInput } from '@/components/PasswordInput';
 import { useAuth } from '@/context/AuthContext';
@@ -48,8 +49,8 @@ export default function LoginPage() {
 
       const redirectTo = searchParams.get('redirect') || paths.admin.root;
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       window.location.href = redirectTo;
     }
   };
@@ -122,9 +123,11 @@ export default function LoginPage() {
                 className="w-full bg-primary"
                 disabled={form.formState.isSubmitting}
               >
-                {form.formState.isSubmitting
-                  ? t('submitting')
-                  : t('submitButton')}
+                {form.formState.isSubmitting ? (
+                  <LoadingSpinner size="sm" />
+                ) : (
+                  t('submitButton')
+                )}
               </Button>
             </form>
           </Form>

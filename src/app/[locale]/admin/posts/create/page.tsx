@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LoadingSpinner } from '@/components/ui/loading';
 import { Textarea } from '@/components/ui/textarea';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
@@ -58,15 +59,18 @@ export default function CreatePostPage() {
       .trim();
   };
 
-  const handleInputChange = (field: keyof CreatePostFormData, value: string | boolean | string[]) => {
-    setFormData(prev => {
+  const handleInputChange = (
+    field: keyof CreatePostFormData,
+    value: string | boolean | string[]
+  ) => {
+    setFormData((prev) => {
       const updated = { ...prev, [field]: value };
-      
+
       // Auto-generate slug when title changes
       if (field === 'title' && typeof value === 'string') {
         updated.slug = generateSlug(value);
       }
-      
+
       return updated;
     });
   };
@@ -105,12 +109,10 @@ export default function CreatePostPage() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">{t('title')}</h1>
-            <p className="text-muted-foreground">
-              {t('description')}
-            </p>
+            <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
-        
+
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -170,7 +172,9 @@ export default function CreatePostPage() {
                   <Textarea
                     id="excerpt"
                     value={formData.excerpt}
-                    onChange={(e) => handleInputChange('excerpt', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('excerpt', e.target.value)
+                    }
                     placeholder={t('excerptPlaceholder')}
                     rows={3}
                   />
@@ -186,7 +190,9 @@ export default function CreatePostPage() {
               <CardContent>
                 {previewMode ? (
                   <div className="prose max-w-none">
-                    <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                    <div
+                      dangerouslySetInnerHTML={{ __html: formData.content }}
+                    />
                   </div>
                 ) : (
                   <div>
@@ -194,7 +200,9 @@ export default function CreatePostPage() {
                     <Textarea
                       id="content"
                       value={formData.content}
-                      onChange={(e) => handleInputChange('content', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange('content', e.target.value)
+                      }
                       placeholder={t('contentPlaceholder')}
                       rows={15}
                       className="font-mono text-sm"
@@ -222,19 +230,23 @@ export default function CreatePostPage() {
                     type="checkbox"
                     id="published"
                     checked={formData.published}
-                    onChange={(e) => handleInputChange('published', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange('published', e.target.checked)
+                    }
                     className="rounded"
                   />
                   <Label htmlFor="published">{t('publishImmediately')}</Label>
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full"
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  {loading ? t('save') : t('createPost')}
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? (
+                    <LoadingSpinner size="sm" />
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      {t('createPost')}
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -250,28 +262,38 @@ export default function CreatePostPage() {
                   <Input
                     id="metaTitle"
                     value={formData.metaTitle}
-                    onChange={(e) => handleInputChange('metaTitle', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('metaTitle', e.target.value)
+                    }
                     placeholder={t('metaTitlePlaceholder')}
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="metaDescription">{t('metaDescriptionLabel')}</Label>
+                  <Label htmlFor="metaDescription">
+                    {t('metaDescriptionLabel')}
+                  </Label>
                   <Textarea
                     id="metaDescription"
                     value={formData.metaDescription}
-                    onChange={(e) => handleInputChange('metaDescription', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('metaDescription', e.target.value)
+                    }
                     placeholder={t('metaDescriptionPlaceholder')}
                     rows={3}
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="featuredImage">{t('featuredImageLabel')}</Label>
+                  <Label htmlFor="featuredImage">
+                    {t('featuredImageLabel')}
+                  </Label>
                   <Input
                     id="featuredImage"
                     value={formData.featuredImage}
-                    onChange={(e) => handleInputChange('featuredImage', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('featuredImage', e.target.value)
+                    }
                     placeholder={t('featuredImagePlaceholder')}
                   />
                 </div>
@@ -290,7 +312,10 @@ export default function CreatePostPage() {
                     id="tags"
                     value={formData.tags?.join(', ') || ''}
                     onChange={(e) => {
-                      const tags = e.target.value.split(',').map(tag => tag.trim()).filter(Boolean);
+                      const tags = e.target.value
+                        .split(',')
+                        .map((tag) => tag.trim())
+                        .filter(Boolean);
                       handleInputChange('tags', tags);
                     }}
                     placeholder={t('tagsPlaceholder')}

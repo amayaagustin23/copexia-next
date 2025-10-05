@@ -1,10 +1,11 @@
 "use client";
 
-import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
-import { cn } from "@/lib/utils";
+import { LoadingSpinner } from '@/components/ui/loading';
+import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { cn } from '@/lib/utils';
 import { postsService } from '@/services/postsService';
 import type { Post } from '@/types/posts';
-import { FilePlus2, Loader2, Search } from 'lucide-react';
+import { FilePlus2, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -143,10 +144,7 @@ export default function PostsList() {
             {loading && (
               <tr>
                 <td colSpan={5} className="px-3 py-8 text-center">
-                  <span className="inline-flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {t('loading')}
-                  </span>
+                  <LoadingSpinner size="sm" />
                 </td>
               </tr>
             )}
@@ -260,7 +258,7 @@ export default function PostsList() {
                         {t('actions.edit')}
                       </Link>
                       <Link
-                        href={`${paths.root}/blog/${p.slug}`}
+                        href={paths.path(`posts/${p.slug}`)}
                         className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40"
                         target="_blank"
                       >

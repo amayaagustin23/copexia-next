@@ -181,11 +181,21 @@
     background: var(--section-alt-gradient), var(--muted);
   }
 
-  /* 🔹 superficies “flotantes” coherentes con el nuevo fondo */
+  /* 🔹 superficies "flotantes" coherentes con el nuevo fondo */
   .surface {
     background: var(--card);
     box-shadow: 0 10px 30px rgba(15, 28, 46, 0.1);
     border-radius: var(--radius);
     border: 1px solid var(--border);
+  }
+
+  /* 🔹 shimmer animation for loading components */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
 }

@@ -16,7 +16,8 @@ export class PostsService extends BaseService {
       page: params.page ?? 1,
       size: params.size ?? 10,
       q: params.q,
-      status: params.status && params.status !== 'ALL' ? params.status : undefined,
+      status:
+        params.status && params.status !== 'ALL' ? params.status : undefined,
     });
   }
 
@@ -31,7 +32,11 @@ export class PostsService extends BaseService {
    * Update an existing post (admin)
    */
   async update(id: string, postData: any): Promise<any> {
-    return this.adminRequest('PUT', this.routes.ADMIN.POSTS.UPDATE(id), postData);
+    return this.adminRequest(
+      'PUT',
+      this.routes.ADMIN.POSTS.UPDATE(id),
+      postData
+    );
   }
 
   /**
@@ -108,7 +113,17 @@ export class PostsService extends BaseService {
    * Create a comment on a post
    */
   async createComment(postId: string, commentData: any): Promise<any> {
-    return this.post(this.routes.PUBLIC.POSTS.CREATE_COMMENT(postId), commentData);
+    return this.post(
+      this.routes.PUBLIC.POSTS.CREATE_COMMENT(postId),
+      commentData
+    );
+  }
+
+  /**
+   * Increment view count for a post
+   */
+  async incrementView(postId: string): Promise<any> {
+    return this.post(this.routes.PUBLIC.POSTS.INCREMENT_VIEW(postId));
   }
 
   // ==================== LEGACY METHODS (for backward compatibility) ====================

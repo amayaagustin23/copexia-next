@@ -70,7 +70,7 @@
     }
   },
   "Sidebar": {
-    "panelTitle": "Administration Panel",
+    "panelTitle": "Administration",
     "logout": "Sign out",
     "dashboard": "Dashboard",
     "posts": "Posts",
@@ -434,7 +434,7 @@
     }
   },
   "AdminDashboard": {
-    "title": "Administration Panel",
+    "title": "Administration",
     "description": "Activity summary and quick access.",
     "logout": "Sign out",
     "kpi": {
@@ -515,6 +515,66 @@
       "edit": "Edit",
       "delete": "Delete",
       "view": "View"
+    },
+    "backToCategories": "Back to Categories",
+    "createTitle": "Create New Category",
+    "createDescription": "Add a new category to organize your publications",
+    "editTitle": "Edit Category",
+    "editDescription": "Update category information and settings",
+    "basicInfo": "Basic Information",
+    "basicInfoDescription": "Core category details",
+    "appearance": "Appearance",
+    "appearanceDescription": "Visual settings and styling",
+    "name": "Name",
+    "namePlaceholder": "Enter category name",
+    "slug": "Slug",
+    "slugPlaceholder": "category-slug",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe this category",
+    "sortOrder": "Sort Order",
+    "color": "Color",
+    "icon": "Icon",
+    "status": "Status",
+    "preview": "Preview",
+    "previewDescription": "How this category will appear",
+    "categoryName": "Category Name",
+    "categoryDescription": "Category description will appear here",
+    "cancel": "Cancel",
+    "create": "Create Category",
+    "creating": "Creating...",
+    "update": "Update Category",
+    "updating": "Updating...",
+    "loading": "Loading...",
+    "validation": {
+      "nameRequired": "Category name is required",
+      "slugRequired": "Category slug is required",
+      "descriptionRequired": "Category description is required"
+    },
+    "errors": {
+      "createFailed": "Failed to create category",
+      "updateFailed": "Failed to update category",
+      "fetchFailed": "Failed to load category"
+    },
+    "deleteConfirm": {
+      "title": "Delete Category",
+      "description": "Are you sure you want to delete the category \"{name}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    },
+    "table": {
+      "icon": "Icon",
+      "name": "Name",
+      "slug": "Slug",
+      "description": "Description",
+      "order": "Order",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} categories",
+      "prev": "Previous",
+      "next": "Next"
     }
   },
   "whatsapp": {
@@ -557,7 +617,26 @@
     "viewAllPosts": "View all articles",
     "noPosts": "No articles available at the moment.",
     "errorLoading": "Error loading posts",
-    "locale": "en-US"
+    "locale": "en-US",
+    "searchPlaceholder": "Search articles...",
+    "filterAllPosts": "All Posts",
+    "filterPublished": "Published",
+    "filterDrafts": "Drafts",
+    "showingPosts": "Showing {count} of {total} articles",
+    "pageOf": "Page {current} of {total}",
+    "noArticlesFound": "No articles found",
+    "noArticlesFoundDescription": "Try adjusting your search or filter criteria.",
+    "noArticlesAvailable": "No articles are available at the moment.",
+    "clearFilters": "Clear filters",
+    "tryAgain": "Try Again",
+    "pinned": "Pinned",
+    "views": "views",
+    "comments": "comments",
+    "likes": "likes",
+    "like": "Like",
+    "liked": "Liked",
+    "previous": "Previous",
+    "next": "Next"
   },
   "postDetail": {
     "back": "Back",
@@ -568,7 +647,33 @@
     "comments": "comments",
     "like": "Like",
     "liked": "Liked",
-    "viewMoreArticles": "View more articles"
+    "viewMoreArticles": "View more articles",
+    "commentsSection": {
+      "title": "Comments",
+      "loading": "Loading comments...",
+      "noComments": "No comments yet. Be the first to comment!",
+      "commentBy": "By",
+      "form": {
+        "title": "Leave a comment",
+        "name": "Name *",
+        "email": "Email *",
+        "website": "Website (optional)",
+        "comment": "Comment *",
+        "namePlaceholder": "Your name",
+        "emailPlaceholder": "your@email.com",
+        "websitePlaceholder": "https://yoursite.com",
+        "commentPlaceholder": "Write your comment here...",
+        "submit": "Send comment",
+        "submitting": "Sending...",
+        "validation": {
+          "contentRequired": "Comment content is required",
+          "nameRequired": "Name is required",
+          "emailRequired": "Email is required",
+          "emailInvalid": "Please enter a valid email",
+          "errorSending": "Error creating comment. Please try again."
+        }
+      }
+    }
   },
   "AdminPosts": {
     "title": "Posts",

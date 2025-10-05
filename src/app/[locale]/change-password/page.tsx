@@ -1,26 +1,27 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
+import { LoadingSpinner } from '@/components/ui/loading';
+import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import {
-	ChangeWithTokenSchema,
-	makeChangeWithTokenSchema,
-} from "@/lib/validators/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+  ChangeWithTokenSchema,
+  makeChangeWithTokenSchema,
+} from '@/lib/validators/auth';
+import { resetPassword } from '@/services/authService';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function ChangePasswordForm() {
-  const t = useTranslations("auth.change");
-  const tv = useTranslations("validations.change");
-  const { changePassword, loading } = useAuth();
+  const t = useTranslations('auth.change');
+  const tv = useTranslations('validations.change');
   const { auth } = useLocalizedPaths();
+  const [loading, setLoading] = useState(false);
   const params = useSearchParams();
 
-  const token = params.get("token") || "";
+  const token = params.get('token') || '';
 
   const schema = useMemo(() => makeChangeWithTokenSchema(tv), [tv]);
 
@@ -32,31 +33,38 @@ export default function ChangePasswordForm() {
     reset,
   } = useForm<ChangeWithTokenSchema>({
     resolver: zodResolver(schema),
-    mode: "onTouched",
-    reValidateMode: "onChange",
-    defaultValues: { newPassword: "", confirmPassword: "" },
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
+    defaultValues: { newPassword: '', confirmPassword: '' },
   });
 
   const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (!token) {
-      setError("root", { type: "missing-token", message: t("missingToken") });
+      setError('root', { type: 'missing-token', message: t('missingToken') });
     }
   }, [token, setError, t]);
 
   const onSubmit = handleSubmit(async ({ newPassword }) => {
     if (!token) {
-      setError("root", { type: "missing-token", message: t("missingToken") });
+      setError('root', { type: 'missing-token', message: t('missingToken') });
       return;
     }
     try {
-      await changePassword({ token, newPassword });
+      setLoading(true);
+      await resetPassword(
+        token,
+        { password: newPassword, confirmPassword: newPassword },
+        t
+      );
       setDone(true);
       reset();
     } catch (e: any) {
-      const msg = e?.message || t("genericError");
-      setError("root", { type: "server", message: msg });
+      const msg = e?.message || t('genericError');
+      setError('root', { type: 'server', message: msg });
+    } finally {
+      setLoading(false);
     }
   });
 
@@ -66,7 +74,7 @@ export default function ChangePasswordForm() {
     <div className="flex min-h-screen items-center justify-center bg-background p-6">
       <div className="w-full max-w-md rounded-2xl bg-card p-8 shadow-md border border-border">
         <h1 className="mb-6 text-center text-2xl font-bold text-foreground">
-          {t("title")}
+          {t('title')}
         </h1>
 
         {done && (
@@ -75,12 +83,12 @@ export default function ChangePasswordForm() {
             role="status"
             aria-live="polite"
           >
-            {t("done")}
+            {t('done')}
           </div>
         )}
 
         {/* Error global */}
-        {"root" in errors && (errors as any).root?.message && (
+        {'root' in errors && (errors as any).root?.message && (
           <div
             className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
             role="alert"
@@ -95,20 +103,20 @@ export default function ChangePasswordForm() {
               htmlFor="newPassword"
               className="block text-sm font-medium text-foreground"
             >
-              {t("newLabel")}
+              {t('newLabel')}
             </label>
             <input
               id="newPassword"
               type="password"
               autoComplete="new-password"
               aria-invalid={!!errors.newPassword}
-              {...register("newPassword")}
+              {...register('newPassword')}
               className={[
-                "mt-1 w-full rounded-lg border bg-background px-3 py-2 text-foreground focus:border-primary focus:ring-2 focus:ring-primary",
+                'mt-1 w-full rounded-lg border bg-background px-3 py-2 text-foreground focus:border-primary focus:ring-2 focus:ring-primary',
                 errors.newPassword
-                  ? "border-destructive ring-destructive/40"
-                  : "border-input",
-              ].join(" ")}
+                  ? 'border-destructive ring-destructive/40'
+                  : 'border-input',
+              ].join(' ')}
               disabled={submitting}
             />
             {errors.newPassword && (
@@ -123,20 +131,20 @@ export default function ChangePasswordForm() {
               htmlFor="confirmPassword"
               className="block text-sm font-medium text-foreground"
             >
-              {t("confirmLabel")}
+              {t('confirmLabel')}
             </label>
             <input
               id="confirmPassword"
               type="password"
               autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}
-              {...register("confirmPassword")}
+              {...register('confirmPassword')}
               className={[
-                "mt-1 w-full rounded-lg border bg-background px-3 py-2 text-foreground focus:border-primary focus:ring-2 focus:ring-primary",
+                'mt-1 w-full rounded-lg border bg-background px-3 py-2 text-foreground focus:border-primary focus:ring-2 focus:ring-primary',
                 errors.confirmPassword
-                  ? "border-destructive ring-destructive/40"
-                  : "border-input",
-              ].join(" ")}
+                  ? 'border-destructive ring-destructive/40'
+                  : 'border-input',
+              ].join(' ')}
               disabled={submitting}
             />
             {errors.confirmPassword && (
@@ -148,16 +156,16 @@ export default function ChangePasswordForm() {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-primary py-2 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="w-full rounded-lg bg-primary py-2 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 flex items-center justify-center gap-2"
             disabled={!token || submitting || (submitCount > 0 && !isValid)}
           >
-            {submitting ? t("submitting") : t("submit")}
+            {submitting ? <LoadingSpinner size="sm" /> : t('submit')}
           </button>
         </form>
 
         <div className="mt-4 flex justify-between text-sm text-primary">
           <Link href={auth.signIn} className="hover:underline">
-            {t("backToLogin")}
+            {t('backToLogin')}
           </Link>
         </div>
       </div>

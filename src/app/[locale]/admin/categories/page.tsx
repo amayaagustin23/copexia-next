@@ -1,251 +1,357 @@
 'use client';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { LoadingSpinner } from '@/components/ui/loading';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useSearchDebounce } from '@/lib/hooks/useSearchDebounce';
 import { categoriesService } from '@/lib/services/categoriesService';
 import { Category } from '@/types/posts';
-import {
-  Edit,
-  FolderTree,
-  Hash,
-  MoreHorizontal,
-  Palette,
-  Plus,
-  Search,
-  Trash2,
-} from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function AdminCategoriesPage() {
   const t = useTranslations('AdminCategories');
   const paths = useLocalizedPaths();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+    null
+  );
+  const [deleting, setDeleting] = useState(false);
+  const isFetchingRef = useRef(false);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(
+    async (searchQuery: string = '') => {
+      // Prevent duplicate concurrent requests
+      if (isFetchingRef.current) {
+        return;
+      }
+
+      try {
+        isFetchingRef.current = true;
+        setLoading(true);
+        const categoriesResponse = await categoriesService.list({
+          page: currentPage,
+          size: pageSize,
+          search: searchQuery || undefined,
+        });
+
+        // Handle paginated response
+        if (categoriesResponse?.data && categoriesResponse?.meta) {
+          setCategories(categoriesResponse.data || []);
+          setTotalPages(categoriesResponse.meta.totalPages || 0);
+          setTotalItems(categoriesResponse.meta.total || 0);
+        } else if (categoriesResponse?.data) {
+          // Fallback for non-paginated response
+          setCategories(categoriesResponse.data || []);
+          setTotalPages(1);
+          setTotalItems(categoriesResponse.data?.length || 0);
+        } else {
+          setCategories([]);
+          setTotalPages(0);
+          setTotalItems(0);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategories([]);
+        setTotalPages(0);
+        setTotalItems(0);
+      } finally {
+        setLoading(false);
+        isFetchingRef.current = false;
+      }
+    },
+    [currentPage, pageSize]
+  );
+
+  // Search debounce hook
+  const {
+    searchQuery,
+    isSearching,
+    handleSearch,
+    handleSearchSubmit,
+    isValidQuery,
+  } = useSearchDebounce({
+    delay: 2000,
+    minLength: 3,
+    onSearch: fetchCategories,
+  });
+
+  useEffect(() => {
+    fetchCategories(searchQuery);
+  }, [fetchCategories, searchQuery]);
+
+  const handleDeleteClick = (category: Category) => {
+    setCategoryToDelete(category);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!categoryToDelete) return;
+
     try {
-      setLoading(true);
-      const response = await categoriesService.list();
-      setCategories(response.data);
+      setDeleting(true);
+      await categoriesService.delete(categoryToDelete.id);
+      await fetchCategories(searchQuery); // Refresh the list
+      setDeleteDialogOpen(false);
+      setCategoryToDelete(null);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error deleting category:', error);
+      // Handle error - could show a toast notification
     } finally {
-      setLoading(false);
+      setDeleting(false);
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setCategoryToDelete(null);
+  };
 
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearchWithPageReset = (query: string) => {
+    setCurrentPage(1); // Reset to first page when searching
+    handleSearch(query);
+  };
+
+  const handleSearchSubmitForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearchSubmit();
+  };
+  // Remove client-side filtering since we're using server-side pagination
+  // const filteredCategories = (categories || []).filter(
+  //   (category) =>
+  //     category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     category.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   return (
-    <div className="space-y-6">
-      <header className="flex justify-between items-start">
-        <div>
-          <h1 className="text-2xl font-bold">{t('title')}</h1>
-          <p className="mt-2 text-muted-foreground">{t('description')}</p>
-        </div>
-        <Button asChild>
-          <Link href={`${paths.admin.categories}/new`}>
-            <Plus className="w-4 h-4 mr-2" />
-            {t('newCategory')}
-          </Link>
-        </Button>
-      </header>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-xl font-semibold">{t('title')}</h2>
+        <Link
+          href={`${paths.admin.categories}/new`}
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-primary-foreground text-sm hover:bg-primary/90"
+        >
+          <Plus className="h-4 w-4" />
+          {t('newCategory')}
+        </Link>
+      </div>
 
-      {/* Buscador */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">{t('searchTitle')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <input
-              type="text"
-              placeholder={t('searchInputPlaceholder')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      {/* Filtros */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <form
+          onSubmit={handleSearchSubmitForm}
+          className="relative w-full sm:max-w-xs"
+        >
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => handleSearchWithPageReset(e.target.value)}
+            placeholder={t('searchInputPlaceholder')}
+            className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          {isSearching && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
+        </form>
+        {searchQuery.length > 0 && !isValidQuery && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Escribe al menos 3 caracteres para buscar
+          </p>
+        )}
+      </div>
 
-      {/* Lista de categorías */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">
-            {t('listTitle', { count: filteredCategories.length })}
-          </CardTitle>
-          <CardDescription>{t('listDescription')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              <span className="ml-2">{t('loadingMessage')}</span>
-            </div>
-          ) : filteredCategories.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <FolderTree className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">
-                {searchQuery ? t('noResults') : t('noCategories')}
-              </p>
-              <p className="text-sm">
-                {searchQuery
-                  ? t('noResultsDescription')
-                  : t('noCategoriesDescription')}
-              </p>
-            </div>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredCategories.map((category) => (
-                <div
-                  key={category.id}
-                  className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+      {/* Tabla */}
+      <div className="overflow-x-auto rounded-lg border border-border bg-card">
+        <table className="min-w-full text-sm">
+          <thead className="bg-muted/40 text-muted-foreground">
+            <tr>
+              <th className="px-3 py-2 text-left font-medium w-[50px]">
+                {t('table.icon')}
+              </th>
+              <th className="px-3 py-2 text-left font-medium">
+                {t('table.name')}
+              </th>
+              <th className="px-3 py-2 text-left font-medium">
+                {t('table.slug')}
+              </th>
+              <th className="px-3 py-2 text-left font-medium">
+                {t('table.description')}
+              </th>
+              <th className="px-3 py-2 text-left font-medium w-[100px]">
+                {t('table.order')}
+              </th>
+              <th className="px-3 py-2 text-left font-medium w-[100px]">
+                {t('table.status')}
+              </th>
+              <th className="px-3 py-2 text-right font-medium w-[100px]">
+                {t('table.actions')}
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {loading && (
+              <tr>
+                <td colSpan={7} className="px-3 py-8 text-center">
+                  <LoadingSpinner size="sm" />
+                </td>
+              </tr>
+            )}
+
+            {!loading && categories.length === 0 && (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="px-3 py-6 text-center text-muted-foreground"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
-                        style={{
-                          backgroundColor: category.color + '20',
-                          color: category.color,
-                        }}
-                      >
-                        {category.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg">
-                          {category.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          #{category.slug}
-                        </p>
-                      </div>
+                  {searchQuery ? t('noResults') : t('noCategories')}
+                </td>
+              </tr>
+            )}
+
+            {!loading &&
+              categories.map((category) => (
+                <tr
+                  key={category.id}
+                  className="border-t border-border/60 hover:bg-muted/20"
+                >
+                  <td className="px-3 py-2">
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                      style={{
+                        backgroundColor: category.color + '20',
+                        color: category.color,
+                      }}
+                    >
+                      {category.icon}
                     </div>
-
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link
-                            href={`${paths.admin.categories}/${category.id}/edit`}
-                          >
-                            <Edit className="w-4 h-4 mr-2" />
-                            {t('actions.edit')}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          {t('actions.delete')}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                  </td>
+                  <td className="px-3 py-2">
+                    <div className="font-medium">{category.name}</div>
+                  </td>
+                  <td className="px-3 py-2">
+                    <code className="text-xs bg-muted px-1 py-0.5 rounded">
+                      {category.slug}
+                    </code>
+                  </td>
+                  <td className="px-3 py-2 max-w-[200px] truncate">
                     {category.description}
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Hash className="w-3 h-3" />
-                        {t('order')}: {category.sortOrder}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Palette className="w-3 h-3" />
-                        <div
-                          className="w-3 h-3 rounded-full border"
-                          style={{ backgroundColor: category.color }}
-                        />
-                      </div>
-                    </div>
-
+                  </td>
+                  <td className="px-3 py-2 text-center">
+                    {category.sortOrder || 0}
+                  </td>
+                  <td className="px-3 py-2">
                     <Badge
                       variant={category.isActive ? 'default' : 'secondary'}
                     >
                       {category.isActive ? t('active') : t('inactive')}
                     </Badge>
-                  </div>
-                </div>
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    <div className="inline-flex items-center gap-2">
+                      <Link
+                        href={`${paths.admin.categories}/${category.id}/edit`}
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40"
+                      >
+                        {t('actions.edit')}
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteClick(category)}
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 text-destructive"
+                      >
+                        {t('actions.delete')}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Estadísticas rápidas */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <FolderTree className="h-4 w-4 text-muted-foreground" />
-              <div className="ml-2">
-                <p className="text-sm font-medium">{t('stats.total')}</p>
-                <p className="text-2xl font-bold">{categories.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <Hash className="h-4 w-4 text-muted-foreground" />
-              <div className="ml-2">
-                <p className="text-sm font-medium">{t('stats.active')}</p>
-                <p className="text-2xl font-bold">
-                  {categories.filter((c) => c.isActive).length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <Palette className="h-4 w-4 text-muted-foreground" />
-              <div className="ml-2">
-                <p className="text-sm font-medium">{t('stats.inactive')}</p>
-                <p className="text-2xl font-bold">
-                  {categories.filter((c) => !c.isActive).length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </tbody>
+        </table>
       </div>
+
+      {/* Paginación */}
+      <div className="flex items-center justify-between pt-2">
+        <p className="text-xs text-muted-foreground">
+          {t('pagination.showing', {
+            start: (currentPage - 1) * pageSize + (categories?.length ? 1 : 0),
+            end: (currentPage - 1) * pageSize + categories?.length,
+            total: totalItems,
+          })}
+        </p>
+
+        <div className="flex items-center gap-2">
+          <button
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage <= 1 || loading}
+          >
+            {t('pagination.prev')}
+          </button>
+          <span className="text-sm">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            onClick={() =>
+              handlePageChange(Math.min(totalPages, currentPage + 1))
+            }
+            disabled={currentPage >= totalPages || loading}
+          >
+            {t('pagination.next')}
+          </button>
+        </div>
+      </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('deleteConfirm.title')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('deleteConfirm.description', { name: categoryToDelete?.name })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteCancel}>
+              {t('deleteConfirm.cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting
+                ? t('deleteConfirm.deleting')
+                : t('deleteConfirm.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -3,8 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Loading, LoadingImage, LoadingText } from '@/components/ui/loading';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
+import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
 import { Post } from '@/types/posts';
 import { Calendar, Eye, Heart, MessageCircle } from 'lucide-react';
@@ -14,22 +15,21 @@ import { useEffect, useState } from 'react';
 
 export default function PostsSection() {
   const t = useTranslations('posts');
+  const paths = useLocalizedPaths();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [likingPosts, setLikingPosts] = useState<Set<string>>(new Set());
-  
-  // Hook personalizado para manejar likes con localStorage
-  const { likedPosts, isLiked, toggleLike, isLoading: likesLoading } = useLikedPosts();
+
+  const { isLiked, toggleLike, isLoading: likesLoading } = useLikedPosts();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const response = await postsService.getPublicPosts({ size: 6 });
+        const response = await postsService.getPublicPosts({ size: 3 });
         setPosts(response.data);
       } catch (err) {
-        console.error('Error fetching posts:', err);
         setError(t('errorLoading'));
       } finally {
         setLoading(false);
@@ -50,14 +50,14 @@ export default function PostsSection() {
   const handleLike = async (postId: string, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if (likingPosts.has(postId)) return;
-    
+
     const currentlyLiked = isLiked(postId);
-    
+
     try {
-      setLikingPosts(prev => new Set(prev).add(postId));
-      
+      setLikingPosts((prev) => new Set(prev).add(postId));
+
       if (currentlyLiked) {
         await postsService.unlikePost(postId);
         toggleLike(postId);
@@ -66,11 +66,9 @@ export default function PostsSection() {
         toggleLike(postId);
       }
     } catch (err) {
-      console.error('Error toggling like:', err);
-      // En caso de error, revertir el cambio local
       toggleLike(postId);
     } finally {
-      setLikingPosts(prev => {
+      setLikingPosts((prev) => {
         const newSet = new Set(prev);
         newSet.delete(postId);
         return newSet;
@@ -82,25 +80,24 @@ export default function PostsSection() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <Skeleton className="h-12 w-96 mx-auto mb-4" />
-          <Skeleton className="h-6 w-64 mx-auto" />
+          <Loading className="h-12 w-96 mx-auto mb-4" />
+          <Loading className="h-6 w-64 mx-auto" />
         </div>
-        
-        <div className="grid grid-cols-1 gap-8">
-          {[...Array(6)].map((_, i) => (
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(3)].map((_, i) => (
             <Card key={i} className="overflow-hidden">
-              <Skeleton className="h-48 w-full" />
+              <LoadingImage className="h-48 w-full" />
               <CardHeader>
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
+                <Loading className="h-6 w-3/4" />
+                <LoadingText lines={2} className="space-y-2" />
               </CardHeader>
               <CardContent>
-                <Skeleton className="h-4 w-1/4 mb-2" />
+                <Loading className="h-4 w-1/4 mb-2" />
                 <div className="flex gap-4">
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-4 w-16" />
+                  <Loading className="h-4 w-16" />
+                  <Loading className="h-4 w-16" />
+                  <Loading className="h-4 w-16" />
                 </div>
               </CardContent>
             </Card>
@@ -143,15 +140,15 @@ export default function PostsSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map((post, index) => (
-          <Card 
-            key={post.id} 
+          <Card
+            key={post.id}
             className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
             data-animate
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <Link href={`/posts/${post.slug}`}>
+            <Link href={paths.path(`posts/${post.slug}`)}>
               {post.featuredImage && (
                 <div className="relative overflow-hidden h-48">
                   <img
@@ -161,7 +158,7 @@ export default function PostsSection() {
                   />
                   <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                     {post.categories.slice(0, 2).map((postCategory) => (
-                      <Badge 
+                      <Badge
                         key={postCategory.id}
                         variant="secondary"
                         className="bg-white/90 text-black"
@@ -172,7 +169,7 @@ export default function PostsSection() {
                   </div>
                 </div>
               )}
-              
+
               <CardHeader>
                 <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-4">
                   {post.title}
@@ -181,7 +178,7 @@ export default function PostsSection() {
                   {post.excerpt}
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 py-4">
                   <div className="flex items-center gap-1">
@@ -189,7 +186,7 @@ export default function PostsSection() {
                     {post.publishedAt && formatDate(post.publishedAt)}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
@@ -201,24 +198,32 @@ export default function PostsSection() {
                       {post.commentCount}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <button
                       onClick={(e) => handleLike(post.id, e)}
                       disabled={likingPosts.has(post.id) || likesLoading}
                       className={`flex items-center gap-1 transition-colors ${
                         isLiked(post.id)
-                          ? 'text-red-500' 
+                          ? 'text-red-500'
                           : 'text-muted-foreground hover:text-red-500'
-                      } ${likingPosts.has(post.id) || likesLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      } ${
+                        likingPosts.has(post.id) || likesLoading
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
                     >
-                      <Heart 
+                      <Heart
                         className={`h-4 w-4 transition-transform ${
                           isLiked(post.id) ? 'fill-current' : ''
-                        } ${likingPosts.has(post.id) ? 'animate-pulse' : ''}`} 
+                        } ${likingPosts.has(post.id) ? 'animate-pulse' : ''}`}
                       />
                     </button>
-                    <Button variant="ghost" size="sm" className="group-hover:bg-primary/10">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="group-hover:bg-primary/10"
+                    >
                       {t('readMore')}
                     </Button>
                   </div>
@@ -231,9 +236,7 @@ export default function PostsSection() {
 
       <div className="text-center mt-12" data-animate>
         <Button variant="outline" size="lg" asChild>
-          <Link href="/posts">
-            {t('viewAllPosts')}
-          </Link>
+          <Link href={paths.path('posts')}>{t('viewAllPosts')}</Link>
         </Button>
       </div>
     </div>

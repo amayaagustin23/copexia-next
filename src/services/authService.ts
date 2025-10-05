@@ -29,17 +29,12 @@ export async function loginUser(
 
 export async function isLoggedIn(): Promise<boolean> {
   try {
-    console.log(
-      'isLoggedIn: Checking auth status at:',
-      BackendEndpoints.auth.status
-    );
+    BackendEndpoints.auth.status;
     const res = await api.get<{ isAuthenticated: boolean }>(
       BackendEndpoints.auth.status
     );
-    console.log('isLoggedIn: Response:', res.data);
     return res.data.isAuthenticated;
   } catch (error) {
-    console.error('isLoggedIn: Error checking auth status:', error);
     return false;
   }
 }
@@ -63,32 +58,27 @@ export async function getMyProfile(
   router?: ReturnType<typeof useRouter>,
   redirectTo?: string
 ): Promise<UserProfile | undefined> {
-  console.log('getMyProfile: Starting profile fetch...');
-  const authenticated = await isLoggedIn();
-  console.log('getMyProfile: isLoggedIn result:', authenticated);
+  // Solo hacer llamada a /me si hay cookies
+  if (typeof window !== 'undefined') {
+    const hasCookies =
+      document.cookie.includes('token=') ||
+      document.cookie.includes('refreshT=');
+    if (!hasCookies) {
+      console.log('AuthService: No cookies found, skipping /me call');
+      return undefined;
+    }
+  }
 
   try {
-    if (authenticated) {
-      console.log(
-        'getMyProfile: User is authenticated, fetching profile from:',
-        BackendEndpoints.auth.me
-      );
-      const response = await api.get<UserProfile>(BackendEndpoints.auth.me);
-      console.log('getMyProfile: Profile response:', response.data);
-      return response.data;
-    } else {
-      console.log(
-        'getMyProfile: User is not authenticated, skipping profile fetch'
-      );
-    }
+    const response = await api.get<UserProfile>(BackendEndpoints.auth.me);
+    return response.data;
   } catch (error: unknown) {
-    console.error('getMyProfile: Error fetching profile:', error);
     if (
       isAxiosErrorType<ApiErrorResponse>(error) &&
-      error.response?.status === 403
+      (error.response?.status === 401 || error.response?.status === 403)
     ) {
-      console.log('getMyProfile: 403 error, calling logout');
-      await logoutUser(router, redirectTo);
+      // Don't call logout here as it might cause redirect loops
+      // The axios interceptor will handle the logout
     }
   }
 

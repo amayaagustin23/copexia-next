@@ -6,7 +6,6 @@ import Section from '@/components/Section';
 import AboutSection from '@/components/Sections/AboutSection';
 import ContactSection from '@/components/Sections/ContactSection';
 import HeroSection from '@/components/Sections/HeroSection';
-import LearningOverview from '@/components/Sections/LearningOverview';
 import PostsSection from '@/components/Sections/PostsSection';
 import ValuesSection from '@/components/Sections/ValuesSection';
 
@@ -51,12 +50,6 @@ export default function HomePage() {
       title: '',
       children: <ValuesSection />,
       className: 'section-values bg-background',
-    },
-    {
-      id: 'servicios',
-      title: 'Copexia Learning',
-      children: <LearningOverview />,
-      className: 'section-learning bg-muted/5',
     },
     {
       id: 'blog',

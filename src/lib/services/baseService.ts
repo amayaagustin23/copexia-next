@@ -1,6 +1,9 @@
 import api from '@/lib/axios';
 import { API_ROUTES } from '@/lib/config/apiRoutes';
 
+// Request deduplication map
+const pendingRequests = new Map<string, Promise<any>>();
+
 /**
  * Base service class for common HTTP operations
  */
@@ -9,11 +12,52 @@ export class BaseService {
   protected routes = API_ROUTES;
 
   /**
-   * Generic GET request
+   * Create a unique key for request deduplication
    */
-  protected async get<T>(url: string, params?: Record<string, any>): Promise<T> {
-    const response = await this.api.get<T>(url, { params });
-    return response.data;
+  private createRequestKey(
+    method: string,
+    url: string,
+    params?: Record<string, any>
+  ): string {
+    const sortedParams = params
+      ? Object.keys(params)
+          .sort()
+          .map((key) => `${key}=${params[key]}`)
+          .join('&')
+      : '';
+    return `${method}:${url}${sortedParams ? `?${sortedParams}` : ''}`;
+  }
+
+  /**
+   * Generic GET request with deduplication
+   */
+  protected async get<T>(
+    url: string,
+    params?: Record<string, any>
+  ): Promise<T> {
+    const requestKey = this.createRequestKey('GET', url, params);
+
+    // Check if there's already a pending request for this key
+    if (pendingRequests.has(requestKey)) {
+      return pendingRequests.get(requestKey)!;
+    }
+
+    // Create new request and store it
+    const requestPromise = this.api
+      .get<T>(url, { params })
+      .then((response) => {
+        // Remove from pending requests when completed
+        pendingRequests.delete(requestKey);
+        return response.data;
+      })
+      .catch((error) => {
+        // Remove from pending requests on error
+        pendingRequests.delete(requestKey);
+        throw error;
+      });
+
+    pendingRequests.set(requestKey, requestPromise);
+    return requestPromise;
   }
 
   /**
@@ -33,6 +77,14 @@ export class BaseService {
   }
 
   /**
+   * Generic PATCH request
+   */
+  protected async patch<T>(url: string, data?: any, config?: any): Promise<T> {
+    const response = await this.api.patch<T>(url, data, config);
+    return response.data;
+  }
+
+  /**
    * Generic DELETE request
    */
   protected async deleteRequest<T>(url: string, config?: any): Promise<T> {
@@ -41,10 +93,10 @@ export class BaseService {
   }
 
   /**
-   * Admin request with credentials
+   * Admin request with credentials and deduplication for GET requests
    */
   protected async adminRequest<T>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     url: string,
     data?: any,
     params?: Record<string, any>
@@ -56,11 +108,14 @@ export class BaseService {
 
     switch (method) {
       case 'GET':
+        // Use deduplicated GET request
         return this.get<T>(url, params);
       case 'POST':
         return this.post<T>(url, data, config);
       case 'PUT':
         return this.put<T>(url, data, config);
+      case 'PATCH':
+        return this.patch<T>(url, data, config);
       case 'DELETE':
         return this.deleteRequest<T>(url, config);
       default:

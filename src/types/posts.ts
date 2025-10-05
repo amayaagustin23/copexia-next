@@ -75,3 +75,15 @@ export type GetCategoriesResponse = {
   page: number;
   size: number;
 };
+
+export type PaginatedCategoriesResponse = {
+  data: Category[];
+  meta: {
+    total: number;
+    page: number;
+    size: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+};

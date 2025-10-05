@@ -5,14 +5,14 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { runLogoutCallback } from './authManager';
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://localhost:8000/api';
+  process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL ||
+  'http://localhost:4005/api/v1';
 
 if (!process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL) {
   console.warn(
-    "WARNING: La variable de entorno 'NEXT_PUBLIC_BACKEND_API_BASE_URL' no está definida. Usando URL por defecto: http://localhost:8000/api"
+    "WARNING: La variable de entorno 'NEXT_PUBLIC_BACKEND_API_BASE_URL' no está definida. Usando URL por defecto: http://localhost:4005/api/v1"
   );
 }
 
@@ -32,9 +32,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      runLogoutCallback();
-    }
+    // Removido el logout automático en 401/403
+    // Solo el logout manual redirige al login
     return Promise.reject(error);
   }
 );
