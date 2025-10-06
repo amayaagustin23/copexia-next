@@ -2,6 +2,7 @@
 
 import { LoadingSpinner } from '@/components/ui/loading';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useSearchDebounce } from '@/lib/hooks/useSearchDebounce';
 import { cn } from '@/lib/utils';
 import { classifyError } from '@/lib/utils/errorHandler';
 import { postsService } from '@/services/postsService';
@@ -9,7 +10,7 @@ import type { Post } from '@/types/posts';
 import { FilePlus2, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type StatusFilter = 'PUBLISHED' | 'DRAFT' | 'ALL';
 
@@ -21,46 +22,91 @@ export default function PostsList() {
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [perPage, setPageSize] = useState<number>(10);
-  const [q, setQ] = useState<string>('');
   const [status, setStatus] = useState<StatusFilter>('ALL');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const isFetchingRef = useRef(false);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / perPage)),
     [total, perPage]
   );
 
-  const fetchData = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await postsService.list({
-        q: q || undefined,
-        status: status === 'ALL' ? undefined : status,
-        page,
-        size: perPage,
-      });
-      setItems(data.data);
-      setTotal(data.total);
-      setPage(data.page);
-      setPageSize(data.size);
-    } catch (e: unknown) {
-      const classifiedError = classifyError(e);
-      setError(classifiedError.message || t('errorLoading'));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchData = useCallback(
+    async (searchQuery: string = '') => {
+      // Prevent duplicate concurrent requests
+      if (isFetchingRef.current) {
+        return;
+      }
+
+      try {
+        isFetchingRef.current = true;
+        setLoading(true);
+        setError(null);
+        const data = await postsService.list({
+          q: searchQuery || undefined,
+          status: status === 'ALL' ? undefined : status,
+          page,
+          size: perPage,
+        });
+        setItems(data.data);
+        setTotal(data.total);
+        setPage(data.page);
+        setPageSize(data.size);
+      } catch (e: unknown) {
+        const classifiedError = classifyError(e);
+        setError(classifiedError.message || t('errorLoading'));
+      } finally {
+        setLoading(false);
+        isFetchingRef.current = false;
+      }
+    },
+    [status, page, perPage, t]
+  );
+
+  // Search debounce hook
+  const {
+    searchQuery,
+    isSearching,
+    handleSearch,
+    handleSearchSubmit,
+    isValidQuery,
+  } = useSearchDebounce({
+    delay: 2000,
+    minLength: 3,
+    onSearch: fetchData,
+  });
 
   useEffect(() => {
-    fetchData();
-  }, [q, status, page, perPage]);
+    fetchData(searchQuery);
+  }, [fetchData, searchQuery, status, page, perPage]);
 
-  const onSubmitSearch = (e: React.FormEvent) => {
+  const handleSearchWithPageReset = (query: string) => {
+    setPage(1); // Reset to first page when searching
+    handleSearch(query);
+  };
+
+  const handleSearchSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    setPage(1);
-    fetchData();
+    handleSearchSubmit();
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (!confirm(t('confirmDelete'))) {
+      return;
+    }
+
+    try {
+      setDeleting(postId);
+      await postsService.delete(postId);
+      await fetchData(searchQuery); // Refresh the list
+    } catch (e: unknown) {
+      const classifiedError = classifyError(e);
+      setError(classifiedError.message || t('errorDeleting'));
+    } finally {
+      setDeleting(null);
+    }
   };
 
   return (
@@ -78,15 +124,29 @@ export default function PostsList() {
 
       {/* Filtros */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <form onSubmit={onSubmitSearch} className="relative w-full sm:max-w-xs">
+        <form
+          onSubmit={handleSearchSubmitForm}
+          className="relative w-full sm:max-w-xs"
+        >
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => handleSearchWithPageReset(e.target.value)}
             placeholder={t('searchPlaceholder')}
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {isSearching && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
         </form>
+        {searchQuery.length > 0 && !isValidQuery && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Escribe al menos 3 caracteres para buscar
+          </p>
+        )}
 
         <div className="flex items-center gap-2">
           <select
@@ -124,19 +184,20 @@ export default function PostsList() {
         <table className="min-w-full text-sm">
           <thead className="bg-muted/40 text-muted-foreground">
             <tr>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[300px]">
                 {t('table.title')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+
+              <th className="px-4 py-3 text-left font-medium w-[200px]">
                 {t('table.category')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[120px]">
                 {t('table.status')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[120px]">
                 {t('table.publishedAt')}
               </th>
-              <th className="px-3 py-2 text-right font-medium">
+              <th className="px-4 py-3 text-right font-medium w-[200px]">
                 {t('table.actions')}
               </th>
             </tr>
@@ -151,54 +212,34 @@ export default function PostsList() {
               </tr>
             )}
 
-            {!loading && error && (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-3 py-6 text-center text-destructive"
-                >
-                  {error}
-                </td>
-              </tr>
-            )}
-
-            {!loading && !error && items?.length === 0 && (
+            {!loading && items?.length === 0 && (
               <tr>
                 <td
                   colSpan={5}
                   className="px-3 py-6 text-center text-muted-foreground"
                 >
-                  {t('empty')}
+                  {searchQuery ? 'No se encontraron posts' : t('empty')}
                 </td>
               </tr>
             )}
 
             {!loading &&
-              !error &&
               items?.map((p) => (
                 <tr
                   key={p.id}
                   className="border-t border-border/60 hover:bg-muted/20"
                 >
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <div className="font-medium">{p.title}</div>
-                      {p.isPinned && (
-                        <span className="inline-flex items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs text-purple-800">
-                          📌 {t('pinned')}
-                        </span>
-                      )}
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {p.slug}
-                    </div>
+
                     <div className="text-xs text-muted-foreground mt-1">
-                      {t('by')} {p.author.name} • {p.viewCount} {t('views')} •{' '}
-                      {p.likeCount} {t('likes')} • {p.commentCount}{' '}
-                      {t('comments')}
+                      {p.viewCount} {t('views')} • {p.likeCount} {t('likes')} •{' '}
+                      {p.commentCount} {t('comments')}
                     </div>
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     {p.categories.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {p.categories.slice(0, 2).map((postCategory) => (
@@ -225,7 +266,7 @@ export default function PostsList() {
                       <span className="text-muted-foreground">—</span>
                     )}
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <span
                       className={cn(
                         'inline-flex items-center rounded-full px-2 py-0.5 text-xs',
@@ -239,33 +280,36 @@ export default function PostsList() {
                         : t('status.draft')}
                     </span>
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     {p.publishedAt
-                      ? new Date(p.publishedAt).toLocaleDateString(
-                          t('locale') || 'es-ES',
-                          {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                          }
-                        )
+                      ? new Date(p.publishedAt).toLocaleDateString('es-ES', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                        })
                       : '—'}
                   </td>
-                  <td className="px-3 py-2 text-right">
-                    <div className="inline-flex items-center gap-2">
+                  <td className="px-4 py-3 text-right">
+                    <div className="inline-flex items-center gap-1">
                       <Link
-                        href={`${paths.admin.posts}/${p.id}/edit`}
-                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40"
-                      >
-                        {t('actions.edit')}
-                      </Link>
-                      <Link
-                        href={paths.path(`posts/${p.slug}`)}
-                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40"
-                        target="_blank"
+                        href={`${paths.admin.posts}/${p.id}/view`}
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 transition-colors"
                       >
                         {t('actions.view')}
                       </Link>
+                      <Link
+                        href={`${paths.admin.posts}/${p.id}/edit`}
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 transition-colors"
+                      >
+                        {t('actions.edit')}
+                      </Link>
+                      <button
+                        onClick={() => handleDeletePost(p.id)}
+                        disabled={deleting === p.id}
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 text-destructive transition-colors disabled:opacity-50"
+                      >
+                        {deleting === p.id ? '...' : t('actions.delete')}
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -274,18 +318,10 @@ export default function PostsList() {
         </table>
       </div>
 
-      <div className="flex items-center justify-between pt-2">
-        <p className="text-xs text-muted-foreground">
-          {t('pagination.summary', {
-            from: (page - 1) * perPage + (items?.length ? 1 : 0),
-            to: (page - 1) * perPage + items?.length,
-            total,
-          })}
-        </p>
-
+      <div className="flex justify-end pt-2">
         <div className="flex items-center gap-2">
           <button
-            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50 hover:bg-muted/40 transition-colors"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1 || loading}
           >
@@ -295,7 +331,7 @@ export default function PostsList() {
             {page} / {totalPages}
           </span>
           <button
-            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50 hover:bg-muted/40 transition-colors"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages || loading}
           >

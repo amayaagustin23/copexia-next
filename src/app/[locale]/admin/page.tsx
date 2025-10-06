@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
       try {
         setLoading(true);
         const response = await postsService.getDashboard();
-        setDashboardData(response);
+        setDashboardData(response as DashboardData);
       } catch {
         setError('Error al cargar los datos del dashboard');
       } finally {
@@ -89,9 +89,9 @@ export default function AdminDashboardPage() {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return '';
     return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
       day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   };
 

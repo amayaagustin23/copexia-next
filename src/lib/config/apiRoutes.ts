@@ -21,6 +21,14 @@ export const API_ROUTES = {
       UPDATE: (id: string) => `/admin/categories/${id}`,
       DELETE: (id: string) => `/admin/categories/${id}`,
     },
+    COMMENTS: {
+      LIST: '/admin/comments',
+      GET_BY_ID: (id: string) => `/admin/comments/${id}`,
+      UPDATE: (id: string) => `/admin/comments/${id}`,
+      UPDATE_STATUS: (id: string) => `/admin/comments/${id}/status`,
+      DELETE: (id: string) => `/admin/comments/${id}`,
+      STATS: '/admin/comments/stats',
+    },
   },
 
   // Public routes
@@ -39,6 +47,10 @@ export const API_ROUTES = {
       LIST: '/public/categories',
       GET_BY_ID: (id: string) => `/public/categories/${id}`,
       GET_BY_SLUG: (slug: string) => `/public/categories/slug/${slug}`,
+    },
+    COMMENTS: {
+      LIST: '/comments/post/:postId',
+      CREATE: '/comments',
     },
   },
 

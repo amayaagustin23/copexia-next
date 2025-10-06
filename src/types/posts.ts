@@ -2,6 +2,7 @@ export type {
   Author,
   Category,
   Comment,
+  CommentStats,
   CreateCategoryData,
   CreateCommentData,
   CreatePostData,
@@ -15,3 +16,4 @@ export type {
   UpdateCategoryData,
   UpdatePostData,
 } from '@/schemas/posts';
+

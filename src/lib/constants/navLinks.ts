@@ -1,6 +1,10 @@
 import { LocalizedPaths } from "@/types/path";
 
-export type SidebarIconName = "LayoutDashboard" | "FileText" | "FolderTree";
+export type SidebarIconName =
+  | 'LayoutDashboard'
+  | 'FileText'
+  | 'FolderTree'
+  | 'MessageCircle';
 
 export type SidebarLink = {
   label: string;
@@ -23,18 +27,23 @@ export const getSidebarLinks = (
   paths: LocalizedPaths
 ): SidebarLink[] => [
   {
-    label: t("dashboardLink"),
+    label: t('dashboardLink'),
     href: paths.admin.dashboard,
-    iconName: "LayoutDashboard",
+    iconName: 'LayoutDashboard',
   },
   {
-    label: t("postsLink"),
+    label: t('postsLink'),
     href: paths.admin.posts,
-    iconName: "FileText",
+    iconName: 'FileText',
   },
   {
-    label: t("categoriesLink"),
+    label: t('categoriesLink'),
     href: paths.admin.categories,
-    iconName: "FolderTree",
+    iconName: 'FolderTree',
+  },
+  {
+    label: t('commentsLink'),
+    href: paths.admin.comments,
+    iconName: 'MessageCircle',
   },
 ];

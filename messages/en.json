@@ -68,9 +68,11 @@
     "dashboard": "Dashboard",
     "posts": "Posts",
     "categories": "Categories",
+    "comments": "Comments",
     "dashboardLink": "Dashboard",
     "postsLink": "Posts",
-    "categoriesLink": "Categories"
+    "categoriesLink": "Categories",
+    "commentsLink": "Comments"
   },
   "Footer": {
     "brandName": "Copexia",
@@ -458,6 +460,7 @@
     "empty": "No posts to show.",
     "table": {
       "title": "Title",
+      "description": "Description",
       "category": "Category",
       "status": "Status",
       "publishedAt": "Published",
@@ -470,13 +473,61 @@
     },
     "actions": {
       "edit": "Edit",
-      "view": "View"
+      "view": "View",
+      "viewPublic": "View Public",
+      "delete": "Delete"
     },
     "perPage": "{n} per page",
     "pagination": {
       "prev": "Previous",
       "next": "Next",
       "summary": "{from}–{to} of {total}"
+    },
+    "pinned": "Pinned",
+    "views": "views",
+    "likes": "likes",
+    "comments": "comments",
+    "more": "more",
+    "locale": "en-US",
+    "viewPage": {
+      "title": "Post Details",
+      "description": "View and manage post information",
+      "back": "Back to Posts",
+      "backToPosts": "Back to Posts",
+      "edit": "Edit Post",
+      "view": "View",
+      "viewPublic": "View Public",
+      "share": "Share",
+      "copySlug": "Copy Slug",
+      "posts": "Posts",
+      "errorLoading": "Error loading post",
+      "postNotFound": "Post not found",
+      "content": "Content",
+      "excerpt": "Excerpt",
+      "postInfo": "Post Information",
+      "created": "Created",
+      "published": "Published",
+      "draft": "Draft",
+      "slug": "Slug",
+      "stats": "Statistics",
+      "engagement": "Engagement",
+      "timeline": "Timeline",
+      "postCreated": "Post Created",
+      "postCreatedBy": "Created by",
+      "postPublished": "Post Published",
+      "postPublishedDesc": "Post was published to the public",
+      "lastUpdated": "Last Updated",
+      "lastUpdatedDesc": "Most recent modification",
+      "categories": "Categories",
+      "tags": "Tags",
+      "seo": "SEO",
+      "metaTitle": "Meta Title",
+      "metaDescription": "Meta Description",
+      "featuredImage": "Featured Image",
+      "quickActions": "Quick Actions",
+      "urlCopied": "URL copied to clipboard",
+      "slugCopied": "Slug copied to clipboard",
+      "copyFailed": "Failed to copy to clipboard"
     }
   },
   "AdminCategories": {
@@ -521,7 +572,7 @@
     "namePlaceholder": "Enter category name",
     "slug": "Slug",
     "slugPlaceholder": "category-slug",
-    "description": "Description",
+    "descriptionLabel": "Description",
     "descriptionPlaceholder": "Describe this category",
     "sortOrder": "Sort Order",
     "color": "Color",
@@ -536,7 +587,7 @@
     "creating": "Creating...",
     "update": "Update Category",
     "updating": "Updating...",
-    "loading": "Loading...",
+    "loadingCategory": "Loading...",
     "validation": {
       "nameRequired": "Category name is required",
       "slugRequired": "Category slug is required",
@@ -568,6 +619,116 @@
       "prev": "Previous",
       "next": "Next"
     }
+  },
+  "AdminComments": {
+    "title": "Comments Management",
+    "description": "Manage and moderate comments",
+    "searchPlaceholder": "Search comments...",
+    "errorLoading": "Error loading comments",
+    "errorUpdating": "Error updating comment",
+    "errorDeleting": "Error deleting comment",
+    "confirmDelete": "Are you sure you want to delete this comment?",
+    "empty": "No comments found",
+    "emptyDescription": "No comments match your search criteria",
+    "stats": {
+      "total": "Total",
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "deleted": "Deleted"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "deleted": "Deleted"
+    },
+    "orderBy": {
+      "createdAt": "Created Date",
+      "updatedAt": "Updated Date"
+    },
+    "order": {
+      "desc": "Newest First",
+      "asc": "Oldest First"
+    },
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "perPage": "{n} per page",
+    "approve": "Approve",
+    "reject": "Reject",
+    "postId": "Post ID",
+    "replyTo": "Reply to",
+    "pagination": {
+      "summary": "{from}–{to} of {total}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "locale": "en-US",
+    "filters": {
+      "title": "Filters and Search",
+      "clear": "Clear",
+      "allStatuses": "All statuses",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "bulkActions": {
+      "selected": "{count} comment(s) selected",
+      "approve": "Approve",
+      "reject": "Reject",
+      "delete": "Delete",
+      "confirmBulk": "Are you sure you want to {action} {count} comment(s)?",
+      "errorBulk": "Error {action}ing comments"
+    },
+    "selection": {
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "found": "{count} comment(s) found"
+    },
+    "comments": {
+      "post": "Post:",
+      "reply": "Reply",
+      "showing": "Showing {from} to {to} of {total} comments"
+    },
+    "relativeTime": {
+      "justNow": "Just now",
+      "minutesAgo": "{minutes} min ago",
+      "hoursAgo": "{hours}h ago",
+      "daysAgo": "{days} days ago"
+    }
+  },
+  "Comments": {
+    "title": "Comments",
+    "addComment": "Add Comment",
+    "replyTo": "Reply to {author}",
+    "content": "Content",
+    "contentPlaceholder": "Write your comment here...",
+    "authorName": "Name",
+    "authorNamePlaceholder": "Your name",
+    "authorEmail": "Email (optional)",
+    "authorEmailPlaceholder": "your.email@example.com",
+    "authorWebsite": "Website (optional)",
+    "authorWebsitePlaceholder": "https://yourwebsite.com",
+    "submit": "Submit Comment",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "errorCreating": "Error creating comment",
+    "errorLoading": "Error loading comments",
+    "retry": "Retry",
+    "loadMore": "Load More",
+    "noComments": "No comments yet",
+    "noCommentsDescription": "Be the first to share your thoughts on this article!",
+    "beFirst": "Be the first to comment",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "deleted": "Deleted"
+    },
+    "edited": "edited",
+    "hideReplies": "Hide Replies",
+    "showReplies": "Show Replies",
+    "locale": "en-US"
   },
   "whatsapp": {
     "chooseMessage": "Choose a message",
@@ -634,7 +795,6 @@
     "back": "Back",
     "notFound": "Post not found",
     "notFoundDescription": "The post you're looking for doesn't exist or has been deleted.",
-    "by": "By",
     "views": "views",
     "comments": "comments",
     "like": "Like",
@@ -665,87 +825,6 @@
           "errorSending": "Error creating comment. Please try again."
         }
       }
-    }
-  },
-  "AdminPosts": {
-    "title": "Posts",
-    "description": "Manage your articles",
-    "create": "Create Post",
-    "edit": "Edit Post",
-    "delete": "Delete",
-    "deleteConfirm": "Are you sure you want to delete this post?",
-    "published": "Published",
-    "draft": "Draft",
-    "noPosts": "No posts created",
-    "createFirst": "Create your first post",
-    "newPost": "New Post",
-    "searchPlaceholder": "Search posts...",
-    "loading": "Loading...",
-    "empty": "No posts found",
-    "perPage": "{n} per page",
-    "errorLoading": "Could not load the list",
-    "pinned": "Pinned",
-    "by": "By",
-    "views": "views",
-    "likes": "likes",
-    "comments": "comments",
-    "more": "more",
-    "locale": "en-US",
-    "createPage": {
-      "title": "Create New Post",
-      "description": "Create a new article for your blog",
-      "back": "Back",
-      "preview": "Preview",
-      "edit": "Edit",
-      "basicInfo": "Basic Information",
-      "titleLabel": "Title *",
-      "titlePlaceholder": "Post title",
-      "slugLabel": "Slug *",
-      "slugPlaceholder": "post-url",
-      "slugHelp": "Automatically generated from the title",
-      "excerptLabel": "Excerpt",
-      "excerptPlaceholder": "Brief post description",
-      "content": "Content",
-      "contentLabel": "HTML Content *",
-      "contentPlaceholder": "Write your HTML content here...",
-      "contentHelp": "You can use HTML to format your content. Use tags like &lt;p&gt;, &lt;h1&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, etc.",
-      "publish": "Publishing",
-      "publishImmediately": "Publish immediately",
-      "save": "Saving...",
-      "createPost": "Create Post",
-      "seo": "SEO",
-      "metaTitleLabel": "Meta Title",
-      "metaTitlePlaceholder": "SEO title",
-      "metaDescriptionLabel": "Meta Description",
-      "metaDescriptionPlaceholder": "SEO description",
-      "featuredImageLabel": "Featured Image",
-      "featuredImagePlaceholder": "Image URL",
-      "tags": "Tags",
-      "tagsLabel": "Tags (comma separated)",
-      "tagsPlaceholder": "javascript, react, tutorial",
-      "errorCreating": "Error creating post"
-    },
-    "status": {
-      "all": "All",
-      "published": "Published",
-      "draft": "Draft"
-    },
-    "table": {
-      "title": "Title",
-      "category": "Category",
-      "status": "Status",
-      "publishedAt": "Published date",
-      "actions": "Actions"
-    },
-    "actions": {
-      "edit": "Edit",
-      "view": "View",
-      "delete": "Delete"
-    },
-    "pagination": {
-      "summary": "Showing {from} to {to} of {total} results",
-      "prev": "Previous",
-      "next": "Next"
     }
   }
 }

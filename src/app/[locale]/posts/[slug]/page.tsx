@@ -1,6 +1,6 @@
 'use client';
   
-import { CommentForm } from '@/components/CommentForm';
+import CommentsSection from '@/components/comments/CommentsSection';
 import SEOHead from '@/components/SEO/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { LoadingSpinner } from '@/components/ui/loading';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
-import { Comment, Post } from '@/types/posts';
+import { Post } from '@/types/posts';
 import {
   ArrowLeft,
   Calendar,
@@ -17,7 +17,6 @@ import {
   Heart,
   MessageCircle,
   Tag,
-  User,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -40,10 +39,6 @@ export default function PostDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [liking, setLiking] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const [comments, setComments] = useState<
-    { id: string; authorName: string; content: string; createdAt: string }[]
-  >([]);
-  const [loadingComments, setLoadingComments] = useState(false);
   const [viewTracked, setViewTracked] = useState(false);
 
   const requestInProgress = useRef(false);
@@ -129,9 +124,9 @@ export default function PostDetailPage() {
     }
 
     return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: '2-digit',
       day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   };
 
@@ -163,39 +158,16 @@ export default function PostDetailPage() {
     }
   };
 
-  const handleToggleComments = async () => {
-    if (!post) return;
-
-    if (showComments) {
-      setShowComments(false);
-      return;
-    }
-
-    setShowComments(true);
-
-    if (comments.length === 0) {
-      try {
-        setLoadingComments(true);
-        const response = await postsService.getComments(post.id);
-        setComments(response);
-      } catch (err) {
-        console.error('Error fetching comments:', err);
-      } finally {
-        setLoadingComments(false);
-      }
-    }
+  const handleToggleComments = () => {
+    setShowComments(!showComments);
   };
 
-  const handleCommentCreated = (newComment: Comment) => {
-    setComments((prev) => [newComment, ...prev]);
-
+  const handleCommentAdded = () => {
+    // Update the post's comment count
     if (post) {
       setPost((prev) =>
         prev ? { ...prev, commentCount: prev.commentCount + 1 } : null
       );
-    }
-
-    if (post) {
       postCache.delete(slug);
     }
   };
@@ -237,7 +209,7 @@ export default function PostDetailPage() {
         url={paths.path(`posts/${post.slug}`)}
         type="article"
         author="Copexia Team"
-        publishedTime={post.publishedAt}
+        publishedTime={post.publishedAt || ''}
         modifiedTime={post.updatedAt}
         section={post.categories[0]?.category.name}
         tags={postTags}
@@ -367,53 +339,9 @@ export default function PostDetailPage() {
             </Card>
 
             {showComments && (
-              <>
-                <Card className="mt-4">
-                  <CardHeader>
-                    <h3 className="text-lg font-semibold">
-                      {t('commentsSection.title')}
-                    </h3>
-                  </CardHeader>
-                  <CardContent>
-                    {loadingComments ? (
-                      <div className="flex items-center justify-center py-12">
-                        <LoadingSpinner size="md" />
-                      </div>
-                    ) : comments.length > 0 ? (
-                      <div className="space-y-4">
-                        {comments.map((comment) => (
-                          <div key={comment.id} className="flex gap-3">
-                            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                              <User className="h-4 w-4 text-primary" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-sm">
-                                  {comment.authorName}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  {formatDate(comment.createdAt)}
-                                </span>
-                              </div>
-                              <p className="text-sm text-muted-foreground">
-                                {comment.content}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground text-center py-8">
-                        {t('commentsSection.noComments')}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-                <CommentForm
-                  postId={post.id}
-                  onCommentCreated={handleCommentCreated}
-                />
-              </>
+              <div className="mt-8">
+                <CommentsSection postId={post.id} />
+              </div>
             )}
           </div>
         </div>

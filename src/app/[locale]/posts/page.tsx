@@ -108,10 +108,10 @@ export default function PostsPage() {
   }, [debouncedSearchTerm, statusFilter]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(t('locale') || 'es-ES', {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
     });
   };
 

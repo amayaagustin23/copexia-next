@@ -53,16 +53,11 @@ export default function AdminCategoriesPage() {
           search: searchQuery || undefined,
         });
 
-        // Handle paginated response
-        if (categoriesResponse?.data && categoriesResponse?.meta) {
+        // Handle response
+        if (categoriesResponse?.data) {
           setCategories(categoriesResponse.data || []);
-          setTotalPages(categoriesResponse.meta.totalPages || 0);
-          setTotalItems(categoriesResponse.meta.total || 0);
-        } else if (categoriesResponse?.data) {
-          // Fallback for non-paginated response
-          setCategories(categoriesResponse.data || []);
-          setTotalPages(1);
-          setTotalItems(categoriesResponse.data?.length || 0);
+          setTotalPages(Math.ceil((categoriesResponse.total || 0) / pageSize));
+          setTotalItems(categoriesResponse.total || 0);
         } else {
           setCategories([]);
           setTotalPages(0);
@@ -183,6 +178,23 @@ export default function AdminCategoriesPage() {
             Escribe al menos 3 caracteres para buscar
           </p>
         )}
+
+        <div className="flex items-center gap-2">
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="rounded-md border border-input bg-background px-2 py-2 text-sm"
+          >
+            {[10, 20, 50].map((n) => (
+              <option key={n} value={n}>
+                {n} por página
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Tabla */}
@@ -190,25 +202,22 @@ export default function AdminCategoriesPage() {
         <table className="min-w-full text-sm">
           <thead className="bg-muted/40 text-muted-foreground">
             <tr>
-              <th className="px-3 py-2 text-left font-medium w-[50px]">
+              <th className="px-4 py-3 text-left font-medium w-[80px]">
                 {t('table.icon')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[200px]">
                 {t('table.name')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[150px]">
                 {t('table.slug')}
               </th>
-              <th className="px-3 py-2 text-left font-medium">
+              <th className="px-4 py-3 text-left font-medium w-[300px]">
                 {t('table.description')}
               </th>
-              <th className="px-3 py-2 text-left font-medium w-[100px]">
-                {t('table.order')}
-              </th>
-              <th className="px-3 py-2 text-left font-medium w-[100px]">
+              <th className="px-4 py-3 text-left font-medium w-[120px]">
                 {t('table.status')}
               </th>
-              <th className="px-3 py-2 text-right font-medium w-[100px]">
+              <th className="px-4 py-3 text-right font-medium w-[150px]">
                 {t('table.actions')}
               </th>
             </tr>
@@ -217,7 +226,7 @@ export default function AdminCategoriesPage() {
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={7} className="px-3 py-8 text-center">
+                <td colSpan={6} className="px-3 py-8 text-center">
                   <LoadingSpinner size="sm" />
                 </td>
               </tr>
@@ -226,7 +235,7 @@ export default function AdminCategoriesPage() {
             {!loading && categories.length === 0 && (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={6}
                   className="px-3 py-6 text-center text-muted-foreground"
                 >
                   {searchQuery ? t('noResults') : t('noCategories')}
@@ -240,7 +249,7 @@ export default function AdminCategoriesPage() {
                   key={category.id}
                   className="border-t border-border/60 hover:bg-muted/20"
                 >
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
                       style={{
@@ -251,38 +260,33 @@ export default function AdminCategoriesPage() {
                       {category.icon}
                     </div>
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <div className="font-medium">{category.name}</div>
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-4 py-3">
                     <code className="text-xs bg-muted px-1 py-0.5 rounded">
                       {category.slug}
                     </code>
                   </td>
-                  <td className="px-3 py-2 max-w-[200px] truncate">
-                    {category.description}
+                  <td className="px-4 py-3">
+                    <div className="text-sm text-muted-foreground">
+                      {category.description}
+                    </div>
                   </td>
-                  <td className="px-3 py-2 text-center">
-                    {category.sortOrder || 0}
+                  <td className="px-4 py-3">
+                    <Badge variant="default">{t('active')}</Badge>
                   </td>
-                  <td className="px-3 py-2">
-                    <Badge
-                      variant={category.isActive ? 'default' : 'secondary'}
-                    >
-                      {category.isActive ? t('active') : t('inactive')}
-                    </Badge>
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    <div className="inline-flex items-center gap-2">
+                  <td className="px-4 py-3 text-right">
+                    <div className="inline-flex items-center gap-1">
                       <Link
                         href={`${paths.admin.categories}/${category.id}/edit`}
-                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40"
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 transition-colors"
                       >
                         {t('actions.edit')}
                       </Link>
                       <button
                         onClick={() => handleDeleteClick(category)}
-                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 text-destructive"
+                        className="rounded-md border border-input px-2 py-1 text-xs hover:bg-muted/40 text-destructive transition-colors"
                       >
                         {t('actions.delete')}
                       </button>
@@ -294,19 +298,10 @@ export default function AdminCategoriesPage() {
         </table>
       </div>
 
-      {/* Paginación */}
-      <div className="flex items-center justify-between pt-2">
-        <p className="text-xs text-muted-foreground">
-          {t('pagination.showing', {
-            start: (currentPage - 1) * pageSize + (categories?.length ? 1 : 0),
-            end: (currentPage - 1) * pageSize + categories?.length,
-            total: totalItems,
-          })}
-        </p>
-
+      <div className="flex justify-end pt-2">
         <div className="flex items-center gap-2">
           <button
-            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50 hover:bg-muted/40 transition-colors"
             onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
             disabled={currentPage <= 1 || loading}
           >
@@ -316,7 +311,7 @@ export default function AdminCategoriesPage() {
             {currentPage} / {totalPages}
           </span>
           <button
-            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm disabled:opacity-50 hover:bg-muted/40 transition-colors"
             onClick={() =>
               handlePageChange(Math.min(totalPages, currentPage + 1))
             }

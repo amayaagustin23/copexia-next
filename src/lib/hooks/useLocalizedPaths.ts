@@ -35,6 +35,7 @@ type AdminPaths = {
   dashboard: string; // /:locale/admin
   posts: string; // /:locale/admin/posts
   categories: string; // /:locale/admin/categories
+  comments: string; // /:locale/admin/comments
 };
 
 export const useLocalizedPaths = () => {
@@ -61,6 +62,7 @@ export const useLocalizedPaths = () => {
     dashboard: `${base}/admin`,
     posts: `${base}/admin/posts`,
     categories: `${base}/admin/categories`,
+    comments: `${base}/admin/comments`,
   } as const;
 
   const sections: Sections = {
