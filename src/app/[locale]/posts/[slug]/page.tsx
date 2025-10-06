@@ -63,7 +63,6 @@ export default function PostDetailPage() {
         setLoading(true);
         setError(null);
 
-        console.log('Fetching post from API:', slug);
         const response = await postsService.getPublicPostBySlug(slug);
 
         postCache.set(slug, { post: response, timestamp: Date.now() });
@@ -103,8 +102,6 @@ export default function PostDetailPage() {
 
             return updatedPost;
           });
-
-          console.log('View tracked for post:', post.id);
         } catch (err) {
           console.error('Error tracking view:', err);
         }
@@ -162,15 +159,6 @@ export default function PostDetailPage() {
     setShowComments(!showComments);
   };
 
-  const handleCommentAdded = () => {
-    // Update the post's comment count
-    if (post) {
-      setPost((prev) =>
-        prev ? { ...prev, commentCount: prev.commentCount + 1 } : null
-      );
-      postCache.delete(slug);
-    }
-  };
 
   if (loading) {
     return (

@@ -46,7 +46,7 @@ export const CommentSchema = z.object({
   parentId: z.string().optional(),
   postId: z.string(),
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.string().datetime().optional(),
   replies: z.array(z.lazy(() => CommentSchema)).optional(),
 });
 

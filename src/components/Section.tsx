@@ -1,8 +1,8 @@
 'use client';
 
-import { animate, createScope, createSpring, stagger } from 'animejs';
+import { animate, createScope, spring, stagger } from 'animejs';
 import React, { useEffect, useRef, useState } from 'react';
-                
+
 interface SectionProps {
   id?: string;
   title?: string;
@@ -102,7 +102,7 @@ const Section: React.FC<SectionProps> = ({
                   ? stagger(DEFAULT_ANIMATION_CONFIG.delay)
                   : 0,
               duration: DEFAULT_ANIMATION_CONFIG.duration,
-              ease: createSpring(DEFAULT_ANIMATION_CONFIG.spring),
+              ease: spring(DEFAULT_ANIMATION_CONFIG.spring),
               complete: () =>
                 elements.forEach((el) => {
                   el.style.willChange = 'auto';
@@ -158,6 +158,8 @@ const Section: React.FC<SectionProps> = ({
     };
 
     const elements = getElementsToAnimate();
+
+    if (elements.length === 0) return;
 
     animate(elements, {
       scale: [1, 1.02],

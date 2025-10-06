@@ -39,12 +39,7 @@ export default function RootLayout({
         />
 
         {/* Performance hints */}
-        <link
-          rel="preload"
-          href="/images/logo-copexia.png"
-          as="image"
-          type="image/png"
-        />
+        {/* Logo preload removed - handled by Next.js Image priority in HeroSection */}
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>

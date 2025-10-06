@@ -1,9 +1,9 @@
 "use client";
 
-import { animate, createSpring } from "animejs";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-import Link from "next/link";
+import { animate, spring } from 'animejs';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 const ANIMATION_CONFIG = {
@@ -21,7 +21,7 @@ const HeroSection = () => {
   const subtitleRef = useRef<HTMLParagraphElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const spring = useMemo(() => createSpring(ANIMATION_CONFIG.spring), []);
+  const springAnimation = useMemo(() => spring(ANIMATION_CONFIG.spring), []);
 
   useEffect(() => {
     const prefersReduced =
@@ -64,7 +64,7 @@ const HeroSection = () => {
         scale: scale || [0.9, 1],
         delay,
         duration: 1000,
-        ease: spring,
+        ease: springAnimation,
         complete: () => {
           el.style.willChange = 'auto';
         },
@@ -74,7 +74,7 @@ const HeroSection = () => {
     return () => {
       timeline.forEach((anim) => anim?.pause());
     };
-  }, [spring]);
+  }, [springAnimation]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -164,7 +164,7 @@ const HeroSection = () => {
         animate(anchor, {
           scale: ANIMATION_CONFIG.scale,
           duration: ANIMATION_CONFIG.scaleDuration,
-          ease: spring,
+          ease: springAnimation,
         });
         animate(bar, {
           width: ['0%', '100%'],
@@ -192,7 +192,7 @@ const HeroSection = () => {
 
     const cleanups = buttons.map(setupButtonAnimation);
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, [spring]);
+  }, [springAnimation]);
 
   return (
     <div

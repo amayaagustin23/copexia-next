@@ -1,42 +1,42 @@
 "use client";
 
-import { animate, createSpring } from "animejs";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { animate, spring } from 'animejs';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-type PresetKey = number | "otro";
+type PresetKey = number | 'otro';
 
 type Props = {
   phone?: string; // por defecto toma el de env
 };
 
 export default function FloatingWhatsApp({
-  phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "543813571707",
+  phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '543813571707',
 }: Props) {
-  const t = useTranslations("whatsapp");
+  const t = useTranslations('whatsapp');
 
   // presets desde i18n
   const PRESETS = [
-    t("presets.info"),
-    t("presets.meeting"),
-    t("presets.proposal"),
-    t("presets.training"),
-    t("presets.adoptionConsult"),
+    t('presets.info'),
+    t('presets.meeting'),
+    t('presets.proposal'),
+    t('presets.training'),
+    t('presets.adoptionConsult'),
   ] as const;
 
   const [open, setOpen] = useState(false); // estado lógico
   const [render, setRender] = useState(false); // controla montaje para animar salida
   const [selected, setSelected] = useState<PresetKey>(0);
-  const [customMsg, setCustomMsg] = useState("");
+  const [customMsg, setCustomMsg] = useState('');
 
   const messageToSend =
-    selected === "otro" ? customMsg.trim() : PRESETS[selected];
+    selected === 'otro' ? customMsg.trim() : PRESETS[selected];
 
   const href = useMemo(
     () =>
-      `https://wa.me/${phone}?text=${encodeURIComponent(messageToSend || "")}`,
+      `https://wa.me/${phone}?text=${encodeURIComponent(messageToSend || '')}`,
     [messageToSend, phone]
   );
 
@@ -44,20 +44,20 @@ export default function FloatingWhatsApp({
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   // pop-in del botón
   useEffect(() => {
     if (prefersReduced || !btnRef.current) return;
     const el = btnRef.current;
-    el.style.opacity = "0";
-    el.style.transform = "scale(0.8)";
+    el.style.opacity = '0';
+    el.style.transform = 'scale(0.8)';
     animate(el, {
       opacity: [0, 1],
       scale: [0.8, 1],
       duration: 520,
-      ease: createSpring({ stiffness: 210, damping: 20 }),
+      ease: spring({ stiffness: 210, damping: 20 }),
     });
   }, [prefersReduced]);
 
@@ -71,20 +71,20 @@ export default function FloatingWhatsApp({
 
     const el = panelRef.current;
     if (open) {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(12px)";
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
       animate(el, {
         opacity: [0, 1],
         translateY: [12, 0],
         duration: 380,
-        ease: createSpring({ stiffness: 240, damping: 22 }),
+        ease: spring({ stiffness: 240, damping: 22 }),
       });
     } else {
       animate(el, {
         opacity: [1, 0],
         translateY: [0, 12],
         duration: 280,
-        easing: "easeInOutQuad",
+        easing: 'easeInOutQuad',
         complete: () => setRender(false),
       });
     }
@@ -95,7 +95,7 @@ export default function FloatingWhatsApp({
     animate(btnRef.current!, {
       scale: [1, 1.06, 1],
       duration: 260,
-      ease: createSpring({ stiffness: 300, damping: 18 }),
+      ease: spring({ stiffness: 300, damping: 18 }),
     });
   };
 

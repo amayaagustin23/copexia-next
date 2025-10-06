@@ -21,25 +21,12 @@ export default function CommentItem({
   const t = useTranslations('Comments');
   const [showReplies, setShowReplies] = useState(true);
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString('es-ES', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     });
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'APPROVED':
-        return 'bg-green-100 text-green-800';
-      case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'REJECTED':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
   };
 
   const hasReplies = comment.replies && comment.replies.length > 0;
@@ -50,7 +37,6 @@ export default function CommentItem({
     <div className={`${depth > 0 ? 'ml-6 border-l-2 border-muted pl-4' : ''}`}>
       <Card className={`${depth > 0 ? 'bg-muted/30' : ''}`}>
         <CardContent className="p-4">
-          {/* Comment Header */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
@@ -75,33 +61,21 @@ export default function CommentItem({
                       comment.authorName
                     )}
                   </span>
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                      comment.status
-                    )}`}
-                  >
-                    {t(`status.${comment.status.toLowerCase()}`)}
-                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calendar className="w-3 h-3" />
                   {formatDate(comment.createdAt)}
-                  {comment.updatedAt !== comment.createdAt && (
-                    <span>({t('edited')})</span>
-                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Comment Content */}
           <div className="mb-3">
             <p className="text-sm leading-relaxed whitespace-pre-wrap">
               {comment.content}
             </p>
           </div>
 
-          {/* Comment Actions */}
           <div className="flex items-center gap-2">
             {canReply && (
               <Button
@@ -129,7 +103,6 @@ export default function CommentItem({
             )}
           </div>
 
-          {/* Replies */}
           {hasReplies && showReplies && (
             <div className="mt-4 space-y-3">
               {comment.replies?.map((reply) => (

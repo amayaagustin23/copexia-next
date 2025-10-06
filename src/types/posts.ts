@@ -2,6 +2,7 @@ export type {
   Author,
   Category,
   Comment,
+  CommentListResponse,
   CommentStats,
   CreateCategoryData,
   CreateCommentData,

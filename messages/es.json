@@ -451,6 +451,7 @@
     "loadMore": "Cargar Más",
     "noComments": "Aún no hay comentarios",
     "noCommentsDescription": "¡Sé el primero en compartir tus pensamientos sobre este artículo!",
+    "asUser": "como {name}",
     "beFirst": "Sé el primero en comentar",
     "status": {
       "pending": "Pendiente",

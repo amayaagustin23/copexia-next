@@ -7,51 +7,37 @@ import type {
 } from '@/schemas/posts';
 import { BaseService } from './baseService';
 
-/**
- * Comments service for managing comments
- * Handles both admin and public operations
- */
+
 export class CommentsService extends BaseService {
   // ==================== PUBLIC METHODS ====================
 
-  /**
-   * Create a new comment (public)
-   */
   async create(commentData: CreateCommentData): Promise<CommentResponse> {
     return this.post(this.routes.PUBLIC.COMMENTS.CREATE, commentData);
   }
 
-  /**
-   * Get comments for a specific post (public)
-   */
   async getByPost(
-    postId: string,
-    params: {
-      page?: number;
-      size?: number;
-    } = {}
-  ): Promise<CommentListResponse> {
-    const { page = 1, size = 10 } = params;
-    return this.get(
-      this.routes.PUBLIC.COMMENTS.LIST.replace(':postId', postId),
-      { page, size }
-    );
+    postId: string
+  ): Promise<Comment[] | CommentListResponse | { data: Comment[] }> {
+    const url = this.routes.PUBLIC.COMMENTS.LIST.replace(':postId', postId);
+
+    const response = await this.get(url);
+
+    return response;
   }
 
   // ==================== ADMIN METHODS ====================
 
-  /**
-   * Get all comments (admin) with filters
-   */
-  async listAdmin(params: {
-    page?: number;
-    size?: number;
-    search?: string;
-    orderBy?: 'createdAt' | 'updatedAt';
-    order?: 'asc' | 'desc';
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<CommentListResponse> {
+  async listAdmin(
+    params: {
+      page?: number;
+      size?: number;
+      search?: string;
+      orderBy?: 'createdAt' | 'updatedAt';
+      order?: 'asc' | 'desc';
+      startDate?: string;
+      endDate?: string;
+    } = {}
+  ): Promise<CommentListResponse> {
     const {
       page = 1,
       size = 10,
@@ -62,15 +48,20 @@ export class CommentsService extends BaseService {
       endDate,
     } = params;
 
-    return this.adminRequest('GET', this.routes.ADMIN.COMMENTS.LIST, undefined, {
-      page,
-      size,
-      search,
-      orderBy,
-      order,
-      startDate,
-      endDate,
-    });
+    return this.adminRequest(
+      'GET',
+      this.routes.ADMIN.COMMENTS.LIST,
+      undefined,
+      {
+        page,
+        size,
+        search,
+        orderBy,
+        order,
+        startDate,
+        endDate,
+      }
+    );
   }
 
   /**
@@ -83,7 +74,10 @@ export class CommentsService extends BaseService {
   /**
    * Update comment (admin)
    */
-  async update(id: string, commentData: UpdateCommentData): Promise<CommentResponse> {
+  async update(
+    id: string,
+    commentData: UpdateCommentData
+  ): Promise<CommentResponse> {
     return this.adminRequest(
       'PATCH',
       this.routes.ADMIN.COMMENTS.UPDATE(id),

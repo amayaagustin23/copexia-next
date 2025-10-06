@@ -49,7 +49,7 @@ export const API_ROUTES = {
       GET_BY_SLUG: (slug: string) => `/public/categories/slug/${slug}`,
     },
     COMMENTS: {
-      LIST: '/comments/post/:postId',
+      LIST: '/public/posts/:postId/comments',
       CREATE: '/comments',
     },
   },
