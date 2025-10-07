@@ -17,7 +17,7 @@
 │                      Base Service Layer                         │
 │                   (baseService.ts)                             │
 ├─────────────────────────────────────────────────────────────────┤
-│  • Generic HTTP methods (GET, POST, PUT, DELETE)               │
+│  • Generic HTTP methods (GET, POST, PATCH, DELETE)              │
 │  • Admin request handler with credentials                      │
 │  • Error handling and response processing                      │
 └─────────────────────────────────────────────────────────────────┘

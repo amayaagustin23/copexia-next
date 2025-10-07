@@ -5,6 +5,7 @@ import SEOHead from '@/components/SEO/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DefaultImage } from '@/components/ui/default-image';
 import { LoadingSpinner } from '@/components/ui/loading';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
@@ -159,7 +160,6 @@ export default function PostDetailPage() {
     setShowComments(!showComments);
   };
 
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -256,8 +256,8 @@ export default function PostDetailPage() {
               </div>
             </header>
 
-            {post.featuredImage && (
-              <div className="mb-8">
+            <div className="mb-8">
+              {post.featuredImage ? (
                 <Image
                   src={post.featuredImage}
                   alt={post.title}
@@ -265,8 +265,14 @@ export default function PostDetailPage() {
                   height={400}
                   className="w-full h-64 md:h-96 object-cover rounded-lg"
                 />
-              </div>
-            )}
+              ) : (
+                <DefaultImage
+                  size="md"
+                  translationKey="postDetail.noImage"
+                  className="rounded-lg"
+                />
+              )}
+            </div>
 
             <Card className="mb-8">
               <CardContent className="p-8">

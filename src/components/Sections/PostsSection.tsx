@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DefaultImage } from '@/components/ui/default-image';
 import { Loading, LoadingImage, LoadingText } from '@/components/ui/loading';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
@@ -161,26 +162,32 @@ export default function PostsSection() {
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <Link href={paths.path(`posts/${post.slug}`)}>
-              {post.featuredImage && (
-                <div className="relative overflow-hidden h-28 xs:h-32 sm:h-40 lg:h-48">
+              <div className="relative overflow-hidden h-28 xs:h-32 sm:h-40 lg:h-48">
+                {post.featuredImage ? (
                   <img
                     src={post.featuredImage}
                     alt={post.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-2 xs:top-4 left-2 xs:left-4 flex flex-wrap gap-1 xs:gap-2">
-                    {post.categories.slice(0, 2).map((postCategory) => (
-                      <Badge
-                        key={postCategory.id}
-                        variant="secondary"
-                        className="bg-white/90 text-black text-[10px] xs:text-xs px-1 xs:px-2 py-0.5"
-                      >
-                        {postCategory.category.name}
-                      </Badge>
-                    ))}
-                  </div>
+                ) : (
+                  <DefaultImage
+                    size="sm"
+                    translationKey="posts.noImage"
+                    className="h-full"
+                  />
+                )}
+                <div className="absolute top-2 xs:top-4 left-2 xs:left-4 flex flex-wrap gap-1 xs:gap-2">
+                  {post.categories.slice(0, 2).map((postCategory) => (
+                    <Badge
+                      key={postCategory.id}
+                      variant="secondary"
+                      className="bg-white/90 text-black text-[10px] xs:text-xs px-1 xs:px-2 py-0.5"
+                    >
+                      {postCategory.category.name}
+                    </Badge>
+                  ))}
                 </div>
-              )}
+              </div>
 
               <CardHeader className="p-2 xs:p-3 sm:p-6">
                 <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-1 xs:py-2 sm:py-4 text-xs xs:text-sm sm:text-base leading-tight">

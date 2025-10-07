@@ -75,17 +75,21 @@ export const PostSchema = z.object({
 // ==================== REQUEST/RESPONSE TYPES ====================
 
 export const CreatePostDataSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  slug: z.string().min(1, 'Slug is required'),
-  excerpt: z.string().optional(),
-  content: z.string().min(1, 'Content is required'),
-  published: z.boolean().default(false),
-  isPinned: z.boolean().default(false),
-  categoryId: z.string().optional(),
+  title: z
+    .string()
+    .min(5, 'Title must be at least 5 characters')
+    .max(200, 'Title must be at most 200 characters'),
+  content: z.string().min(10, 'Content must be at least 10 characters'),
+  excerpt: z
+    .string()
+    .max(500, 'Excerpt must be at most 500 characters')
+    .optional(),
   featuredImage: z.string().optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
-  tags: z.array(z.string()).default([]),
+  status: z.enum(['PUBLISHED', 'DRAFT']).optional(),
+  isPinned: z.boolean().optional(),
+  categoryIds: z
+    .array(z.string().uuid())
+    .min(1, 'At least one category is required'),
 });
 
 export const UpdatePostDataSchema = CreatePostDataSchema.partial();

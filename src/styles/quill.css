@@ -1,0 +1,532 @@
+/* Quill.js styles */
+@import 'quill/dist/quill.snow.css';
+
+/* Contenedor principal del editor */
+.quill-editor-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Quill theme overrides */
+.ql-editor {
+  min-height: 200px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+}
+
+/* Mejorar visibilidad del placeholder */
+.ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground));
+  font-style: normal;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+.ql-toolbar {
+  border-top: 1px solid hsl(var(--border));
+  border-left: 1px solid hsl(var(--border));
+  border-right: 1px solid hsl(var(--border));
+  border-bottom: none;
+  background-color: hsl(var(--muted) / 0.5);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.ql-container {
+  border-bottom: 1px solid hsl(var(--border));
+  border-left: 1px solid hsl(var(--border));
+  border-right: 1px solid hsl(var(--border));
+  border-top: none;
+  font-family: inherit;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Mejorar contraste del texto en el editor */
+.ql-editor p,
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6,
+.ql-editor div,
+.ql-editor span,
+.ql-editor a,
+.ql-editor strong,
+.ql-editor em,
+.ql-editor u,
+.ql-editor s,
+.ql-editor code,
+.ql-editor pre,
+.ql-editor blockquote,
+.ql-editor li {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Force all text content to be white, overriding any blue colors */
+.ql-editor * {
+  color: white !important;
+}
+
+.ql-snow .ql-picker-label {
+  color: white;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.ql-snow .ql-picker-label:hover {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.ql-snow .ql-picker-label.ql-active {
+  background-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+.ql-snow .ql-stroke {
+  stroke: white;
+}
+
+.ql-snow .ql-fill {
+  fill: white;
+}
+
+.ql-snow .ql-picker-options {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 4px 0;
+  margin-top: 4px;
+  min-width: 120px;
+}
+
+.ql-snow .ql-picker-item {
+  color: white;
+  padding: 8px 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  margin: 2px 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ql-snow .ql-picker-item:hover {
+  background-color: rgba(212, 175, 55, 0.3);
+  color: white;
+  transform: translateX(2px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.ql-snow .ql-picker-item.ql-selected {
+  background-color: #d4af37;
+  color: #000000;
+  font-weight: 600;
+  border-color: #d4af37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.ql-snow .ql-tooltip {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.ql-snow .ql-tooltip input {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.ql-snow .ql-tooltip a {
+  color: hsl(var(--primary));
+}
+
+.ql-snow .ql-toolbar .ql-formats {
+  margin-right: 15px;
+}
+
+.ql-snow .ql-toolbar button {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.ql-snow .ql-toolbar button:hover {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+}
+
+.ql-snow .ql-toolbar .ql-picker {
+  height: 32px;
+  margin-right: 8px;
+}
+
+.ql-snow .ql-toolbar .ql-picker-label {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+}
+
+.ql-snow .ql-toolbar .ql-picker-label:hover {
+  background-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(212, 175, 55, 0.6);
+  transform: translateY(-1px);
+}
+
+.ql-snow .ql-toolbar .ql-picker-label.ql-active {
+  background-color: rgba(212, 175, 55, 0.4);
+  border-color: rgba(212, 175, 55, 0.8);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+/* Mejorar la flecha del dropdown */
+.ql-snow .ql-picker-label::after {
+  border-top-color: white !important;
+  border-width: 4px 4px 0 4px !important;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.ql-snow .ql-picker-label.ql-expanded::after {
+  transform: rotate(180deg);
+}
+
+/* Estilos para el dropdown abierto */
+.ql-snow .ql-picker-options {
+  animation: slideDown 0.2s ease-out;
+  z-index: 1000;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Force all icons to be white */
+.ql-snow .ql-toolbar button .ql-stroke {
+  stroke: white !important;
+}
+
+.ql-snow .ql-toolbar button .ql-fill {
+  fill: white !important;
+}
+
+.ql-snow .ql-toolbar button:hover .ql-stroke {
+  stroke: white !important;
+}
+
+.ql-snow .ql-toolbar button:hover .ql-fill {
+  fill: white !important;
+}
+
+.ql-snow .ql-toolbar button.ql-active {
+  background-color: rgba(212, 175, 55, 0.3) !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
+}
+
+.ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: white !important;
+}
+
+.ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: white !important;
+}
+
+.ql-snow .ql-toolbar .ql-picker .ql-stroke {
+  stroke: white !important;
+}
+
+.ql-snow .ql-toolbar .ql-picker .ql-fill {
+  fill: white !important;
+}
+
+/* Dark mode support */
+.dark .ql-snow .ql-picker-label {
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dark .ql-snow .ql-picker-label:hover {
+  background-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(212, 175, 55, 0.6);
+  transform: translateY(-1px);
+}
+
+.dark .ql-snow .ql-picker-label.ql-active {
+  background-color: rgba(212, 175, 55, 0.4);
+  border-color: rgba(212, 175, 55, 0.8);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+.dark .ql-snow .ql-stroke {
+  stroke: white;
+}
+
+.dark .ql-snow .ql-fill {
+  fill: white;
+}
+
+.dark .ql-snow .ql-picker-options {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+}
+
+.dark .ql-snow .ql-picker-item {
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-snow .ql-picker-item:hover {
+  background-color: hsl(var(--muted));
+}
+
+/* Dark mode - Force all icons to be white */
+.dark .ql-snow .ql-toolbar button .ql-stroke {
+  stroke: white !important;
+}
+
+.dark .ql-snow .ql-toolbar button .ql-fill {
+  fill: white !important;
+}
+
+.dark .ql-snow .ql-toolbar button:hover .ql-stroke {
+  stroke: white !important;
+}
+
+.dark .ql-snow .ql-toolbar button:hover .ql-fill {
+  fill: white !important;
+}
+
+.dark .ql-snow .ql-toolbar button.ql-active {
+  background-color: rgba(212, 175, 55, 0.4) !important;
+  border-color: rgba(212, 175, 55, 0.8) !important;
+}
+
+.dark .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: white !important;
+}
+
+.dark .ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: white !important;
+}
+
+.dark .ql-snow .ql-toolbar .ql-picker .ql-stroke {
+  stroke: white !important;
+}
+
+.dark .ql-snow .ql-toolbar .ql-picker .ql-fill {
+  fill: white !important;
+}
+
+/* Dark mode - Mejorar el selector de tipo de texto */
+.dark .ql-snow .ql-picker-label {
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .ql-snow .ql-picker-label:hover {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-1px);
+}
+
+.dark .ql-snow .ql-picker-label.ql-active {
+  background-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.dark .ql-snow .ql-picker-options {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  padding: 4px 0;
+  margin-top: 4px;
+  min-width: 120px;
+}
+
+.dark .ql-snow .ql-picker-item {
+  color: white;
+  padding: 8px 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  margin: 2px 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .ql-snow .ql-picker-item:hover {
+  background-color: rgba(212, 175, 55, 0.3);
+  color: white;
+  transform: translateX(2px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+.dark .ql-snow .ql-picker-item.ql-selected {
+  background-color: #d4af37;
+  color: #000000;
+  font-weight: 600;
+  border-color: #d4af37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+.dark .ql-snow .ql-picker-label::after {
+  border-top-color: white !important;
+  border-width: 4px 4px 0 4px !important;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.dark .ql-snow .ql-picker-label.ql-expanded::after {
+  transform: rotate(180deg);
+}
+
+/* Mejorar contraste en modo oscuro */
+.dark .ql-editor {
+  color: hsl(var(--foreground)) !important;
+  background-color: hsl(var(--background));
+}
+
+.dark .ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground)) !important;
+  opacity: 1;
+}
+
+.dark .ql-editor p,
+.dark .ql-editor h1,
+.dark .ql-editor h2,
+.dark .ql-editor h3,
+.dark .ql-editor h4,
+.dark .ql-editor h5,
+.dark .ql-editor h6,
+.dark .ql-editor div,
+.dark .ql-editor span,
+.dark .ql-editor li,
+.dark .ql-editor blockquote,
+.dark .ql-editor a,
+.dark .ql-editor strong,
+.dark .ql-editor em,
+.dark .ql-editor u,
+.dark .ql-editor s,
+.dark .ql-editor code,
+.dark .ql-editor pre {
+  color: white !important;
+}
+
+/* Force all text content in dark mode to be white, overriding any blue colors */
+.dark .ql-editor * {
+  color: white !important;
+}
+
+.dark .ql-editor h1 {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 700;
+}
+
+.dark .ql-editor h2 {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 600;
+}
+
+.dark .ql-editor h3 {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 600;
+}
+
+/* Override any Quill color classes that might apply blue colors */
+.ql-editor .ql-color-blue,
+.ql-editor [style*="color: blue"],
+.ql-editor [style*="color: #0000ff"],
+.ql-editor [style*="color: #0066cc"],
+.ql-editor [style*="color: #0080ff"],
+.ql-editor [style*="color: rgb(0, 0, 255)"],
+.ql-editor [style*="color: rgb(0, 102, 204)"],
+.ql-editor [style*="color: rgb(0, 128, 255)"] {
+  color: white !important;
+}
+
+/* Dark mode overrides for blue colors */
+.dark .ql-editor .ql-color-blue,
+.dark .ql-editor [style*="color: blue"],
+.dark .ql-editor [style*="color: #0000ff"],
+.dark .ql-editor [style*="color: #0066cc"],
+.dark .ql-editor [style*="color: #0080ff"],
+.dark .ql-editor [style*="color: rgb(0, 0, 255)"],
+.dark .ql-editor [style*="color: rgb(0, 102, 204)"],
+.dark .ql-editor [style*="color: rgb(0, 128, 255)"] {
+  color: white !important;
+}
+
+/* Ensure all active toolbar buttons have golden background */
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active:hover,
+.ql-snow .ql-toolbar .ql-bold.ql-active,
+.ql-snow .ql-toolbar .ql-italic.ql-active,
+.ql-snow .ql-toolbar .ql-underline.ql-active,
+.ql-snow .ql-toolbar .ql-strike.ql-active,
+.ql-snow .ql-toolbar .ql-link.ql-active,
+.ql-snow .ql-toolbar .ql-image.ql-active,
+.ql-snow .ql-toolbar .ql-video.ql-active,
+.ql-snow .ql-toolbar .ql-blockquote.ql-active,
+.ql-snow .ql-toolbar .ql-code-block.ql-active,
+.ql-snow .ql-toolbar .ql-clean.ql-active {
+  background-color: rgba(212, 175, 55, 0.3) !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.4) !important;
+}
+
+/* Dark mode - Ensure all active toolbar buttons have golden background */
+.dark .ql-snow .ql-toolbar button.ql-active,
+.dark .ql-snow .ql-toolbar button.ql-active:hover,
+.dark .ql-snow .ql-toolbar .ql-bold.ql-active,
+.dark .ql-snow .ql-toolbar .ql-italic.ql-active,
+.dark .ql-snow .ql-toolbar .ql-underline.ql-active,
+.dark .ql-snow .ql-toolbar .ql-strike.ql-active,
+.dark .ql-snow .ql-toolbar .ql-link.ql-active,
+.dark .ql-snow .ql-toolbar .ql-image.ql-active,
+.dark .ql-snow .ql-toolbar .ql-video.ql-active,
+.dark .ql-snow .ql-toolbar .ql-blockquote.ql-active,
+.dark .ql-snow .ql-toolbar .ql-code-block.ql-active,
+.dark .ql-snow .ql-toolbar .ql-clean.ql-active {
+  background-color: rgba(212, 175, 55, 0.4) !important;
+  border-color: rgba(212, 175, 55, 0.8) !important;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5) !important;
+}

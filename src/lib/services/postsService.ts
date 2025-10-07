@@ -33,7 +33,27 @@ export class PostsService extends BaseService {
    * Create a new post (admin)
    */
   async create(postData: CreatePostData): Promise<Post> {
-    return this.adminRequest('POST', this.routes.ADMIN.POSTS.CREATE, postData);
+    console.log('📡 PostsService - Creating post with data:', {
+      postData,
+      contentLength: postData.content?.length || 0,
+      hasContent: postData.content && postData.content.length > 0,
+      title: postData.title,
+      slug: postData.slug,
+    });
+
+    const result = await this.adminRequest(
+      'POST',
+      this.routes.ADMIN.POSTS.CREATE,
+      postData
+    );
+
+    console.log('✅ PostsService - Post created successfully:', {
+      id: result.id,
+      title: result.title,
+      slug: result.slug,
+    });
+
+    return result;
   }
 
   /**
@@ -41,7 +61,7 @@ export class PostsService extends BaseService {
    */
   async update(id: string, postData: UpdatePostData): Promise<Post> {
     return this.adminRequest(
-      'PUT',
+      'PATCH',
       this.routes.ADMIN.POSTS.UPDATE(id),
       postData
     );

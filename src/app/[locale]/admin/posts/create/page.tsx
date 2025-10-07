@@ -1,79 +1,88 @@
 "use client";
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { HTMLEditor } from '@/components/ui/html-editor';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { QuillEditor } from '@/components/ui/quill-editor';
 import { Textarea } from '@/components/ui/textarea';
+import { ToastContainer } from '@/components/ui/toast';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useToast } from '@/lib/hooks/useToast';
+import { categoriesService } from '@/lib/services/categoriesService';
 import { classifyError } from '@/lib/utils/errorHandler';
 import { postsService } from '@/services/postsService';
+import type { Category } from '@/types/posts';
 import { ArrowLeft, Eye, Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CreatePostFormData {
   title: string;
-  slug: string;
-  excerpt: string;
+  excerpt?: string;
   content: string;
-  published: boolean;
-  categoryId?: string;
+  status?: 'PUBLISHED' | 'DRAFT';
+  categoryIds: string[];
   featuredImage?: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  tags?: string[];
+  isPinned?: boolean;
 }
 
 export default function CreatePostPage() {
   const t = useTranslations('AdminPosts.createPage');
   const paths = useLocalizedPaths();
   const router = useRouter();
+  const { toasts, removeToast, success, error: showError } = useToast();
 
   const [formData, setFormData] = useState<CreatePostFormData>({
     title: '',
-    slug: '',
     excerpt: '',
     content: '',
-    published: false,
-    categoryId: '',
+    status: 'DRAFT',
+    categoryIds: [],
     featuredImage: '',
-    metaTitle: '',
-    metaDescription: '',
-    tags: [],
+    isPinned: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
 
-  // Auto-generate slug from title
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
+  // Load categories on component mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      setLoadingCategories(true);
+      try {
+        const response = await categoriesService.list({ size: 100 });
+        setCategories(response.data);
+      } catch (err) {
+        console.error('Error loading categories:', err);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   const handleInputChange = (
     field: keyof CreatePostFormData,
     value: string | boolean | string[]
   ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCategoryToggle = (categoryId: string) => {
     setFormData((prev) => {
-      const updated = { ...prev, [field]: value };
-
-      // Auto-generate slug when title changes
-      if (field === 'title' && typeof value === 'string') {
-        updated.slug = generateSlug(value);
-      }
-
-      return updated;
+      const categoryIds = prev.categoryIds.includes(categoryId)
+        ? prev.categoryIds.filter((id) => id !== categoryId)
+        : [...prev.categoryIds, categoryId];
+      return { ...prev, categoryIds };
     });
   };
 
@@ -83,17 +92,18 @@ export default function CreatePostPage() {
     setError(null);
 
     try {
-      const postData = {
-        ...formData,
-        published: formData.published,
-      };
+      await postsService.createPost(formData);
+      success(t('successTitle'), t('successDescription'));
 
-      await postsService.createPost(postData);
-      router.push(paths.admin.posts);
+      // Redirect after a short delay to show the success toast
+      setTimeout(() => {
+        router.push(paths.admin.posts);
+      }, 1500);
     } catch (err: unknown) {
-      console.error('Error creating post:', err);
       const classifiedError = classifyError(err);
-      setError(classifiedError.message || t('errorCreating'));
+      const errorMessage = classifiedError.message || t('errorCreating');
+      setError(errorMessage);
+      showError(t('errorTitle'), errorMessage);
     } finally {
       setLoading(false);
     }
@@ -157,30 +167,142 @@ export default function CreatePostPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="slug">{t('slugLabel')}</Label>
-                  <Input
-                    id="slug"
-                    value={formData.slug}
-                    onChange={(e) => handleInputChange('slug', e.target.value)}
-                    placeholder={t('slugPlaceholder')}
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t('slugHelp')}
-                  </p>
-                </div>
-
-                <div>
                   <Label htmlFor="excerpt">{t('excerptLabel')}</Label>
                   <Textarea
                     id="excerpt"
-                    value={formData.excerpt}
+                    value={formData.excerpt || ''}
                     onChange={(e) =>
                       handleInputChange('excerpt', e.target.value)
                     }
                     placeholder={t('excerptPlaceholder')}
                     rows={3}
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t('excerptHelp')}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium">
+                      {t('categoriesLabel')}
+                    </Label>
+                    {formData.categoryIds.length > 0 && (
+                      <Badge variant="outline" className="text-xs">
+                        {formData.categoryIds.length} {t('selected')}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* Selected Categories Display */}
+                  {formData.categoryIds.length > 0 && (
+                    <div className="flex flex-wrap gap-2 p-3 bg-muted/30 rounded-lg border">
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {t('selectedCategories')}:
+                      </span>
+                      {formData.categoryIds.map((categoryId) => {
+                        const category = categories.find(
+                          (c) => c.id === categoryId
+                        );
+                        return category ? (
+                          <Badge
+                            key={categoryId}
+                            variant="secondary"
+                            className="flex items-center gap-1 px-2 py-1"
+                          >
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: category.color }}
+                            />
+                            {category.name}
+                            <button
+                              type="button"
+                              onClick={() => handleCategoryToggle(categoryId)}
+                              className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5 transition-colors"
+                            >
+                              <span className="sr-only">Remove category</span>×
+                            </button>
+                          </Badge>
+                        ) : null;
+                      })}
+                    </div>
+                  )}
+
+                  {/* Categories Selection */}
+                  {loadingCategories ? (
+                    <div className="flex items-center justify-center p-6 border rounded-lg bg-muted/20">
+                      <LoadingSpinner size="sm" />
+                      <span className="ml-2 text-sm text-muted-foreground">
+                        {t('loadingCategories')}
+                      </span>
+                    </div>
+                  ) : categories.length === 0 ? (
+                    <div className="p-6 text-center border rounded-lg bg-muted/20">
+                      <p className="text-sm text-muted-foreground">
+                        {t('noCategories')}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t('createCategoryFirst')}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3 bg-background">
+                      {categories.map((category) => {
+                        const isSelected = formData.categoryIds.includes(
+                          category.id
+                        );
+                        return (
+                          <div
+                            key={category.id}
+                            className={`flex items-center space-x-3 p-2 rounded-md border transition-all cursor-pointer hover:bg-muted/50 ${
+                              isSelected
+                                ? 'bg-primary/10 border-primary/30 shadow-sm'
+                                : 'hover:border-muted-foreground/30'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleCategoryToggle(category.id);
+                            }}
+                          >
+                            <div
+                              className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+                                isSelected
+                                  ? 'bg-primary border-primary text-primary-foreground'
+                                  : 'border-muted-foreground/30 hover:border-muted-foreground/50'
+                              }`}
+                            >
+                              {isSelected && (
+                                <svg
+                                  className="w-3 h-3"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-2 flex-1 min-w-0">
+                              <span
+                                className="w-3 h-3 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: category.color }}
+                              />
+                              <span className="text-sm font-medium truncate">
+                                {category.name}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <p className="text-xs text-muted-foreground">
+                    {t('categoriesHelp')}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -200,7 +322,7 @@ export default function CreatePostPage() {
                 ) : (
                   <div>
                     <Label htmlFor="content">{t('contentLabel')}</Label>
-                    <HTMLEditor
+                    <QuillEditor
                       value={formData.content}
                       onChange={(value) => handleInputChange('content', value)}
                       placeholder={t('contentPlaceholder')}
@@ -219,17 +341,35 @@ export default function CreatePostPage() {
                 <CardTitle>{t('publish')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="status">{t('status')}</Label>
+                  <select
+                    id="status"
+                    value={formData.status}
+                    onChange={(e) =>
+                      handleInputChange(
+                        'status',
+                        e.target.value as 'PUBLISHED' | 'DRAFT'
+                      )
+                    }
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="DRAFT">{t('draft')}</option>
+                    <option value="PUBLISHED">{t('published')}</option>
+                  </select>
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    id="published"
-                    checked={formData.published}
+                    id="isPinned"
+                    checked={formData.isPinned}
                     onChange={(e) =>
-                      handleInputChange('published', e.target.checked)
+                      handleInputChange('isPinned', e.target.checked)
                     }
                     className="rounded"
                   />
-                  <Label htmlFor="published">{t('publishImmediately')}</Label>
+                  <Label htmlFor="isPinned">{t('pinPost')}</Label>
                 </div>
 
                 <Button type="submit" disabled={loading} className="w-full">
@@ -245,81 +385,35 @@ export default function CreatePostPage() {
               </CardContent>
             </Card>
 
-            {/* SEO */}
+            {/* Featured Image */}
             <Card>
               <CardHeader>
-                <CardTitle>{t('seo')}</CardTitle>
+                <CardTitle>{t('media')}</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="metaTitle">{t('metaTitleLabel')}</Label>
-                  <Input
-                    id="metaTitle"
-                    value={formData.metaTitle}
-                    onChange={(e) =>
-                      handleInputChange('metaTitle', e.target.value)
-                    }
-                    placeholder={t('metaTitlePlaceholder')}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="metaDescription">
-                    {t('metaDescriptionLabel')}
-                  </Label>
-                  <Textarea
-                    id="metaDescription"
-                    value={formData.metaDescription}
-                    onChange={(e) =>
-                      handleInputChange('metaDescription', e.target.value)
-                    }
-                    placeholder={t('metaDescriptionPlaceholder')}
-                    rows={3}
-                  />
-                </div>
-
+              <CardContent>
                 <div>
                   <Label htmlFor="featuredImage">
                     {t('featuredImageLabel')}
                   </Label>
                   <Input
                     id="featuredImage"
-                    value={formData.featuredImage}
+                    value={formData.featuredImage || ''}
                     onChange={(e) =>
                       handleInputChange('featuredImage', e.target.value)
                     }
                     placeholder={t('featuredImagePlaceholder')}
                   />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Tags */}
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('tags')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div>
-                  <Label htmlFor="tags">{t('tagsLabel')}</Label>
-                  <Input
-                    id="tags"
-                    value={formData.tags?.join(', ') || ''}
-                    onChange={(e) => {
-                      const tags = e.target.value
-                        .split(',')
-                        .map((tag) => tag.trim())
-                        .filter(Boolean);
-                      handleInputChange('tags', tags);
-                    }}
-                    placeholder={t('tagsPlaceholder')}
-                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t('featuredImageHelp')}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </form>
+
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }
