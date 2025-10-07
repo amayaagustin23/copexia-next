@@ -1,7 +1,6 @@
 'use client';
 
 // Components
-import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import Section from '@/components/Section';
 import AboutSection from '@/components/Sections/AboutSection';
 import ContactSection from '@/components/Sections/ContactSection';
@@ -195,8 +194,6 @@ export default function HomePage() {
           </Section>
         );
       })}
-
-      <FloatingWhatsApp />
     </main>
   );
 }

@@ -160,7 +160,7 @@ export const Header = () => {
           } as React.CSSProperties
         }
       >
-        <div className="w-full max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 relative overflow-hidden">
+        <div className="w-full mx-2 px-3 xs:px-4 sm:px-6 relative overflow-hidden">
           <div
             className="absolute bottom-0 left-0 h-0.5 w-40 pointer-events-none z-10 opacity-70"
             style={{

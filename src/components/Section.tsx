@@ -188,7 +188,7 @@ const Section: React.FC<SectionProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-full py-12 xs:py-16 lg:py-20">
+      <div className="w-full py-12 xs:py-16 lg:py-20 px-3 xs:px-4 sm:px-6 lg:px-25 mx-auto" >
         {title && <h2 className={titleClassName}>{title}</h2>}
         <div ref={innerRef}>{children}</div>
       </div>

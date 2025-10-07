@@ -432,6 +432,7 @@
   },
   "Comments": {
     "title": "Comentarios",
+    "comments": "Comentarios",
     "addComment": "Agregar Comentario",
     "replyTo": "Responder a {author}",
     "content": "Contenido",
@@ -453,6 +454,7 @@
     "noCommentsDescription": "¡Sé el primero en compartir tus pensamientos sobre este artículo!",
     "asUser": "como {name}",
     "beFirst": "Sé el primero en comentar",
+    "loadingUserData": "Cargando datos del usuario...",
     "status": {
       "pending": "Pendiente",
       "approved": "Aprobado",
@@ -673,7 +675,109 @@
     "like": "Me gusta",
     "liked": "Te gusta",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "loading": {
+      "title": "Cargando artículos...",
+      "description": "Por favor espera mientras cargamos el contenido.",
+      "skeleton": {
+        "title": "Cargando título...",
+        "description": "Cargando descripción...",
+        "meta": "Cargando información..."
+      }
+    },
+    "error": {
+      "title": "Error al cargar artículos",
+      "description": "Ha ocurrido un error al cargar los artículos. Por favor intenta de nuevo.",
+      "retry": "Reintentar",
+      "refresh": "Actualizar página"
+    },
+    "empty": {
+      "title": "No hay artículos",
+      "description": "Aún no hay artículos publicados.",
+      "subtitle": "Vuelve pronto para ver nuevo contenido."
+    },
+    "search": {
+      "placeholder": "Buscar artículos...",
+      "noResults": "No se encontraron resultados para \"{query}\"",
+      "noResultsDescription": "Intenta con otros términos de búsqueda o revisa la ortografía.",
+      "clearSearch": "Limpiar búsqueda",
+      "resultsFor": "Resultados para \"{query}\"",
+      "resultsCount": "{count} resultado(s) encontrado(s)"
+    },
+    "filters": {
+      "all": "Todos",
+      "published": "Publicados",
+      "draft": "Borradores",
+      "pinned": "Fijados",
+      "recent": "Recientes",
+      "popular": "Populares",
+      "clearAll": "Limpiar filtros"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {current} de {total}",
+      "showing": "Mostrando {from} a {to} de {total} artículos",
+      "goToPage": "Ir a la página {page}",
+      "firstPage": "Primera página",
+      "lastPage": "Última página"
+    },
+    "card": {
+      "readMore": "Leer más",
+      "readFull": "Leer artículo completo",
+      "by": "Por {author}",
+      "publishedOn": "Publicado el {date}",
+      "updatedOn": "Actualizado el {date}",
+      "inCategory": "en {category}",
+      "categories": "Categorías",
+      "tags": "Etiquetas",
+      "share": "Compartir",
+      "bookmark": "Guardar",
+      "bookmarked": "Guardado"
+    },
+    "featured": {
+      "title": "Artículo Destacado",
+      "subtitle": "No te pierdas nuestro contenido más importante",
+      "readNow": "Leer ahora",
+      "readMore": "Seguir leyendo"
+    },
+    "stats": {
+      "views": "vistas",
+      "likes": "me gusta",
+      "comments": "comentarios",
+      "shares": "compartidos",
+      "readingTime": "min de lectura",
+      "published": "Publicado",
+      "updated": "Actualizado"
+    },
+    "actions": {
+      "like": "Me gusta",
+      "liked": "Te gusta",
+      "unlike": "Ya no me gusta",
+      "share": "Compartir",
+      "bookmark": "Guardar",
+      "unbookmark": "Quitar de guardados",
+      "report": "Reportar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "pin": "Fijar",
+      "unpin": "Desfijar"
+    },
+    "meta": {
+      "author": "Autor",
+      "published": "Publicado",
+      "updated": "Actualizado",
+      "category": "Categoría",
+      "categories": "Categorías",
+      "tags": "Etiquetas",
+      "readingTime": "Tiempo de lectura",
+      "wordCount": "Palabras"
+    },
+    "seo": {
+      "title": "Artículos sobre Transformación Digital y Gestión Organizacional | Copexia",
+      "description": "Descubre artículos especializados en transformación digital, gestión organizacional, metodologías ágiles, Power BI y desarrollo empresarial. Consejos prácticos y casos de éxito.",
+      "keywords": "transformación digital, gestión organizacional, metodologías ágiles, Power BI, desarrollo empresarial, consultoría, mejora continua"
+    }
   },
   "postDetail": {
     "back": "Volver",

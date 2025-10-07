@@ -12,7 +12,10 @@ export class CommentsService extends BaseService {
   // ==================== PUBLIC METHODS ====================
 
   async create(commentData: CreateCommentData): Promise<CommentResponse> {
-    return this.post(this.routes.PUBLIC.COMMENTS.CREATE, commentData);
+    return this.post(
+      this.routes.PUBLIC.COMMENTS.CREATE.replace(':postId', commentData.postId),
+      commentData
+    );
   }
 
   async getByPost(

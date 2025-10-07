@@ -3,13 +3,7 @@
 import SEOHead from '@/components/SEO/SEOHead';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Loading, LoadingImage, LoadingText } from '@/components/ui/loading';
 import {
@@ -32,7 +26,6 @@ import {
   MessageCircle,
   Search,
   ThumbsUp,
-  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -93,7 +86,6 @@ export default function PostsPage() {
         setTotalPosts(response.total);
         setTotalPages(Math.ceil(response.total / postsPerPage));
       } catch (err) {
-        console.error('Error fetching posts:', err);
         setError(t('errorLoading'));
       } finally {
         setLoading(false);
@@ -289,7 +281,7 @@ export default function PostsPage() {
           <Loading className="h-6 w-64 mx-auto" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {[...Array(9)].map((_, i) => (
             <Card key={i} className="overflow-hidden">
               <LoadingImage className="h-48 w-full" />
@@ -351,23 +343,11 @@ export default function PostsPage() {
         type="website"
       />
       <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4" data-animate>
-            {t('title')}
-          </h1>
-          <p
-            className="text-muted-foreground max-w-3xl mx-auto text-lg"
-            data-animate
-          >
-            {t('description')}
-          </p>
-        </div>
-
         <div
           className="mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between md:gap-4"
           data-animate
         >
-          <div className="relative flex-1 max-w-md">
+          <div className="relative flex-1 max-w-md mt-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder={t('searchPlaceholder')}
@@ -377,19 +357,6 @@ export default function PostsPage() {
             />
           </div>
         </div>
-
-        {!loading && (
-          <div className="mb-8 p-4 bg-muted/50 rounded-lg" data-animate>
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>
-                {t('showingPosts', { count: posts.length, total: totalPosts })}
-              </span>
-              <span>
-                {t('pageOf', { current: currentPage, total: totalPages })}
-              </span>
-            </div>
-          </div>
-        )}
 
         {posts.length === 0 && !loading ? (
           <div className="text-center py-16">
@@ -418,7 +385,7 @@ export default function PostsPage() {
           <div className="space-y-8">
             {/* Featured Pinned Post */}
             {posts.filter((post) => post.isPinned).length > 0 && (
-              <div className="mb-12" data-animate>
+              <div className="mb-8 sm:mb-12" data-animate>
                 {posts
                   .filter((post) => post.isPinned)
                   .slice(0, 1)
@@ -429,78 +396,89 @@ export default function PostsPage() {
                     >
                       <Link href={paths.path(`posts/${pinnedPost.slug}`)}>
                         {pinnedPost.featuredImage && (
-                          <div className="relative overflow-hidden h-64 md:h-80 lg:h-96">
+                          <div className="relative overflow-hidden h-48 sm:h-64 md:h-80 lg:h-96">
                             <img
                               src={pinnedPost.featuredImage}
                               alt={pinnedPost.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                            <div className="absolute top-6 left-6 flex flex-wrap gap-2">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex flex-wrap gap-1 sm:gap-2">
                               {pinnedPost.categories
-                                .slice(0, 3)
+                                .slice(0, 2)
                                 .map((postCategory) => (
                                   <Badge
                                     key={postCategory.id}
                                     variant="secondary"
-                                    className="bg-white/90 text-black text-sm"
+                                    className="bg-white/90 text-black text-xs sm:text-sm"
                                   >
                                     {postCategory.category.name}
                                   </Badge>
                                 ))}
                             </div>
-                            <div className="absolute bottom-6 left-6 right-6 text-white">
-                              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+
+                            {/* Content Overlay */}
+                            <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 text-white">
+                              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-3 line-clamp-2 group-hover:text-primary transition-colors leading-tight">
                                 {pinnedPost.title}
                               </h2>
-                              <p className="text-lg md:text-xl line-clamp-3 opacity-90">
+                              <p className="text-sm sm:text-base md:text-lg lg:text-xl line-clamp-2 sm:line-clamp-3 opacity-90 leading-relaxed">
                                 {pinnedPost.excerpt}
                               </p>
                             </div>
                           </div>
                         )}
 
-                        <CardHeader className="p-6">
-                          <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              {pinnedPost.publishedAt &&
-                                formatDate(pinnedPost.publishedAt)}
-                            </div>
-                            <div className="flex items-center gap-1 text-sm">
-                              <Users className="h-4 w-4" />
-                              {pinnedPost.author.name}
+                        <CardHeader className="p-4 sm:p-6">
+                          <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
+                            <div className="flex items-center gap-1 sm:gap-2">
+                              <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                              <span>
+                                {pinnedPost.publishedAt &&
+                                  formatDate(pinnedPost.publishedAt)}
+                              </span>
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-2">
-                                <Eye className="h-4 w-4" />
-                                <span>
-                                  {pinnedPost.viewCount} {t('views')}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <MessageCircle className="h-4 w-4" />
-                                <span>
-                                  {pinnedPost.commentCount} {t('comments')}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <ThumbsUp className="h-4 w-4" />
-                                <span>
-                                  {pinnedPost.likeCount} {t('likes')}
-                                </span>
+                          <div className="flex justify-between">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                              <div className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
+                                <div className="flex items-center gap-1 sm:gap-2">
+                                  <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="hidden sm:inline">
+                                    {pinnedPost.viewCount} {t('views')}
+                                  </span>
+                                  <span className="sm:hidden">
+                                    {pinnedPost.viewCount}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1 sm:gap-2">
+                                  <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="hidden sm:inline">
+                                    {pinnedPost.commentCount} {t('comments')}
+                                  </span>
+                                  <span className="sm:hidden">
+                                    {pinnedPost.commentCount}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1 sm:gap-2">
+                                  <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                                  <span className="hidden sm:inline">
+                                    {pinnedPost.likeCount} {t('likes')}
+                                  </span>
+                                  <span className="sm:hidden">
+                                    {pinnedPost.likeCount}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-
                             <button
                               onClick={(e) => handleLike(pinnedPost.id, e)}
                               disabled={
                                 likingPosts.has(pinnedPost.id) || likesLoading
                               }
-                              className={`flex items-center gap-2 transition-colors ${
+                              className={`flex items-center gap-1 sm:gap-2 transition-colors ${
                                 isLiked(pinnedPost.id)
                                   ? 'text-red-500'
                                   : 'text-muted-foreground hover:text-red-500'
@@ -511,7 +489,7 @@ export default function PostsPage() {
                               }`}
                             >
                               <Heart
-                                className={`h-5 w-5 transition-transform ${
+                                className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform ${
                                   isLiked(pinnedPost.id) ? 'fill-current' : ''
                                 } ${
                                   likingPosts.has(pinnedPost.id)
@@ -519,7 +497,7 @@ export default function PostsPage() {
                                     : ''
                                 }`}
                               />
-                              <span className="text-sm font-medium">
+                              <span className="text-xs sm:text-sm font-medium">
                                 {isLiked(pinnedPost.id)
                                   ? t('liked')
                                   : t('like')}
@@ -529,10 +507,26 @@ export default function PostsPage() {
 
                           <Button
                             variant="outline"
-                            size="lg"
-                            className="w-full mt-4 group-hover:bg-primary/10 text-base"
+                            size="sm"
+                            className="w-full mt-3 sm:mt-4 bg-card/80 backdrop-blur-sm border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background text-sm sm:text-base font-medium relative overflow-hidden group"
                           >
-                            {t('readMore')}
+                            <span className="flex items-center justify-center gap-2 relative z-10">
+                              {t('readMore')}
+                              <svg
+                                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                           </Button>
                         </CardHeader>
                       </Link>
@@ -542,7 +536,7 @@ export default function PostsPage() {
             )}
 
             {/* Regular Posts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {posts
                 .filter((post) => !post.isPinned)
                 .map((post, index) => (
@@ -557,72 +551,79 @@ export default function PostsPage() {
                       className="flex flex-col h-full"
                     >
                       {post.featuredImage && (
-                        <div className="relative overflow-hidden h-48">
+                        <div className="relative overflow-hidden h-32 sm:h-48">
                           <img
                             src={post.featuredImage}
                             alt={post.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
-                          <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                          <div className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-wrap gap-1 sm:gap-2">
                             {post.categories.slice(0, 2).map((postCategory) => (
                               <Badge
                                 key={postCategory.id}
                                 variant="secondary"
-                                className="bg-white/90 text-black text-xs"
+                                className="bg-white/90 text-black text-[10px] sm:text-xs px-1 sm:px-2 py-0.5 sm:py-1"
                               >
                                 {postCategory.category.name}
                               </Badge>
                             ))}
                           </div>
-                          {post.isPinned && (
-                            <div className="absolute top-4 right-4">
-                              <Badge variant="destructive" className="text-xs">
-                                {t('pinned')}
-                              </Badge>
-                            </div>
-                          )}
                         </div>
                       )}
 
-                      <CardHeader className="flex-grow">
-                        <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors text-lg">
+                      <CardHeader className="flex-grow p-3 sm:p-6">
+                        <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors text-sm sm:text-lg">
                           {post.title}
                         </CardTitle>
-                        <CardDescription className="line-clamp-3 text-sm">
-                          {post.excerpt}
-                        </CardDescription>
                       </CardHeader>
 
-                      <CardContent className="pt-0">
-                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                      <CardContent className="pt-0 p-3 sm:p-6">
+                        <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            {post.publishedAt && formatDate(post.publishedAt)}
-                          </div>
-                          <div className="flex items-center gap-1 text-xs">
-                            <Users className="h-3 w-3" />
-                            {post.author.name}
+                            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">
+                              {post.publishedAt && formatDate(post.publishedAt)}
+                            </span>
+                            <span className="sm:hidden">
+                              {post.publishedAt &&
+                                new Date(post.publishedAt).toLocaleDateString(
+                                  'es-ES',
+                                  {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                  }
+                                )}
+                            </span>
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center justify-between mb-3 sm:mb-4">
+                          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
-                              <Eye className="h-4 w-4" />
-                              <span>
+                              <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                              <span className="hidden sm:inline">
                                 {post.viewCount} {t('views')}
                               </span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <MessageCircle className="h-4 w-4" />
-                              <span>
-                                {post.commentCount} {t('comments')}
+                              <span className="sm:hidden">
+                                {post.viewCount}
                               </span>
                             </div>
                             <div className="flex items-center gap-1">
-                              <ThumbsUp className="h-4 w-4" />
-                              <span>
+                              <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                              <span className="hidden sm:inline">
+                                {post.commentCount} {t('comments')}
+                              </span>
+                              <span className="sm:hidden">
+                                {post.commentCount}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                              <span className="hidden sm:inline">
                                 {post.likeCount} {t('likes')}
+                              </span>
+                              <span className="sm:hidden">
+                                {post.likeCount}
                               </span>
                             </div>
                           </div>
@@ -641,7 +642,7 @@ export default function PostsPage() {
                             }`}
                           >
                             <Heart
-                              className={`h-4 w-4 transition-transform ${
+                              className={`h-3 w-3 sm:h-4 sm:w-4 transition-transform ${
                                 isLiked(post.id) ? 'fill-current' : ''
                               } ${
                                 likingPosts.has(post.id) ? 'animate-pulse' : ''
@@ -651,11 +652,27 @@ export default function PostsPage() {
                         </div>
 
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="w-full mt-4 group-hover:bg-primary/10"
+                          className="w-full mt-2 sm:mt-4 bg-card/80 backdrop-blur-sm border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:scale-[1.02] focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background text-xs sm:text-sm font-medium relative overflow-hidden group"
                         >
-                          {t('readMore')}
+                          <span className="flex items-center justify-center gap-2 relative z-10">
+                            {t('readMore')}
+                            <svg
+                              className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </Button>
                       </CardContent>
                     </Link>
@@ -680,7 +697,7 @@ export default function PostsPage() {
                         : 'cursor-pointer'
                     }
                   >
-                    <span>{t('previous')}</span>
+                    {t('pagination.previous')}
                   </PaginationPrevious>
                 </PaginationItem>
 
@@ -698,7 +715,7 @@ export default function PostsPage() {
                         : 'cursor-pointer'
                     }
                   >
-                    <span>{t('next')}</span>
+                    {t('pagination.next')}
                   </PaginationNext>
                 </PaginationItem>
               </PaginationContent>

@@ -1,10 +1,11 @@
 "use client";
 
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { isAdminPath, isAuthPath } from "@/lib/config/routes";
-import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { Footer } from '@/components/layout/Footer';
+import { Header } from '@/components/layout/Header';
+import { isAdminPath, isAuthPath } from '@/lib/config/routes';
+import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
+import FloatingWhatsApp from '../FloatingWhatsApp';
 
 type LayoutWrapperProps = { children: ReactNode };
 
@@ -17,13 +18,14 @@ export const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   const hideForPublic = false; // o: isPublicPath(pathname)
 
   const shouldHideLayout = hideForAuth || hideForAdmin || hideForPublic;
-
+  const shouldHideWhatsApp = hideForAuth || hideForAdmin;
 
   return (
     <>
       {!shouldHideLayout && <Header />}
       <main>{children}</main>
       {!shouldHideLayout && <Footer />}
+      {!shouldHideWhatsApp && <FloatingWhatsApp />}
     </>
   );
 };

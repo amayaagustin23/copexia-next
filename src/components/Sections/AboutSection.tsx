@@ -52,17 +52,16 @@ export default function AboutSection() {
   const crosses: CrossSpec[] = useMemo(
     () => [
       { word: 'COLABORACION', letter: 'C', occurrence: 2 },
-      { word: 'ORGANIZACION', letter: 'O' },
+      { word: 'ORGANIZACION', letter: 'O', occurrence: 2 },
       { word: 'PERSONALIZACION', letter: 'P' },
       { word: 'ESTRATEGIA', letter: 'E', occurrence: 2 },
-      { word: 'EXCELENCIA', letter: 'X' }, // o "EXPERIENCIA"
+      { word: 'EXCELENCIA', letter: 'X' },
       { word: 'INNOVACION', letter: 'I', occurrence: 2 },
-      { word: 'ACOMPANAMIENTO', letter: 'A' },
+      { word: 'ACOMPANAMIENTO', letter: 'A', occurrence: 2 },
     ],
     []
   );
 
-  // Calculate the center column for COPEXIA to be visually centered
   const centerX = useMemo(() => {
     let maxLeftOffset = 0;
     let maxRightOffset = 0;

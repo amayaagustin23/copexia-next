@@ -50,7 +50,7 @@ export const API_ROUTES = {
     },
     COMMENTS: {
       LIST: '/public/posts/:postId/comments',
-      CREATE: '/comments',
+      CREATE: '/public/posts/:postId/comments',
     },
   },
 

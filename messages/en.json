@@ -699,6 +699,7 @@
   },
   "Comments": {
     "title": "Comments",
+    "comments": "Comments",
     "addComment": "Add Comment",
     "replyTo": "Reply to {author}",
     "content": "Content",
@@ -720,6 +721,7 @@
     "noCommentsDescription": "Be the first to share your thoughts on this article!",
     "asUser": "as {name}",
     "beFirst": "Be the first to comment",
+    "loadingUserData": "Loading user data...",
     "status": {
       "pending": "Pending",
       "approved": "Approved",
@@ -790,7 +792,109 @@
     "like": "Like",
     "liked": "Liked",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "loading": {
+      "title": "Loading articles...",
+      "description": "Please wait while we load the content.",
+      "skeleton": {
+        "title": "Loading title...",
+        "description": "Loading description...",
+        "meta": "Loading information..."
+      }
+    },
+    "error": {
+      "title": "Error loading articles",
+      "description": "An error occurred while loading the articles. Please try again.",
+      "retry": "Retry",
+      "refresh": "Refresh page"
+    },
+    "empty": {
+      "title": "No articles",
+      "description": "No articles have been published yet.",
+      "subtitle": "Check back soon for new content."
+    },
+    "search": {
+      "placeholder": "Search articles...",
+      "noResults": "No results found for \"{query}\"",
+      "noResultsDescription": "Try different search terms or check your spelling.",
+      "clearSearch": "Clear search",
+      "resultsFor": "Results for \"{query}\"",
+      "resultsCount": "{count} result(s) found"
+    },
+    "filters": {
+      "all": "All",
+      "published": "Published",
+      "draft": "Drafts",
+      "pinned": "Pinned",
+      "recent": "Recent",
+      "popular": "Popular",
+      "clearAll": "Clear all filters"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}",
+      "showing": "Showing {from} to {to} of {total} articles",
+      "goToPage": "Go to page {page}",
+      "firstPage": "First page",
+      "lastPage": "Last page"
+    },
+    "card": {
+      "readMore": "Read more",
+      "readFull": "Read full article",
+      "by": "By {author}",
+      "publishedOn": "Published on {date}",
+      "updatedOn": "Updated on {date}",
+      "inCategory": "in {category}",
+      "categories": "Categories",
+      "tags": "Tags",
+      "share": "Share",
+      "bookmark": "Save",
+      "bookmarked": "Saved"
+    },
+    "featured": {
+      "title": "Featured Article",
+      "subtitle": "Don't miss our most important content",
+      "readNow": "Read now",
+      "readMore": "Continue reading"
+    },
+    "stats": {
+      "views": "views",
+      "likes": "likes",
+      "comments": "comments",
+      "shares": "shares",
+      "readingTime": "min read",
+      "published": "Published",
+      "updated": "Updated"
+    },
+    "actions": {
+      "like": "Like",
+      "liked": "Liked",
+      "unlike": "Unlike",
+      "share": "Share",
+      "bookmark": "Save",
+      "unbookmark": "Remove from saved",
+      "report": "Report",
+      "edit": "Edit",
+      "delete": "Delete",
+      "pin": "Pin",
+      "unpin": "Unpin"
+    },
+    "meta": {
+      "author": "Author",
+      "published": "Published",
+      "updated": "Updated",
+      "category": "Category",
+      "categories": "Categories",
+      "tags": "Tags",
+      "readingTime": "Reading time",
+      "wordCount": "Words"
+    },
+    "seo": {
+      "title": "Digital Transformation and Organizational Management Articles | Copexia",
+      "description": "Discover specialized articles on digital transformation, organizational management, agile methodologies, Power BI and business development. Practical tips and success stories.",
+      "keywords": "digital transformation, organizational management, agile methodologies, Power BI, business development, consulting, continuous improvement"
+    }
   },
   "postDetail": {
     "back": "Back",

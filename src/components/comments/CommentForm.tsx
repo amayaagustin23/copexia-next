@@ -33,7 +33,6 @@ export default function CommentForm({
   const isLoggedIn = !!user;
   const isReply = !!replyTo;
 
-  // Si es una respuesta y el usuario está logueado, solo mostrar textarea
   const showFullForm = !isReply || !isLoggedIn;
 
   const [formData, setFormData] = useState({
@@ -45,7 +44,6 @@ export default function CommentForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Actualizar datos del formulario cuando cambie el usuario
   useEffect(() => {
     if (isLoggedIn && user) {
       setFormData((prev) => ({
@@ -53,8 +51,24 @@ export default function CommentForm({
         authorName: user.name || '',
         authorEmail: user.email || '',
       }));
+    } else if (!isLoggedIn) {
+      setFormData((prev) => ({
+        ...prev,
+        authorName: '',
+        authorEmail: '',
+      }));
     }
   }, [isLoggedIn, user]);
+
+  useEffect(() => {
+    if (replyTo && isLoggedIn && user) {
+      setFormData((prev) => ({
+        ...prev,
+        authorName: user.name || '',
+        authorEmail: user.email || '',
+      }));
+    }
+  }, [replyTo, isLoggedIn, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +76,6 @@ export default function CommentForm({
     setError(null);
 
     try {
-      // Si el usuario está logueado, usar sus datos
       const commentData = {
         content: formData.content,
         postId,
@@ -76,7 +89,6 @@ export default function CommentForm({
 
       onCommentAdded(comment);
 
-      // Reset form
       setFormData({
         content: '',
         authorName: isLoggedIn ? user?.name || '' : '',
@@ -84,7 +96,6 @@ export default function CommentForm({
         authorWebsite: '',
       });
 
-      // Cancel reply mode if it was a reply
       if (onCancelReply) {
         onCancelReply();
       }
@@ -133,7 +144,6 @@ export default function CommentForm({
             />
           </div>
 
-          {/* Mostrar campos de usuario solo si es necesario */}
           {showFullForm && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

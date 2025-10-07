@@ -54,14 +54,12 @@ export async function logoutUser(
   }
 }
 
-export async function getMyProfile(): Promise<UserProfile | undefined> {
-  if (typeof window !== 'undefined') {
-    const hasCookies =
-      document.cookie.includes('token=') ||
-      document.cookie.includes('refreshT=');
-    if (!hasCookies) {
-      return undefined;
-    }
+export async function getMyProfile(
+  hasGlobalUser?: boolean
+): Promise<UserProfile | undefined> {
+  // Si se pasa el estado del usuario global y no hay usuario, no hacer la llamada
+  if (hasGlobalUser === false) {
+    return undefined;
   }
 
   try {

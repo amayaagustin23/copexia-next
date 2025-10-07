@@ -59,36 +59,46 @@ const PaginationLink = ({
 )
 PaginationLink.displayName = "PaginationLink"
 
+type PaginationPreviousProps = React.ComponentProps<typeof PaginationLink> & {
+  children?: React.ReactNode;
+};
+
 const PaginationPrevious = ({
   className,
+  children,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
+}: PaginationPreviousProps) => (
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn('gap-1 pl-2.5', className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
+    <span>{children || 'Previous'}</span>
   </PaginationLink>
-)
-PaginationPrevious.displayName = "PaginationPrevious"
+);
+PaginationPrevious.displayName = 'PaginationPrevious';
+
+type PaginationNextProps = React.ComponentProps<typeof PaginationLink> & {
+  children?: React.ReactNode;
+};
 
 const PaginationNext = ({
   className,
+  children,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
+}: PaginationNextProps) => (
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    className={cn('gap-1 pr-2.5', className)}
     {...props}
   >
-    <span>Next</span>
+    <span>{children || 'Next'}</span>
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
-)
+);
 PaginationNext.displayName = "PaginationNext"
 
 const PaginationEllipsis = ({
