@@ -145,7 +145,7 @@ export default function AdminCategoriesPage() {
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl font-semibold">{t('title')}</h2>
         <Link
-          href={`${paths.admin.categories}/new`}
+          href={`${paths.admin.categories}/create`}
           className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-primary-foreground text-sm hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" />

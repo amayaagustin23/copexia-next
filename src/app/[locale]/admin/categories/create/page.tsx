@@ -148,7 +148,6 @@ export default function NewCategoryPage() {
         <Button variant="ghost" size="sm" asChild>
           <Link href={paths.admin.categories}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToCategories')}
           </Link>
         </Button>
         <div>

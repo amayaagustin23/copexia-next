@@ -19,7 +19,7 @@ import { ArrowLeft, Save, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 const colorOptions = [
   '#3b82f6', // blue
@@ -54,12 +54,13 @@ const iconOptions = [
 ];
 
 interface EditCategoryPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function EditCategoryPage({ params }: EditCategoryPageProps) {
+  const resolvedParams = use(params);
   const t = useTranslations('AdminCategories');
   const paths = useLocalizedPaths();
   const router = useRouter();
@@ -82,8 +83,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
     const fetchCategory = async () => {
       try {
         setLoadingCategory(true);
-        const response = await categoriesService.getById(params.id);
-        const categoryData = response.data || response;
+        const categoryData = await categoriesService.getById(resolvedParams.id);
 
         if (categoryData) {
           setFormData({
@@ -92,8 +92,8 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
             description: categoryData.description || '',
             color: categoryData.color || colorOptions[0],
             icon: categoryData.icon || iconOptions[0],
-            isActive: categoryData.isActive !== false,
-            sortOrder: categoryData.sortOrder || 0,
+            isActive: true,
+            sortOrder: 0,
           });
         }
       } catch (error) {
@@ -105,7 +105,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
     };
 
     fetchCategory();
-  }, [params.id, t]);
+  }, [resolvedParams.id, t]);
 
   const handleInputChange = (
     field: string,
@@ -167,7 +167,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
 
     try {
       setLoading(true);
-      await categoriesService.update(params.id, formData);
+      await categoriesService.update(resolvedParams.id, formData);
       router.push(paths.admin.categories);
     } catch (error: unknown) {
       console.error('Error updating category:', error);
@@ -192,7 +192,6 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
         <Button variant="ghost" size="sm" asChild>
           <Link href={paths.admin.categories}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToCategories')}
           </Link>
         </Button>
         <div>

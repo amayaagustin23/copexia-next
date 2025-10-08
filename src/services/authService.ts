@@ -1,8 +1,9 @@
 import api from '@/lib/axios';
 import { BackendEndpoints } from '@/lib/config/apiPath';
 import { getErrorMessage } from '@/lib/config/getErrorMessage';
+import { ResetPasswordDto } from '@/schemas/auth/resetPasswordSchema';
 import { ApiErrorResponse, isAxiosErrorType } from '@/types/api';
-import { ForgotPasswordData, LoginData, ResetPasswordData } from '@/types/auth';
+import { ForgotPasswordData, LoginData } from '@/types/auth';
 import { UserProfile } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -90,9 +91,9 @@ export async function requestPasswordReset(
 
 export async function resetPassword(
   token: string,
-  data: ResetPasswordData,
+  data: ResetPasswordDto,
   t?: (key: string) => string
-): Promise<{ message: string }> {
+): Promise<{ message: string } | undefined> {
   try {
     const res = await api.post<{ message: string }>(
       `${BackendEndpoints.auth.resetPassword}/${token}`,
@@ -102,7 +103,6 @@ export async function resetPassword(
     return res.data;
   } catch (error: unknown) {
     toast.error(getErrorMessage(error));
-    throw error;
   }
 }
 

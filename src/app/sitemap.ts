@@ -1,8 +1,8 @@
-import { getPosts } from '@/lib/services/postsService';
+import { postsService } from '@/lib/services/postsService';
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://copexia.com';
+  const baseUrl = 'https://portfolio-ecomerce.shop';
   const currentDate = new Date();
 
   // Static pages
@@ -47,21 +47,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Dynamic pages - Posts
-    const posts = await getPosts({ limit: 1000, page: 1 });
-    const postPages = posts.data?.map((post) => ({
-      url: `${baseUrl}/es/posts/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    })) || [];
+    const posts = await postsService.getPublicPosts({ page: 1, size: 1000 });
+    const postPages =
+      posts.data?.map((post) => ({
+        url: `${baseUrl}/es/posts/${post.slug}`,
+        lastModified: new Date(post.updatedAt || post.createdAt),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      })) || [];
 
     // English versions of posts
-    const englishPostPages = posts.data?.map((post) => ({
-      url: `${baseUrl}/en/posts/${post.slug}`,
-      lastModified: new Date(post.updatedAt || post.createdAt),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    })) || [];
+    const englishPostPages =
+      posts.data?.map((post) => ({
+        url: `${baseUrl}/en/posts/${post.slug}`,
+        lastModified: new Date(post.updatedAt || post.createdAt),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      })) || [];
 
     return [...staticPages, ...postPages, ...englishPostPages];
   } catch (error) {

@@ -114,10 +114,9 @@ export default function CreatePostPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="sm" asChild>
+          <Button variant="ghost" size="sm" asChild>
             <Link href={paths.admin.posts}>
               <ArrowLeft className="w-4 h-4 mr-2" />
-              {t('back')}
             </Link>
           </Button>
           <div>

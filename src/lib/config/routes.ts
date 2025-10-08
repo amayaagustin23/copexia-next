@@ -9,7 +9,7 @@ export const AUTH_ROUTES_BASE = [
   '/ingresar',
   '/forgot-password',
   '/recuperar-contrasena',
-  '/change-password',
+  '/reset-password',
   '/cambiar-contrasena',
 ] as const;
 
@@ -17,11 +17,13 @@ export const LOCALIZED_ROUTES = {
   es: {
     login: '/ingresar',
     forgotPassword: '/recuperar-contrasena',
+    resetPassword: '/reset-password',
     changePassword: '/cambiar-contrasena',
   },
   en: {
     login: '/login',
     forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
     changePassword: '/change-password',
   },
 } as const;
@@ -29,7 +31,7 @@ export const LOCALIZED_ROUTES = {
 export const SPANISH_TO_ENGLISH_ROUTES = {
   '/ingresar': '/login',
   '/recuperar-contrasena': '/forgot-password',
-  '/cambiar-contrasena': '/change-password',
+  '/cambiar-contrasena': '/reset-password',
 } as const;
 
 export const ROUTE_MAPPING = {
@@ -37,8 +39,8 @@ export const ROUTE_MAPPING = {
   '/ingresar': '/login',
   '/forgot-password': '/forgot-password',
   '/recuperar-contrasena': '/forgot-password',
-  '/change-password': '/change-password',
-  '/cambiar-contrasena': '/change-password',
+  '/reset-password': '/reset-password',
+  '/cambiar-contrasena': '/reset-password',
   '/admin': '/admin',
   '/panel-control': '/admin',
   '/admin/posts': '/admin/posts',
@@ -77,7 +79,7 @@ export function isPublicPath(pathname: string) {
 }
 
 export function getLocalizedPath(
-  path: 'login' | 'forgotPassword' | 'changePassword',
+  path: 'login' | 'forgotPassword' | 'resetPassword' | 'changePassword',
   locale: string
 ): string {
   const validLocale = SUPPORTED_LOCALES.includes(locale as Locale)

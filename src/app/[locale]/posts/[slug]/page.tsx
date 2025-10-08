@@ -217,7 +217,6 @@ export default function PostDetailPage() {
                 className="hover:bg-muted transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {t('back')}
               </Button>
             </div>
 

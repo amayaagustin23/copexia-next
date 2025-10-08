@@ -151,9 +151,8 @@ export default function EditPostPage() {
           <p className="text-muted-foreground mb-8">
             {t('postNotFoundDescription')}
           </p>
-          <Button onClick={() => router.back()} variant="outline">
+          <Button onClick={() => router.back()} variant="ghost">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            {t('back')}
           </Button>
         </div>
       </div>

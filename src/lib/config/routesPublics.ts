@@ -5,9 +5,9 @@ export const PUBLIC_ROUTES = [
   '/es/recuperar-contrasena', // -> /es/forgot-password (componente)
   '/es/forgot-password',
   '/en/forgot-password',
-  '/es/cambiar-contrasena', // -> /es/change-password (componente)
-  '/es/change-password',
-  '/en/change-password',
+  '/es/cambiar-contrasena', // -> /es/reset-password (componente)
+  '/es/reset-password',
+  '/en/reset-password',
   '/es/ingresar', // -> /es/login (componente)
   '/es/login',
   '/en/login',

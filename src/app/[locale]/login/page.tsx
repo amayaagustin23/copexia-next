@@ -26,6 +26,7 @@ import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { loginSchema } from '@/schemas/auth/loginSchema';
 import { loginUser } from '@/services/authService';
 import { LoginData } from '@/types/auth';
+import { ArrowLeftIcon } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,8 +38,8 @@ export default function LoginPage() {
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: 'admin@copexia.com',
-      password: 'Pass1234',
+      email: '',
+      password: '',
     },
   });
 
@@ -59,6 +60,15 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <Card className="w-full max-w-md rounded-2xl shadow-sm bg-card text-card-foreground">
         <CardHeader className="flex flex-col items-center pb-0">
+          <button
+            className="flex items-center gap-2 justify-start w-full mb-4 text-muted-foreground hover:text-foreground transition-colors"
+            type="button"
+            onClick={() => router.back()}
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+            <span>{t('goBack')}</span>
+          </button>
+
           <Image
             src="/images/logo-copexia.png"
             alt="Copexia"

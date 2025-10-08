@@ -6,7 +6,11 @@
       "services": "Servicios",
       "about": "Sobre nosotros",
       "values": "Valores",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "admin": "Admin",
+      "login": "Iniciar sesión",
+      "logout": "Cerrar sesión",
+      "goHome": "Ir al inicio"
     },
     "submenu": {
       "services": {
@@ -32,6 +36,7 @@
   "Sidebar": {
     "panelTitle": "Panel",
     "logout": "Cerrar sesión",
+    "goHome": "Ir al inicio",
     "dashboard": "Dashboard",
     "posts": "Publicaciones",
     "categories": "Categorías",
@@ -56,7 +61,8 @@
       "submitButton": "Ingresar",
       "submitting": "Ingresando...",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
-      "changePasswordLink": "Cambiar contraseña"
+      "changePasswordLink": "Cambiar contraseña",
+      "goBack": "Volver"
     },
     "recover": {
       "title": "Recuperar contraseña",
@@ -64,6 +70,7 @@
       "submit": "Enviar",
       "submitting": "Enviando...",
       "sent": "Se ha enviado un correo para restablecer tu contraseña.",
+      "passwordResetSuccess": "Se ha enviado un correo para restablecer tu contraseña.",
       "backToLogin": "Volver a iniciar sesión"
     },
     "change": {
@@ -77,6 +84,20 @@
       "genericError": "No se pudo cambiar la contraseña.",
       "backToLogin": "Volver a iniciar sesión",
       "goToRecover": "Ir a recuperar contraseña"
+    },
+    "reset": {
+      "title": "Restablecer contraseña",
+      "description": "Ingresa tu nueva contraseña",
+      "newPasswordLabel": "Nueva contraseña",
+      "newPasswordPlaceholder": "Tu nueva contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "submit": "Restablecer contraseña",
+      "submitting": "Restableciendo...",
+      "successTitle": "Contraseña restablecida",
+      "successMessage": "Tu contraseña ha sido restablecida correctamente.",
+      "passwordChangeSuccess": "Contraseña restablecida exitosamente",
+      "backToLogin": "Volver a iniciar sesión"
     }
   },
   "AdminDashboard": {

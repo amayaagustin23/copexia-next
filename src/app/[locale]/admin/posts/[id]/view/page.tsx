@@ -74,10 +74,9 @@ function ViewPostPageContent({ params }: { params: Promise<{ id: string }> }) {
     return (
       <div className="text-center py-8">
         <p className="text-destructive mb-4">{error || t('postNotFound')}</p>
-        <Button variant="outline" asChild>
+        <Button variant="ghost" asChild>
           <Link href={paths.admin.posts}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToPosts')}
           </Link>
         </Button>
       </div>
@@ -132,10 +131,9 @@ function ViewPostPageContent({ params }: { params: Promise<{ id: string }> }) {
         <div className="relative bg-background/95 backdrop-blur-sm border rounded-lg p-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-start gap-4">
-              <Button variant="outline" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild>
                 <Link href={paths.admin.posts}>
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  {t('back')}
                 </Link>
               </Button>
               

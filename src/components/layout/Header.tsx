@@ -1,8 +1,9 @@
 "use client";
 
-import { useLocalizedPaths } from "@/lib/hooks/useLocalizedPaths";
-import { getMenu } from "@/lib/menu/getMenu"; // asegura export de MenuItem
-import { animate, stagger } from "animejs";
+import { useAuth } from '@/context/AuthContext';
+import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { getMenu } from '@/lib/menu/getMenu'; // asegura export de MenuItem
+import { animate, stagger } from 'animejs';
 import { Menu as MenuIcon, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -33,6 +34,7 @@ function primeStyles(
 export const Header = () => {
   const t = useTranslations('Header');
   const rutas = useLocalizedPaths();
+  const { user, logout } = useAuth();
 
   const menuPaths = {
     raiz: rutas.root,
@@ -45,7 +47,17 @@ export const Header = () => {
     link: rutas.anchor,
   } as const;
 
-  const menu = getMenu(t, menuPaths, { showAuth: false });
+  const baseMenu = getMenu(t, menuPaths, { showAuth: false });
+
+  // Agregar opción de Admin si el usuario está logueado
+  const menu = user
+    ? [...baseMenu, { name: t('menu.admin'), href: rutas.admin.root }]
+    : baseMenu;
+
+  const handleLogout = async () => {
+    await logout();
+    setOpenMobile(false);
+  };
 
   const pathname = usePathname() || '/';
 
@@ -179,14 +191,17 @@ export const Header = () => {
           <div className="flex items-center justify-center relative py-3 md:hidden">
             <Link
               href={rutas.root}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 group transition-all duration-300 hover:scale-105"
               aria-label={t('aria.goHome')}
               onClick={handleNavigate}
+              title={t('menu.goHome')}
             >
-              <h2 className="text-secondary text-xl">{t('brandAlt')}</h2>
+              <h2 className="text-secondary text-xl group-hover:text-[--accent] transition-colors duration-300">
+                {t('brandAlt')}
+              </h2>
             </Link>
             <button
-              className="absolute left-0 rounded-lg p-2 hover:bg-white/10 text-white drop-shadow-sm"
+              className="absolute left-0 rounded-lg p-2 hover:bg-white/10 text-white drop-shadow-sm transition-all duration-200"
               onClick={() => setOpenMobile(true)}
               aria-label={t('aria.openMenu')}
               aria-expanded={openMobile}
@@ -199,10 +214,14 @@ export const Header = () => {
           <div className="hidden md:flex md:items-center md:justify-between md:gap-3 md:py-4">
             <Link
               href={rutas.root}
-              className="inline-flex items-center justify-center"
+              className="inline-flex items-center justify-center group transition-all duration-300 hover:scale-105 relative"
               aria-label={t('aria.goHome')}
+              title={t('menu.goHome')}
             >
-              <h2 className="text-secondary text-xl">{t('brandAlt')}</h2>
+              <h2 className="text-secondary text-xl group-hover:text-[--accent] transition-colors duration-300 relative">
+                {t('brandAlt')}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[--accent] transition-all duration-300 group-hover:w-full" />
+              </h2>
             </Link>
 
             <nav
@@ -238,6 +257,18 @@ export const Header = () => {
                   </div>
                 );
               })}
+
+              {/* Botones de autenticación */}
+              {user && (
+                <div className="flex items-center gap-2 ml-2" data-navlink>
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-md px-3 py-2 text-sm bg-red-600 text-white hover:bg-red-700 transition"
+                  >
+                    {t('menu.logout')}
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         </div>
@@ -267,17 +298,20 @@ export const Header = () => {
                 openMobile ? 'translate-y-0' : '-translate-y-full',
               ].join(' ')}
             >
-              <div className="w-full px-3 py-3 flex items-center justify-center relative">
+              <div className="w-full px-3 py-3 flex items-center justify-center relative border-b border-white/10">
                 <Link
                   href={rutas.root}
                   onClick={handleNavigate}
-                  className="inline-flex items-center gap-2"
+                  className="inline-flex items-center gap-2 group transition-all duration-300 hover:scale-105"
+                  title={t('menu.goHome')}
                 >
-                  <h2 className="text-secondary text-xl">{t('brandAlt')}</h2>
+                  <h2 className="text-secondary text-xl group-hover:text-[--accent] transition-colors duration-300">
+                    {t('brandAlt')}
+                  </h2>
                 </Link>
                 <button
                   onClick={() => setOpenMobile(false)}
-                  className="absolute left-3 rounded-lg p-2 bg-white/10 hover:bg-white/15"
+                  className="absolute left-3 rounded-lg p-2 bg-white/10 hover:bg-white/15 transition-all duration-200"
                   type="button"
                   aria-label={t('aria.closeMenu')}
                 >
@@ -285,15 +319,31 @@ export const Header = () => {
                 </button>
               </div>
 
-              <nav className="px-3 space-y-2">
+              <nav className="px-3 space-y-2 py-4">
+                {/* Opción Inicio siempre visible */}
+                <div>
+                  <Link
+                    href={rutas.root}
+                    className={[
+                      'block rounded-md px-3 py-2.5 hover:bg-white/10 text-white transition-all duration-200',
+                      isActive(rutas.root) ? 'bg-white/10 font-semibold' : '',
+                    ].join(' ')}
+                    onClick={handleNavigate}
+                  >
+                    🏠 {t('menu.home')}
+                  </Link>
+                </div>
+
                 {menu.map((item) => {
                   return (
                     <div key={item.href}>
                       <Link
                         href={item.href}
                         className={[
-                          'block rounded-md px-2 py-2 hover:bg-white/10 text-white',
-                          isActive(item.href) ? 'bg-white/10' : '',
+                          'block rounded-md px-3 py-2.5 hover:bg-white/10 text-white transition-all duration-200',
+                          isActive(item.href)
+                            ? 'bg-white/10 font-semibold'
+                            : '',
                         ].join(' ')}
                         onClick={handleNavigate}
                       >
@@ -302,6 +352,20 @@ export const Header = () => {
                     </div>
                   );
                 })}
+
+                {/* Botones de autenticación en móvil */}
+                <div className="pt-4 border-t border-white/10 space-y-2">
+                  {user && (
+                    <>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full rounded-md px-2 py-2 bg-red-600 text-white hover:bg-red-700 transition"
+                      >
+                        {t('menu.logout')}
+                      </button>
+                    </>
+                  )}
+                </div>
               </nav>
             </div>
           </div>,

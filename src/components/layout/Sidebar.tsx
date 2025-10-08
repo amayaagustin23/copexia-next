@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import {
   FileText,
   FolderTree,
+  Home,
   LayoutDashboard,
   List,
   LogOut,
@@ -118,7 +119,26 @@ export const Sidebar = ({
         </button>
       </div>
 
-      <nav className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
+      {/* Botón Ir al Inicio */}
+      <div className="px-2 pt-3 pb-2">
+        <Link
+          href={paths.root}
+          className={cn(
+            'flex items-center gap-3 px-3 py-2 w-full text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors',
+            isCollapsed ? 'justify-center' : ''
+          )}
+        >
+          <Home
+            className={cn(
+              'flex-shrink-0 transition-all duration-300',
+              isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+            )}
+          />
+          {!isCollapsed && <span className="truncate">{t('goHome')}</span>}
+        </Link>
+      </div>
+
+      <nav className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto border-t border-border pt-2">
         {(() => {
           // Primero determinar cuál enlace debe estar activo
           const activeLink = (() => {
@@ -190,7 +210,7 @@ export const Sidebar = ({
           onClick={handleLogout}
           type="button"
           className={cn(
-            'flex items-center gap-3 px-3 py-2 w-full text-sm text-destructive hover:underline',
+            'flex items-center gap-3 px-3 py-2 w-full text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors',
             isCollapsed ? 'justify-center' : ''
           )}
         >

@@ -39,7 +39,12 @@
       "services": "Services",
       "about": "About Us",
       "values": "Values",
-      "contact": "Contact"
+      "contact": "Contact",
+      "admin": "Admin",
+      "login": "Sign In",
+      "logout": "Sign Out",
+      "goHome": "Go Home",
+      "goBack": "Go Back"
     },
     "submenu": {
       "services": {
@@ -65,6 +70,7 @@
   "Sidebar": {
     "panelTitle": "Administration",
     "logout": "Sign out",
+    "goHome": "Go Home",
     "dashboard": "Dashboard",
     "posts": "Posts",
     "categories": "Categories",
@@ -424,7 +430,8 @@
       "submitButton": "Sign In",
       "submitting": "Signing in...",
       "forgotPasswordLink": "Forgot your password?",
-      "changePasswordLink": "Change password"
+      "changePasswordLink": "Change password",
+      "goBack": "Go Back"
     }
   },
   "AdminDashboard": {
