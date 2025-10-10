@@ -1,7 +1,9 @@
 "use client";
 
 import { LoadingSpinner } from '@/components/ui/loading';
+import { ToastContainer } from '@/components/ui/toast';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useToast } from '@/lib/hooks/useToast';
 import { makeRecoverSchema, RecoverSchema } from '@/lib/validators/auth';
 import { requestPasswordReset } from '@/services/authService';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +17,7 @@ export default function RecoverPasswordForm() {
   const tv = useTranslations('validations.recover');
   const { auth } = useLocalizedPaths();
   const [loading, setLoading] = useState(false);
+  const { toasts, removeToast, success, error: showError } = useToast();
 
   const schema = useMemo(() => makeRecoverSchema(tv), [tv]);
 
@@ -39,9 +42,16 @@ export default function RecoverPasswordForm() {
       await requestPasswordReset({ email }, t);
       setSent(true);
       reset({ email: '' });
+
+      // Mostrar toast de éxito
+      success(t('successTitle'), t('successMessage'));
     } catch (e: unknown) {
       const error = e as Error;
       const msg = (error?.message || '').toLowerCase();
+
+      // Mostrar toast de error
+      showError(t('errorTitle'), error?.message || t('errorMessage'));
+
       if (msg.includes('correo') || msg.includes('email')) {
         setError('email', { type: 'server', message: error.message });
       } else {
@@ -122,6 +132,7 @@ export default function RecoverPasswordForm() {
           </Link>
         </div>
       </div>
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }

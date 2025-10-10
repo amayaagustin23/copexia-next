@@ -38,29 +38,83 @@ export async function generateMetadata({
     },
     description: t('description'),
     keywords: [
+      // Términos generales de consultoría
+      'consultora',
+      'consultoría',
+      'consultor empresarial',
+      'asesoría empresarial',
+      'consultoría empresas',
+      'servicios de consultoría',
+
+      // Transformación digital (muy buscado)
+      'transformación digital',
+      'digitalización empresas',
+      'implementación digital',
+      'soluciones digitales',
+      'tecnología empresarial',
+      'adopción tecnológica',
+      'innovación digital',
+
+      // Consultoría organizacional
+      'consultoría organizacional',
+      'desarrollo organizacional',
+      'gestión organizacional',
+      'mejora organizacional',
+      'cambio organizacional',
+      'cultura organizacional',
+
+      // Optimización y procesos
+      'optimización de procesos',
+      'mejora de procesos',
+      'gestión de procesos',
+      'mejora continua',
+      'eficiencia operacional',
+      'productividad empresarial',
+
+      // Capacitación
+      'capacitación empresarial',
+      'formación empresarial',
+      'cursos empresas',
+      'talleres empresariales',
+      'capacitación corporativa',
+      'desarrollo profesional',
+
+      // Metodologías
+      'metodologías ágiles',
+      'agile',
+      'scrum',
+      'kaizen',
+      'lean',
+      'six sigma',
+
+      // Gestión del cambio
+      'gestión del cambio',
+      'change management',
+      'transformación cultural',
+      'liderazgo',
+
+      // Herramientas específicas
+      'Power BI',
+      'análisis de datos',
+      'business intelligence',
+      'dashboard empresarial',
+
+      // Ubicación
       'Copexia',
       'Tucumán',
       'San Miguel de Tucumán',
       'Argentina',
-      'transformación cultural',
-      'soluciones digitales',
-      'optimización de procesos',
-      'consultoría organizacional',
-      'capacitación empresarial',
-      'Power BI',
-      'Kaizen',
-      'metodologías ágiles',
-      'gestión del cambio',
-      'formación en acción',
-      'consultoría estratégica',
-      'transformación digital',
-      'mejora continua',
-      'adopción tecnológica',
-      'desarrollo organizacional',
+      'consultora Tucumán',
+      'consultoría Argentina',
+
+      // Términos generales de negocio
       'soluciones empresariales',
-      'innovación organizacional',
-      'gestión de procesos',
-      'capacitación corporativa',
+      'servicios empresariales',
+      'consultoría negocios',
+      'estrategia empresarial',
+      'innovación empresarial',
+      'crecimiento empresarial',
+      'gestión empresarial',
     ],
     authors: [{ name: 'Copexia Team' }],
     creator: 'Copexia',

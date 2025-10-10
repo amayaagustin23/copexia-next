@@ -7,8 +7,11 @@ import ContactSection from '@/components/Sections/ContactSection';
 import HeroSection from '@/components/Sections/HeroSection';
 import PostsSection from '@/components/Sections/PostsSection';
 import ValuesSection from '@/components/Sections/ValuesSection';
+import StructuredData from '@/components/SEO/StructuredData';
+import homePageSEO from './page-metadata';
 
 // Hooks
+import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 // Types
@@ -20,6 +23,11 @@ interface SectionConfig {
 }
 
 export default function HomePage() {
+  const params = useParams();
+  const locale = (params?.locale as string) || 'es';
+  const seoData =
+    homePageSEO[locale as keyof typeof homePageSEO] || homePageSEO.es;
+  
   // Configuración global de animaciones
   useEffect(() => {
     // Preload fonts for better animation performance
@@ -194,6 +202,13 @@ export default function HomePage() {
           </Section>
         );
       })}
+
+      {/* Structured Data for FAQs */}
+      <StructuredData
+        type="faq"
+        data={{ faqs: seoData.faqs }}
+        locale={locale}
+      />
     </main>
   );
 }

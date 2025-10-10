@@ -21,10 +21,11 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "3001:3000"
+      - "6500:6500"
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_BACKEND_API_BASE_URL=http://localhost:9000/api/v1
     env_file:
       - .env.local
     volumes:

@@ -62,7 +62,11 @@
       "submitting": "Ingresando...",
       "forgotPasswordLink": "¿Olvidaste tu contraseña?",
       "changePasswordLink": "Cambiar contraseña",
-      "goBack": "Volver"
+      "goBack": "Volver",
+      "successTitle": "¡Inicio de sesión exitoso!",
+      "successMessage": "Bienvenido de vuelta",
+      "errorTitle": "Error al iniciar sesión",
+      "errorMessage": "Por favor verifica tus credenciales"
     },
     "recover": {
       "title": "Recuperar contraseña",
@@ -71,7 +75,11 @@
       "submitting": "Enviando...",
       "sent": "Se ha enviado un correo para restablecer tu contraseña.",
       "passwordResetSuccess": "Se ha enviado un correo para restablecer tu contraseña.",
-      "backToLogin": "Volver a iniciar sesión"
+      "backToLogin": "Volver a iniciar sesión",
+      "successTitle": "¡Correo enviado!",
+      "successMessage": "Revisa tu bandeja de entrada",
+      "errorTitle": "Error al enviar correo",
+      "errorMessage": "No se pudo procesar tu solicitud"
     },
     "change": {
       "title": "Cambiar contraseña",
@@ -94,10 +102,12 @@
       "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
       "submit": "Restablecer contraseña",
       "submitting": "Restableciendo...",
-      "successTitle": "Contraseña restablecida",
+      "successTitle": "¡Contraseña restablecida!",
       "successMessage": "Tu contraseña ha sido restablecida correctamente.",
       "passwordChangeSuccess": "Contraseña restablecida exitosamente",
-      "backToLogin": "Volver a iniciar sesión"
+      "backToLogin": "Volver a iniciar sesión",
+      "errorTitle": "Error al restablecer",
+      "errorMessage": "No se pudo cambiar tu contraseña"
     }
   },
   "AdminDashboard": {
@@ -471,6 +481,8 @@
     "submit": "Enviar Comentario",
     "reply": "Responder",
     "cancel": "Cancelar",
+    "successCreating": "¡Comentario enviado!",
+    "successDescription": "Tu comentario ha sido enviado correctamente",
     "errorCreating": "Error al crear comentario",
     "errorLoading": "Error al cargar comentarios",
     "retry": "Reintentar",
@@ -586,7 +598,7 @@
         },
         "location": {
           "title": "Ubicación",
-          "address": "Buenos Aires, Argentina"
+          "address": "San Miguel de Tucumán, Tucumán, Argentina"
         }
       },
       "schedule": {
@@ -629,16 +641,16 @@
     }
   },
   "metadata": {
-    "title": "Copexia | Transformación Digital y Consultoría Organizacional en Tucumán",
-    "description": "Consultora especializada en transformación digital, optimización de procesos y desarrollo organizacional desde San Miguel de Tucumán, Argentina. Soluciones personalizadas para empresas que buscan evolucionar con metodologías ágiles, Power BI y gestión del cambio.",
+    "title": "Consultora Copexia | Transformación Digital, Consultoría Empresarial y Capacitación | Tucumán Argentina",
+    "description": "Consultora líder en transformación digital, consultoría empresarial y desarrollo organizacional en Tucumán, Argentina. Servicios de optimización de procesos, capacitación corporativa, implementación de Power BI, metodologías ágiles (Scrum, Kaizen, Lean), gestión del cambio y asesoría estratégica para empresas. Mejoramos la productividad y eficiencia de tu organización con soluciones digitales innovadoras.",
     "og": {
-      "title": "Copexia | Consultoría en Transformación Digital y Organizacional",
-      "description": "Líderes en transformación digital desde Tucumán, Argentina. Ofrecemos consultoría estratégica, adopción tecnológica, optimización de procesos, capacitación empresarial y desarrollo organizacional con enfoque humano y metodologías ágiles.",
-      "alt": "Copexia - Consultora en Transformación Digital y Organizacional en Tucumán, Argentina"
+      "title": "Copexia | Consultoría Empresarial, Transformación Digital y Capacitación en Argentina",
+      "description": "Servicios de consultoría organizacional en Tucumán: transformación digital, optimización de procesos, capacitación empresarial, implementación de tecnología, análisis de datos con Power BI, metodologías ágiles, gestión del cambio y desarrollo profesional. Mejoramos la eficiencia operacional de empresas con soluciones personalizadas.",
+      "alt": "Copexia - Consultora especializada en transformación digital, consultoría empresarial y capacitación corporativa en Tucumán, Argentina"
     },
     "twitter": {
-      "title": "Copexia | Transformación Digital y Consultoría Organizacional",
-      "description": "Desde San Miguel de Tucumán, Argentina, transformamos organizaciones con soluciones digitales, optimización de procesos, Power BI, metodologías ágiles y capacitación empresarial personalizada."
+      "title": "Copexia | Consultoría, Transformación Digital y Capacitación Empresarial",
+      "description": "Consultora en Tucumán especializada en transformación digital, optimización de procesos, capacitación corporativa, Power BI, metodologías ágiles y gestión del cambio. Soluciones empresariales innovadoras para aumentar productividad y eficiencia."
     }
   },
   "whatsapp": {

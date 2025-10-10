@@ -3,7 +3,9 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { ToastContainer } from '@/components/ui/toast';
 import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/lib/hooks/useToast';
 import { commentsService } from '@/lib/services/commentsService';
 import { getMyProfile, isLoggedIn } from '@/services/authService';
 import type { Comment } from '@/types/posts';
@@ -15,11 +17,16 @@ import CommentItem from './CommentItem';
 
 interface CommentsSectionProps {
   postId: string;
+  onCommentCountChange?: (delta: number) => void;
 }
 
-export default function CommentsSection({ postId }: CommentsSectionProps) {
+export default function CommentsSection({
+  postId,
+  onCommentCountChange,
+}: CommentsSectionProps) {
   const t = useTranslations('Comments');
   const { user, setDataUser, login } = useAuth();
+  const { toasts, removeToast, success, error: showError } = useToast();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -100,6 +107,11 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
       ...prev,
       total: prev.total + 1,
     }));
+
+    // Notificar al componente padre que se agregó un comentario
+    if (onCommentCountChange) {
+      onCommentCountChange(1);
+    }
   };
 
   const handleReply = async (commentId: string, authorName: string) => {
@@ -181,8 +193,12 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
           replyTo={replyTo?.authorName}
           onCommentAdded={handleCommentAdded}
           onCancelReply={handleCancelReply}
+          successToast={success}
+          errorToast={showError}
         />
       )}
+
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
 
       {(() => {
         if (comments && comments.length > 0) {
@@ -196,6 +212,8 @@ export default function CommentsSection({ postId }: CommentsSectionProps) {
                     onReply={handleReply}
                     onCommentAdded={handleCommentAdded}
                     postId={postId}
+                    successToast={success}
+                    errorToast={showError}
                   />
                 );
               })}

@@ -2,7 +2,7 @@ import { postsService } from '@/lib/services/postsService';
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://portfolio-ecomerce.shop';
+  const baseUrl = 'https://copexia.com';
   const currentDate = new Date();
 
   // Static pages

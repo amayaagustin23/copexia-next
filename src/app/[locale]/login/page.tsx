@@ -19,10 +19,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { ToastContainer } from '@/components/ui/toast';
 
 import { PasswordInput } from '@/components/PasswordInput';
 import { useAuth } from '@/context/AuthContext';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useToast } from '@/lib/hooks/useToast';
 import { loginSchema } from '@/schemas/auth/loginSchema';
 import { loginUser } from '@/services/authService';
 import { LoginData } from '@/types/auth';
@@ -34,6 +36,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const t = useTranslations('auth.login');
   const paths = useLocalizedPaths();
+  const { toasts, removeToast, success, error: showError } = useToast();
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -44,15 +47,23 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginData) => {
-    const response = await loginUser(data);
-    if (response) {
-      login(response.user);
+    try {
+      const response = await loginUser(data);
+      if (response) {
+        login(response.user);
 
-      const redirectTo = searchParams.get('redirect') || paths.admin.root;
+        // Mostrar toast de éxito
+        success(t('successTitle'), t('successMessage'));
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        const redirectTo = searchParams.get('redirect') || paths.admin.root;
 
-      window.location.href = redirectTo;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        window.location.href = redirectTo;
+      }
+    } catch (error: any) {
+      // Mostrar toast de error
+      showError(t('errorTitle'), error?.message || t('errorMessage'));
     }
   };
 
@@ -143,6 +154,7 @@ export default function LoginPage() {
           </Form>
         </CardContent>
       </Card>
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }

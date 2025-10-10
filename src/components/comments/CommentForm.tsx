@@ -19,6 +19,8 @@ interface CommentFormProps {
   onCommentAdded: (comment: Comment) => void;
   replyTo?: string;
   onCancelReply?: () => void;
+  successToast?: (title: string, description?: string) => void;
+  errorToast?: (title: string, description?: string) => void;
 }
 
 export default function CommentForm({
@@ -27,6 +29,8 @@ export default function CommentForm({
   onCommentAdded,
   replyTo,
   onCancelReply,
+  successToast,
+  errorToast,
 }: CommentFormProps) {
   const t = useTranslations('Comments');
   const { user } = useAuth();
@@ -89,6 +93,11 @@ export default function CommentForm({
 
       onCommentAdded(comment);
 
+      // Mostrar toast de éxito
+      if (successToast) {
+        successToast(t('successCreating'), t('successDescription'));
+      }
+
       setFormData({
         content: '',
         authorName: isLoggedIn ? user?.name || '' : '',
@@ -102,6 +111,11 @@ export default function CommentForm({
     } catch (err: unknown) {
       console.error('Error creating comment:', err);
       setError(t('errorCreating'));
+
+      // Mostrar toast de error
+      if (errorToast) {
+        errorToast(t('errorCreating'), 'Por favor, intenta de nuevo');
+      }
     } finally {
       setLoading(false);
     }

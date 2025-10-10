@@ -160,6 +160,21 @@ export default function PostDetailPage() {
     setShowComments(!showComments);
   };
 
+  const handleCommentCountChange = (delta: number) => {
+    setPost((prevPost) => {
+      if (!prevPost) return null;
+      const updatedPost = {
+        ...prevPost,
+        commentCount: prevPost.commentCount + delta,
+      };
+
+      // Update cache with new comment count
+      postCache.set(slug, { post: updatedPost, timestamp: Date.now() });
+
+      return updatedPost;
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -333,7 +348,10 @@ export default function PostDetailPage() {
 
             {showComments && (
               <div className="mt-8">
-                <CommentsSection postId={post.id} />
+                <CommentsSection
+                  postId={post.id}
+                  onCommentCountChange={handleCommentCountChange}
+                />
               </div>
             )}
           </div>

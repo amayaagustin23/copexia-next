@@ -14,6 +14,8 @@ interface CommentItemProps {
   onCommentAdded: (newComment: Comment) => void;
   postId: string;
   depth?: number;
+  successToast?: (title: string, description?: string) => void;
+  errorToast?: (title: string, description?: string) => void;
 }
 
 export default function CommentItem({
@@ -22,6 +24,8 @@ export default function CommentItem({
   onCommentAdded,
   postId,
   depth = 0,
+  successToast,
+  errorToast,
 }: CommentItemProps) {
   const t = useTranslations('Comments');
   const [showReplies, setShowReplies] = useState(true);
@@ -130,6 +134,8 @@ export default function CommentItem({
             replyTo={comment.authorName}
             onCommentAdded={handleCommentAdded}
             onCancelReply={handleCancelReply}
+            successToast={successToast}
+            errorToast={errorToast}
           />
         </div>
       )}
@@ -144,6 +150,8 @@ export default function CommentItem({
               onCommentAdded={onCommentAdded}
               postId={postId}
               depth={depth + 1}
+              successToast={successToast}
+              errorToast={errorToast}
             />
           ))}
         </div>

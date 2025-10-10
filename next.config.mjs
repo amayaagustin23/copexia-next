@@ -21,9 +21,6 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
-  // Performance optimizations
-  swcMinify: true,
-
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -58,6 +55,18 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '3001',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '6500',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000',
         pathname: '/**',
       },
       {

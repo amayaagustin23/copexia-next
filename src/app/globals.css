@@ -204,4 +204,44 @@
       background-position: 200% 0;
     }
   }
+
+  /* 🗺️ Estilos personalizados para Leaflet Map */
+  .leaflet-container {
+    background: var(--muted) !important;
+    font-family: inherit !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: 0 10px 30px rgba(15, 28, 46, 0.2) !important;
+  }
+
+  .leaflet-popup-tip {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+  }
+
+  .leaflet-control-zoom a {
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+  }
+
+  .leaflet-control-zoom a:hover {
+    background: var(--muted) !important;
+    border-color: var(--primary) !important;
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 10px !important;
+  }
+
+  .leaflet-control-attribution a {
+    color: var(--primary) !important;
+  }
 }

@@ -1,36 +1,44 @@
 "use client";
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-interface FormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+import { contactService } from '@/lib/services/contactService';
+import { ContactSchema, contactSchema } from '@/schemas/contactSchema';
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  subject?: string;
-  message?: string;
-}
+// Importar el mapa de forma dinámica para evitar problemas con SSR
+const Map = dynamic(
+  () => import('@/components/ui/map').then((mod) => mod.Map),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[300px] bg-muted/30 rounded-lg flex items-center justify-center">
+        <p className="text-muted-foreground text-sm">Cargando mapa...</p>
+      </div>
+    ),
+  }
+);
 
 export default function ContactSection() {
   const t = useTranslations('home.contact');
   const sectionRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+
+  const form = useForm<ContactSchema>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
   });
-  const [errors, setErrors] = useState<FormErrors>({});
 
   // Intersection Observer para animaciones de entrada
   useEffect(() => {
@@ -73,77 +81,39 @@ export default function ContactSection() {
     setIsHovered(false);
   };
 
-  // Validación del formulario
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = t('validation.nameRequired');
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = t('validation.nameMin');
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = t('validation.emailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = t('validation.emailInvalid');
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = t('validation.subjectRequired');
-    } else if (formData.subject.trim().length < 3) {
-      newErrors.subject = t('validation.subjectMin');
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = t('validation.messageRequired');
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = t('validation.messageMin');
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [formData, t]);
-
-  // Manejo de cambios en el formulario
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Limpiar error del campo cuando el usuario empiece a escribir
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
-
   // Envío del formulario
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    
+  const onSubmit = async (data: ContactSchema) => {
     try {
-      // Simular envío del formulario
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Resetear formulario después del envío exitoso
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-      });
-      
-      // Aquí puedes agregar lógica para mostrar un mensaje de éxito
-      console.log('Form submitted successfully:', formData);
-      
-    } catch (error) {
+      const response = await contactService.sendContactMessage(data);
+
+      if (response.success) {
+        // Resetear formulario después del envío exitoso
+        form.reset();
+
+        toast.success(
+          response.message ||
+            'Mensaje enviado exitosamente. Te responderemos pronto.'
+        );
+      } else {
+        toast.error(
+          response.message ||
+            'Hubo un error al enviar el mensaje. Inténtalo de nuevo.'
+        );
+      }
+    } catch (error: any) {
       console.error('Error submitting form:', error);
-    } finally {
-      setIsSubmitting(false);
+
+      // Manejar errores de validación del backend
+      if (error.response?.status === 400 && error.response?.data?.message) {
+        const messages = Array.isArray(error.response.data.message)
+          ? error.response.data.message.join('. ')
+          : error.response.data.message;
+        toast.error(messages);
+      } else {
+        toast.error(
+          'Error al enviar el mensaje. Por favor, inténtalo más tarde.'
+        );
+      }
     }
   };
 
@@ -151,14 +121,14 @@ export default function ContactSection() {
     {
       icon: Mail,
       title: t('info.email.title'),
-      content: 'contacto@copexia.com',
-      href: 'mailto:contacto@copexia.com',
+      content: 'agostinaparada70@gmail.com',
+      href: 'mailto:agostinaparada70@gmail.com',
     },
     {
       icon: Phone,
       title: t('info.phone.title'),
-      content: '+54 11 1234-5678',
-      href: 'tel:+541112345678',
+      content: '+54 9 3876 43-8499',
+      href: 'tel:+5493876438499',
     },
     {
       icon: MapPin,
@@ -181,7 +151,6 @@ export default function ContactSection() {
           isHovered ? 'transform translate-y-[-2px]' : ''
         }`}
       >
-        {/* Header */}
         <header
           className={`text-center mb-6 xs:mb-8 sm:mb-12 lg:mb-16 transition-all duration-700 will-change-transform ${
             inView
@@ -203,7 +172,6 @@ export default function ContactSection() {
         </header>
 
         <div className="grid lg:grid-cols-2 gap-4 xs:gap-6 sm:gap-8 lg:gap-12">
-          {/* Información de contacto */}
           <div
             className={`space-y-6 xs:space-y-8 transition-all duration-600 will-change-transform ${
               inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -211,9 +179,6 @@ export default function ContactSection() {
             style={{ transitionDelay: inView ? '200ms' : '0ms' }}
           >
             <div>
-              <h3 className="text-base xs:text-lg sm:text-xl font-semibold mb-3 xs:mb-4 sm:mb-6">
-                {t('info.title')}
-              </h3>
               <div className="space-y-3 xs:space-y-4 sm:space-y-6">
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
@@ -275,6 +240,23 @@ export default function ContactSection() {
                 </p>
               </div>
             </div>
+
+            {/* Mapa de ubicación */}
+            <div
+              className={`rounded-lg xs:rounded-xl border border-border/50 bg-card/30 overflow-hidden transition-all duration-600 will-change-transform ${
+                inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+              style={{ transitionDelay: inView ? '900ms' : '0ms' }}
+            >
+              <Map
+                latitude={-26.8241}
+                longitude={-65.2226}
+                zoom={13}
+                markerTitle="Copexia"
+                markerDescription={t('info.location.address')}
+                className="h-[250px] xs:h-[300px] lg:h-[350px]"
+              />
+            </div>
           </div>
 
           {/* Formulario de contacto */}
@@ -289,33 +271,33 @@ export default function ContactSection() {
                 {t('form.title')}
               </h3>
 
-              <form onSubmit={handleSubmit} className="space-y-4 xs:space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4 xs:space-y-6"
+              >
                 <div className="grid xs:grid-cols-2 gap-3 xs:gap-4">
                   <div>
                     <label
-                      htmlFor="name"
+                      htmlFor="fullName"
                       className="block text-xs xs:text-sm font-medium mb-1 xs:mb-2"
                     >
                       {t('form.name.label')}
                     </label>
                     <input
                       type="text"
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) =>
-                        handleInputChange('name', e.target.value)
-                      }
+                      id="fullName"
+                      {...form.register('fullName')}
                       className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                        errors.name
+                        form.formState.errors.fullName
                           ? 'border-destructive bg-destructive/5'
                           : 'border-border bg-background hover:border-primary/30 focus:border-primary'
                       }`}
                       placeholder={t('form.name.placeholder')}
-                      disabled={isSubmitting}
+                      disabled={form.formState.isSubmitting}
                     />
-                    {errors.name && (
+                    {form.formState.errors.fullName && (
                       <p className="mt-1 text-[10px] xs:text-xs text-destructive">
-                        {errors.name}
+                        {form.formState.errors.fullName.message}
                       </p>
                     )}
                   </div>
@@ -330,21 +312,18 @@ export default function ContactSection() {
                     <input
                       type="email"
                       id="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        handleInputChange('email', e.target.value)
-                      }
+                      {...form.register('email')}
                       className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                        errors.email
+                        form.formState.errors.email
                           ? 'border-destructive bg-destructive/5'
                           : 'border-border bg-background hover:border-primary/30 focus:border-primary'
                       }`}
                       placeholder={t('form.email.placeholder')}
-                      disabled={isSubmitting}
+                      disabled={form.formState.isSubmitting}
                     />
-                    {errors.email && (
+                    {form.formState.errors.email && (
                       <p className="mt-1 text-[10px] xs:text-xs text-destructive">
-                        {errors.email}
+                        {form.formState.errors.email.message}
                       </p>
                     )}
                   </div>
@@ -360,21 +339,18 @@ export default function ContactSection() {
                   <input
                     type="text"
                     id="subject"
-                    value={formData.subject}
-                    onChange={(e) =>
-                      handleInputChange('subject', e.target.value)
-                    }
+                    {...form.register('subject')}
                     className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                      errors.subject
+                      form.formState.errors.subject
                         ? 'border-destructive bg-destructive/5'
                         : 'border-border bg-background hover:border-primary/30 focus:border-primary'
                     }`}
                     placeholder={t('form.subject.placeholder')}
-                    disabled={isSubmitting}
+                    disabled={form.formState.isSubmitting}
                   />
-                  {errors.subject && (
+                  {form.formState.errors.subject && (
                     <p className="mt-1 text-[10px] xs:text-xs text-destructive">
-                      {errors.subject}
+                      {form.formState.errors.subject.message}
                     </p>
                   )}
                 </div>
@@ -389,31 +365,28 @@ export default function ContactSection() {
                   <textarea
                     id="message"
                     rows={4}
-                    value={formData.message}
-                    onChange={(e) =>
-                      handleInputChange('message', e.target.value)
-                    }
+                    {...form.register('message')}
                     className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none text-xs xs:text-sm ${
-                      errors.message
+                      form.formState.errors.message
                         ? 'border-destructive bg-destructive/5'
                         : 'border-border bg-background hover:border-primary/30 focus:border-primary'
                     }`}
                     placeholder={t('form.message.placeholder')}
-                    disabled={isSubmitting}
+                    disabled={form.formState.isSubmitting}
                   />
-                  {errors.message && (
+                  {form.formState.errors.message && (
                     <p className="mt-1 text-[10px] xs:text-xs text-destructive">
-                      {errors.message}
+                      {form.formState.errors.message.message}
                     </p>
                   )}
                 </div>
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={form.formState.isSubmitting}
                   className="w-full flex items-center justify-center gap-2 px-4 xs:px-6 py-2.5 xs:py-3 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-200 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm active:scale-95"
                 >
-                  {isSubmitting ? (
+                  {form.formState.isSubmitting ? (
                     <>
                       <div className="w-3 h-3 xs:w-4 xs:h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                       {t('form.submitting')}

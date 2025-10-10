@@ -3,7 +3,13 @@
 import { useTranslations } from 'next-intl';
 
 interface StructuredDataProps {
-  type: 'organization' | 'website' | 'breadcrumb' | 'article' | 'localBusiness';
+  type:
+    | 'organization'
+    | 'website'
+    | 'breadcrumb'
+    | 'article'
+    | 'localBusiness'
+    | 'faq';
   data?: any;
   locale?: string;
 }
@@ -134,7 +140,8 @@ export function StructuredData({ type, data, locale = 'es' }: StructuredDataProp
                 itemOffered: {
                   '@type': 'Service',
                   name: 'Transformación Cultural y Organizacional',
-                  description: 'Acompañamos a organizaciones en su proceso de cambio cultural',
+                  description:
+                    'Acompañamos a organizaciones en su proceso de cambio cultural',
                 },
               },
               {
@@ -142,7 +149,8 @@ export function StructuredData({ type, data, locale = 'es' }: StructuredDataProp
                 itemOffered: {
                   '@type': 'Service',
                   name: 'Adopción e Implementación de Soluciones Digitales',
-                  description: 'Implementamos herramientas tecnológicas para optimizar procesos',
+                  description:
+                    'Implementamos herramientas tecnológicas para optimizar procesos',
                 },
               },
               {
@@ -150,7 +158,8 @@ export function StructuredData({ type, data, locale = 'es' }: StructuredDataProp
                 itemOffered: {
                   '@type': 'Service',
                   name: 'Optimización de Procesos y Mejora Operativa',
-                  description: 'Mejoramos la eficiencia operativa de tu organización',
+                  description:
+                    'Mejoramos la eficiencia operativa de tu organización',
                 },
               },
             ],
@@ -199,6 +208,23 @@ export function StructuredData({ type, data, locale = 'es' }: StructuredDataProp
           keywords: data?.tags,
           wordCount: data?.wordCount,
           inLanguage: currentLocale,
+        };
+
+      case 'faq':
+        if (!data?.faqs || !Array.isArray(data.faqs)) return null;
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: data.faqs.map(
+            (faq: { question: string; answer: string }) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+              },
+            })
+          ),
         };
 
       default:

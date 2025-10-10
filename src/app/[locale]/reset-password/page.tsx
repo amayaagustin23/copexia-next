@@ -20,7 +20,9 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { LoadingSpinner } from '@/components/ui/loading';
+import { ToastContainer } from '@/components/ui/toast';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { useToast } from '@/lib/hooks/useToast';
 import type { ResetPasswordSchema } from '@/schemas/auth/resetPasswordSchema';
 import { resetPasswordSchema } from '@/schemas/auth/resetPasswordSchema';
 import { resetPassword } from '@/services/authService';
@@ -30,7 +32,13 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const t = useTranslations('auth.reset');
   const paths = useLocalizedPaths();
-  
+  const {
+    toasts,
+    removeToast,
+    success: showSuccess,
+    error: showError,
+  } = useToast();
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -56,22 +64,37 @@ export default function ResetPasswordPage() {
   const onSubmit = async (data: ResetPasswordSchema) => {
     // Get token directly from URL params
     const currentToken = searchParams.get('token');
-    
+
     if (!currentToken) {
-      setError('Token de restablecimiento no válido');
+      const errorMsg = 'Token de restablecimiento no válido';
+      setError(errorMsg);
+      showError(t('errorTitle'), errorMsg);
       return;
     }
 
     setError(null);
-    
-    const response = await resetPassword(currentToken, { password: data.password, confirmPassword: data.confirmPassword }, t);
-    if (response) {
-      setSuccess(true);
-      
-      // Redirect to login after 3 seconds
-      setTimeout(() => {
-        router.push(paths.auth.signIn);
-      }, 3000);
+
+    try {
+      const response = await resetPassword(
+        currentToken,
+        { password: data.password, confirmPassword: data.confirmPassword },
+        t
+      );
+      if (response) {
+        setSuccess(true);
+
+        // Mostrar toast de éxito
+        showSuccess(t('successTitle'), t('successMessage'));
+
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          router.push(paths.auth.signIn);
+        }, 3000);
+      }
+    } catch (err: any) {
+      // Mostrar toast de error
+      showError(t('errorTitle'), err?.message || t('errorMessage'));
+      setError(err?.message || t('errorMessage'));
     }
   };
 
@@ -87,7 +110,9 @@ export default function ResetPasswordPage() {
               height={50}
               className="mb-1"
             />
-            <h1 className="text-2xl font-bold mt-4 mb-10">{t('successTitle')}</h1>
+            <h1 className="text-2xl font-bold mt-4 mb-10">
+              {t('successTitle')}
+            </h1>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-sm text-muted-foreground mb-6">
@@ -97,9 +122,7 @@ export default function ResetPasswordPage() {
               Serás redirigido al inicio de sesión en unos segundos...
             </p>
             <Button asChild className="w-full bg-primary">
-              <Link href={paths.auth.signIn}>
-                Ir al inicio de sesión
-              </Link>
+              <Link href={paths.auth.signIn}>Ir al inicio de sesión</Link>
             </Button>
           </CardContent>
         </Card>
@@ -130,7 +153,9 @@ export default function ResetPasswordPage() {
 
           {Object.keys(form.formState.errors).length > 0 && (
             <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
-              <p className="text-sm text-destructive font-medium mb-2">Errores de validación:</p>
+              <p className="text-sm text-destructive font-medium mb-2">
+                Errores de validación:
+              </p>
               <ul className="text-sm text-destructive space-y-1">
                 {Object.entries(form.formState.errors).map(([field, error]) => (
                   <li key={field}>• {error?.message}</li>
@@ -175,10 +200,7 @@ export default function ResetPasswordPage() {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full bg-primary"
-              >
+              <Button type="submit" className="w-full bg-primary">
                 {form.formState.isSubmitting ? (
                   <LoadingSpinner size="sm" />
                 ) : (
@@ -198,6 +220,7 @@ export default function ResetPasswordPage() {
           </div>
         </CardContent>
       </Card>
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }
