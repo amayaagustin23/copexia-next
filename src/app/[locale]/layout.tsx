@@ -1,4 +1,5 @@
-import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
+import { DefaultPageAnalyticsTracker } from '@/components/analytics/PageAnalyticsTracker';
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper';
 import StructuredData from '@/components/SEO/StructuredData';
 import { AppProvider } from '@/providers/AppProvider';
 import type { Metadata } from 'next';
@@ -225,6 +226,7 @@ export default async function RootLayout({
             <StructuredData type="organization" locale={locale} />
             <StructuredData type="website" locale={locale} />
             <StructuredData type="localBusiness" locale={locale} />
+            <DefaultPageAnalyticsTracker />
           </AppProvider>
         </body>
       </html>

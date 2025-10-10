@@ -16,6 +16,8 @@ if (!process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL) {
   );
 }
 
+console.log('[Axios] API Base URL:', API_BASE_URL);
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
