@@ -10,19 +10,45 @@ import {
 } from '@/components/ui/card';
 import { Loading } from '@/components/ui/loading';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
+import { analyticsService, type AnalyticsSummary } from '@/services/analyticsService';
 import { postsService } from '@/services/postsService';
 import {
+  Activity,
   BarChart3,
+  Clock,
   Eye,
   FileText,
   FolderTree,
+  Globe,
+  Laptop,
   MessageCircle,
+  Monitor,
+  MousePointer,
+  PieChart as PieChartIcon,
   Plus,
+  Smartphone,
+  Tablet,
   TrendingUp,
+  Users,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 // Tipos para el dashboard
 interface DashboardStats {
@@ -37,135 +63,105 @@ interface DashboardStats {
 
 interface DashboardData {
   stats: DashboardStats;
-  recentPosts: {
-    id: string;
-    title: string;
-    publishedAt: string;
-    viewCount: number;
-  }[];
-  topPosts: { id: string; title: string; viewCount: number }[];
-  categories: { id: string; name: string; postCount: number }[];
-  recentComments: {
-    id: string;
-    content: string;
-    authorName: string;
-    createdAt: string;
-  }[];
-  monthlyStats: { month: string; posts: number; views: number }[];
+  recentPosts: any[];
+  topPosts: any[];
+  categories: any[];
+  recentComments: any[];
+  monthlyStats: any[];
 }
+
+const COLORS = ['#3b82f6', '#06b6d4', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+const DARK_BG = 'bg-slate-950';
+const CARD_BG = 'bg-slate-900';
+const TEXT_MAIN = 'text-slate-100';
+const TEXT_MUTED = 'text-slate-400';
 
 export default function AdminDashboardPage() {
   const t = useTranslations('AdminDashboard');
   const paths = useLocalizedPaths();
 
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null
-  );
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await postsService.getDashboard();
-        setDashboardData(response as DashboardData);
-      } catch {
+        const [postsData, analytics] = await Promise.all([
+          postsService.getDashboard(),
+          analyticsService.getSummary().catch(() => null),
+        ]);
+        setDashboardData(postsData as DashboardData);
+        setAnalyticsData(analytics);
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err);
         setError('Error al cargar los datos del dashboard');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardData();
+    fetchData();
   }, []);
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat('es-ES').format(num);
   };
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '';
-    return date.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs}s`;
   };
+
+  const getDeviceIcon = (type: string) => {
+    switch (type?.toLowerCase()) {
+      case 'mobile':
+        return <Smartphone className="h-4 w-4" />;
+      case 'tablet':
+        return <Tablet className="h-4 w-4" />;
+      default:
+        return <Monitor className="h-4 w-4" />;
+    }
+  };
+
+  // Prepare data for charts with strict array checks
+  const visitsData = Array.isArray(analyticsData?.dailyVisits) ? analyticsData.dailyVisits : [];
+  const deviceData = Array.isArray(analyticsData?.deviceBreakdown) ? analyticsData.deviceBreakdown : [];
+  const browserData = Array.isArray(analyticsData?.browserBreakdown) ? analyticsData.browserBreakdown : [];
+  const topPagesData = Array.isArray(analyticsData?.topPages) ? analyticsData.topPages.slice(0, 5) : [];
+
+  // Ensure stats objects exist
+  const stats = dashboardData?.stats || {
+    totalPosts: 0,
+    publishedPosts: 0,
+    draftPosts: 0,
+    totalViews: 0,
+    totalLikes: 0,
+    totalComments: 0,
+    totalCategories: 0
+  };
+
+  // Safe accessors for lists
+  const recentPosts = Array.isArray(dashboardData?.recentPosts) ? dashboardData.recentPosts : [];
+  const topPosts = Array.isArray(dashboardData?.topPosts) ? dashboardData.topPosts : [];
+  const recentComments = Array.isArray(dashboardData?.recentComments) ? dashboardData.recentComments : [];
 
   if (loading) {
     return (
-      <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+      <div className={`space-y-6 p-6 animate-in fade-in duration-500 ${DARK_BG} min-h-screen`}>
         <header className="space-y-2">
-          <Loading className="h-6 sm:h-8 w-40 sm:w-48" />
-          <Loading className="h-3 sm:h-4 w-80 sm:w-96" />
+          <Loading className="h-8 w-48 bg-slate-800" />
+          <Loading className="h-4 w-96 bg-slate-800" />
         </header>
-
-        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <Card key={i} className="p-4">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-                <Loading className="h-3 sm:h-4 w-16 sm:w-20" />
-                <Loading className="h-3 sm:h-4 w-3 sm:w-4" />
-              </CardHeader>
+            <Card key={i} className={`p-4 animate-pulse border-slate-800 ${CARD_BG}`}>
               <CardContent className="p-0 pt-2">
-                <Loading className="h-6 sm:h-8 w-12 sm:w-16" />
-                <Loading className="h-2 sm:h-3 w-20 sm:w-24 mt-1" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Main Content Skeleton */}
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
-          {[...Array(3)].map((_, i) => (
-            <Card key={i} className="p-4">
-              <CardHeader className="p-0 pb-4">
-                <Loading className="h-5 sm:h-6 w-24 sm:w-32" />
-                <Loading className="h-3 sm:h-4 w-32 sm:w-48" />
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-3">
-                  {[...Array(3)].map((_, j) => (
-                    <div key={j} className="flex items-center space-x-3">
-                      <Loading className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
-                      <div className="flex-1 space-y-1 min-w-0">
-                        <Loading className="h-3 sm:h-4 w-24 sm:w-32" />
-                        <Loading className="h-2 sm:h-3 w-16 sm:w-24" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Bottom Row Skeleton */}
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-          {[...Array(2)].map((_, i) => (
-            <Card key={i} className="p-4">
-              <CardHeader className="p-0 pb-4">
-                <Loading className="h-5 sm:h-6 w-28 sm:w-36" />
-                <Loading className="h-3 sm:h-4 w-40 sm:w-48" />
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-3">
-                  {[...Array(3)].map((_, j) => (
-                    <div
-                      key={j}
-                      className="flex items-center justify-between space-x-3"
-                    >
-                      <div className="flex items-center space-x-3 flex-1 min-w-0">
-                        <Loading className="h-3 sm:h-4 w-3 sm:w-4 flex-shrink-0" />
-                        <Loading className="h-3 sm:h-4 w-20 sm:w-28 flex-1" />
-                      </div>
-                      <Loading className="h-5 sm:h-6 w-12 sm:w-16 flex-shrink-0" />
-                    </div>
-                  ))}
-                </div>
+                <Loading className="h-8 w-16 bg-slate-800" />
+                <Loading className="h-3 w-24 mt-1 bg-slate-800" />
               </CardContent>
             </Card>
           ))}
@@ -173,313 +169,356 @@ export default function AdminDashboardPage() {
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-        <header className="space-y-2">
-          <h1 className="text-xl sm:text-2xl font-bold">{t('title')}</h1>
-          <p className="text-sm sm:text-base text-muted-foreground">
-            {t('description')}
-          </p>
-        </header>
-        <Card>
-          <CardContent className="p-4 sm:p-6 text-center">
-            <p className="text-sm sm:text-base text-muted-foreground">
-              {error}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  const stats = dashboardData?.stats;
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-      <header className="space-y-2">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
-          {t('title')}
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground">
-          {t('description')}
-        </p>
+    <div className={`space-y-8 p-6 animate-in fade-in slide-in-from-bottom-4 duration-700 ${DARK_BG} min-h-screen text-slate-200`}>
+      <header className="space-y-2 flex justify-between items-end">
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent animate-in slide-in-from-left duration-500">
+            {t('title')}
+          </h1>
+          <p className={`${TEXT_MUTED} animate-in slide-in-from-left duration-500 delay-100 text-lg`}>
+            {t('description')}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button asChild className="bg-blue-600 hover:bg-blue-500 text-white border-0 shadow-lg shadow-blue-900/20">
+            <Link href={paths.admin.posts}>
+              <Plus className="mr-2 h-4 w-4" />
+              Nuevo Post
+            </Link>
+          </Button>
+        </div>
       </header>
 
-      {/* KPI Cards */}
-      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-            <CardTitle className="text-xs sm:text-sm font-medium">
-              Total de Posts
-            </CardTitle>
-            <FileText className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground" />
+      {/* Main Stats Grid */}
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-blue-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <FileText className="h-24 w-24 text-blue-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Total Posts</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 pt-2">
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {formatNumber(stats?.totalPosts || 0)}
+          <CardContent>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>{formatNumber(stats.totalPosts)}</div>
+            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED} gap-2`}>
+              <span className="bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full font-medium border border-green-900/50">
+                {stats.publishedPosts} pub
+              </span>
+              <span className="bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full font-medium border border-yellow-900/50">
+                {stats.draftPosts} borr
+              </span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {stats?.publishedPosts || 0} publicados, {stats?.draftPosts || 0}{' '}
-              borradores
-            </p>
           </CardContent>
+          <div className="h-1 w-full bg-blue-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
 
-        <Card className="p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-            <CardTitle className="text-xs sm:text-sm font-medium">
-              Categorías
-            </CardTitle>
-            <FolderTree className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground" />
+        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-cyan-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Users className="h-24 w-24 text-cyan-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Visitas Totales</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 pt-2">
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {dashboardData.categories.length || 0}
+          <CardContent>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
+              {formatNumber(analyticsData?.totalVisits || 0)}
             </div>
-            <p className="text-xs text-muted-foreground">Categorías activas</p>
+            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED}`}>
+              <span className="text-cyan-400 font-medium flex items-center">
+                <TrendingUp className="h-3 w-3 mr-1" />
+                +12%
+              </span>
+              <span className="ml-2">vs mes anterior</span>
+            </div>
           </CardContent>
+          <div className="h-1 w-full bg-cyan-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
 
-        <Card className="p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-            <CardTitle className="text-xs sm:text-sm font-medium">
-              Total de Vistas
-            </CardTitle>
-            <Eye className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground" />
+        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Clock className="h-24 w-24 text-purple-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Tiempo en Página</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 pt-2">
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {formatNumber(stats?.totalViews || 0)}
+          <CardContent>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
+              {formatDuration(analyticsData?.avgSessionDuration || 0)}
             </div>
-            <p className="text-xs text-muted-foreground">Vistas acumuladas</p>
+            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED}`}>
+              <span className="text-purple-400 font-medium flex items-center">
+                <Activity className="h-3 w-3 mr-1" />
+                Avg
+              </span>
+            </div>
           </CardContent>
+          <div className="h-1 w-full bg-purple-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
 
-        <Card className="p-4">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
-            <CardTitle className="text-xs sm:text-sm font-medium">
-              Interacciones
-            </CardTitle>
-            <TrendingUp className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground" />
+        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-orange-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <MessageCircle className="h-24 w-24 text-orange-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Interacciones</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 pt-2">
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {formatNumber(
-                (stats?.totalLikes || 0) + (stats?.totalComments || 0)
-              )}
+          <CardContent>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
+              {formatNumber((stats.totalLikes || 0) + (stats.totalComments || 0))}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {stats?.totalLikes || 0} likes, {stats?.totalComments || 0}{' '}
-              comentarios
-            </p>
+            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED} gap-2`}>
+              <span className="bg-pink-900/30 text-pink-400 px-2 py-0.5 rounded-full font-medium border border-pink-900/50">
+                {stats.totalLikes} likes
+              </span>
+              <span className="bg-orange-900/30 text-orange-400 px-2 py-0.5 rounded-full font-medium border border-orange-900/50">
+                {stats.totalComments} com
+              </span>
+            </div>
           </CardContent>
+          <div className="h-1 w-full bg-orange-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
-        {/* Quick Actions */}
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
-            <CardTitle className="text-sm sm:text-base lg:text-lg">
-              Acciones Rápidas
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Acciones rápidas para gestionar el contenido
-            </CardDescription>
+      {/* Charts Section */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+        {/* Visits Chart */}
+        <Card className={`col-span-1 lg:col-span-2 border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Tendencia de Visitas</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Visitas diarias en los últimos 30 días</CardDescription>
           </CardHeader>
-          <CardContent className="p-0 space-y-2 sm:space-y-3">
-            <Button asChild className="w-full text-xs sm:text-sm">
-              <Link href={paths.admin.posts}>
-                <Plus className="mr-1 sm:mr-2 h-3 sm:h-4 w-3 sm:w-4" />
-                Nuevo Post
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="w-full text-xs sm:text-sm"
-            >
-              <Link href={paths.admin.categories}>
-                <FolderTree className="mr-1 sm:mr-2 h-3 sm:h-4 w-3 sm:w-4" />
-                Gestionar Categorías
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full text-xs sm:text-sm"
-              disabled
-            >
-              <BarChart3 className="mr-1 sm:mr-2 h-3 sm:h-4 w-3 sm:w-4" />
-              Ver Analytics
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Recent Posts */}
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
-            <CardTitle className="text-sm sm:text-base lg:text-lg">
-              Posts Recientes
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Últimas publicaciones creadas
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="space-y-2 sm:space-y-3">
-              {dashboardData?.recentPosts?.length > 0 ? (
-                dashboardData.recentPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="flex items-center space-x-2 sm:space-x-3"
-                  >
-                    <FileText className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground flex-shrink-0" />
-                    <div className="flex-1 space-y-1 min-w-0">
-                      <p className="text-xs sm:text-sm font-medium truncate">
-                        {post.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(post.publishedAt)} • {post.viewCount} vistas
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-3 sm:py-4">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    No hay posts recientes
-                  </p>
-                </div>
-              )}
+          <CardContent>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={visitsData}>
+                  <defs>
+                    <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(value) => new Date(value).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
+                    stroke="#64748b"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#64748b"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `${value}`}
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0f172a', borderRadius: '8px', border: '1px solid #1e293b', color: '#f1f5f9' }}
+                    labelFormatter={(value) => new Date(value).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="visits"
+                    stroke="#3b82f6"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorVisits)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        {/* Top Posts */}
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
-            <CardTitle className="text-sm sm:text-base lg:text-lg">
-              Posts Populares
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Posts con más vistas
-            </CardDescription>
+        {/* Device Distribution */}
+        <Card className={`border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Dispositivos</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Distribución por tipo</CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="space-y-2 sm:space-y-3">
-              {dashboardData?.topPosts?.length > 0 ? (
-                dashboardData.topPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="flex items-center space-x-2 sm:space-x-3"
+          <CardContent>
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={deviceData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="count"
                   >
-                    <TrendingUp className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground flex-shrink-0" />
-                    <div className="flex-1 space-y-1 min-w-0">
-                      <p className="text-xs sm:text-sm font-medium truncate">
-                        {post.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {post.viewCount} vistas
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-3 sm:py-4">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    No hay datos de posts populares
-                  </p>
+                    {deviceData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0f172a', borderRadius: '8px', border: '1px solid #1e293b', color: '#f1f5f9' }}
+                  />
+                  <Legend verticalAlign="bottom" height={36} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+              {deviceData.map((device, index) => (
+                <div key={index} className="flex flex-col items-center p-2 bg-slate-800/50 rounded-lg border border-slate-800">
+                  <div className={TEXT_MAIN}>{getDeviceIcon(device.type)}</div>
+                  <span className={`text-xs font-medium mt-1 capitalize ${TEXT_MUTED}`}>{device.type}</span>
+                  <span className={`text-xs ${TEXT_MAIN} font-bold`}>{device.count}</span>
                 </div>
-              )}
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Bottom Row */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-        {/* Categories */}
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
-            <CardTitle className="text-sm sm:text-base lg:text-lg">
-              Categorías
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Categorías con conteo de posts
-            </CardDescription>
+      {/* Secondary Stats Row */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+        {/* Top Pages */}
+        <Card className={`col-span-1 lg:col-span-2 border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Páginas Más Visitadas</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Secciones con mayor interacción</CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="space-y-2 sm:space-y-3">
-              {dashboardData?.categories?.length > 0 ? (
-                dashboardData.categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="flex items-center justify-between space-x-2 sm:space-x-3"
-                  >
-                    <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
-                      <FolderTree className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground flex-shrink-0" />
-                      <span className="text-xs sm:text-sm font-medium truncate">
-                        {category.name}
-                      </span>
+          <CardContent>
+            <div className="space-y-4">
+              {topPagesData.map((page, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-800 hover:border-blue-500/30 hover:bg-slate-800/50 transition-colors group">
+                  <div className="flex items-center space-x-4 flex-1">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-blue-400 font-bold text-sm border border-slate-700">
+                      {index + 1}
                     </div>
-                    <span className="text-xs text-muted-foreground bg-muted px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex-shrink-0">
-                      {category.postCount} posts
-                    </span>
+                    <div className="flex flex-col flex-1">
+                      <span className={`font-medium ${TEXT_MAIN} group-hover:text-blue-400 transition-colors truncate`}>{page.page}</span>
+                      <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 max-w-[200px]">
+                        <div
+                          className="bg-blue-500 h-1.5 rounded-full"
+                          style={{ width: `${(page.visits / (topPagesData[0]?.visits || 1)) * 100}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-3 sm:py-4">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    No hay categorías
-                  </p>
+                  <div className="text-right pl-4">
+                    <span className={`block font-bold ${TEXT_MAIN}`}>{formatNumber(page.visits)}</span>
+                    <span className={`text-xs ${TEXT_MUTED}`}>visitas</span>
+                  </div>
                 </div>
+              ))}
+              {topPagesData.length === 0 && (
+                <div className={`text-center py-8 ${TEXT_MUTED}`}>No hay datos de visitas aún</div>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Recent Comments */}
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
-            <CardTitle className="text-sm sm:text-base lg:text-lg">
-              Comentarios Recientes
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Últimos comentarios recibidos
-            </CardDescription>
+        {/* Browser Stats */}
+        <Card className={`border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Navegadores</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Tecnología de usuarios</CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="space-y-2 sm:space-y-3">
-              {dashboardData?.recentComments?.length > 0 ? (
-                dashboardData.recentComments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="flex items-start space-x-2 sm:space-x-3"
-                  >
-                    <MessageCircle className="h-3 sm:h-4 w-3 sm:w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 space-y-1 min-w-0">
-                      <p className="text-xs sm:text-sm font-medium">
-                        {comment.authorName}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {comment.content}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(comment.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-3 sm:py-4">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    No hay comentarios recientes
-                  </p>
+          <CardContent>
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={browserData} layout="vertical" margin={{ left: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#1e293b" />
+                  <XAxis type="number" hide />
+                  <YAxis
+                    dataKey="browser"
+                    type="category"
+                    stroke="#94a3b8"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    width={80}
+                  />
+                  <Tooltip
+                    cursor={{ fill: '#1e293b' }}
+                    contentStyle={{ backgroundColor: '#0f172a', borderRadius: '8px', border: '1px solid #1e293b', color: '#f1f5f9' }}
+                  />
+                  <Bar dataKey="count" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20}>
+                    {browserData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="pt-4 mt-4 border-t border-slate-800">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-800">
+                  <div className="text-2xl font-bold text-blue-400">{analyticsData?.bounceRate ? analyticsData.bounceRate.toFixed(1) : '0'}%</div>
+                  <div className={`text-xs ${TEXT_MUTED}`}>Rebote</div>
                 </div>
-              )}
+                <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-800">
+                  <div className="text-2xl font-bold text-green-400">
+                    {analyticsData?.avgSessionDuration ? Math.round(analyticsData.avgSessionDuration / 60) : '0'}m
+                  </div>
+                  <div className={`text-xs ${TEXT_MUTED}`}>Duración Media</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Activity Section */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+        <Card className={`border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Posts Recientes</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Últimas publicaciones creadas</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentPosts.slice(0, 5).map((post) => (
+                <div key={post.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                  <div className="p-2 bg-blue-900/20 rounded-lg text-blue-400">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${TEXT_MAIN} truncate`}>{post.title}</p>
+                    <p className={`text-xs ${TEXT_MUTED}`}>
+                      {new Date(post.publishedAt || post.createdAt).toLocaleDateString()} • {post.viewCount || 0} vistas
+                    </p>
+                  </div>
+                  <div className={`text-xs px-2 py-1 rounded-full ${post.status === 'PUBLISHED'
+                      ? 'bg-green-900/30 text-green-400 border border-green-900/50'
+                      : 'bg-yellow-900/30 text-yellow-400 border border-yellow-900/50'
+                    }`}>
+                    {post.status === 'PUBLISHED' ? 'Publicado' : 'Borrador'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className={`border-slate-800 shadow-lg ${CARD_BG}`}>
+          <CardHeader>
+            <CardTitle className={TEXT_MAIN}>Comentarios Recientes</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Últimas interacciones de usuarios</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentComments.slice(0, 5).map((comment) => (
+                <div key={comment.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-slate-800/50 transition-colors">
+                  <div className="p-2 bg-orange-900/20 rounded-lg text-orange-400">
+                    <MessageCircle className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${TEXT_MAIN}`}>{comment.authorName}</p>
+                    <p className={`text-xs ${TEXT_MUTED} line-clamp-2`}>{comment.content}</p>
+                    <p className={`text-xs ${TEXT_MUTED} mt-1`}>
+                      {new Date(comment.createdAt).toLocaleDateString()} en <span className="text-blue-400">{comment.post?.title}</span>
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

@@ -1,14 +1,13 @@
-'use client';
-
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL ||
-  'http://localhost:4005/api/v1';
+const isServer = typeof window === 'undefined';
+const API_BASE_URL = isServer
+  ? process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://localhost:4005/api/v1'
+  : process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://localhost:4005/api/v1';
 
 if (!process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL) {
   console.warn(

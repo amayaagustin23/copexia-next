@@ -79,7 +79,7 @@ export const Sidebar = ({
     <aside
       className={cn(
         'border-r border-border min-h-screen flex flex-col transition-all duration-300 bg-card fixed left-0 top-0 z-40',
-        isCollapsed ? 'w-16' : 'w-64',
+        isCollapsed ? 'w-24' : 'w-64',
         // En móviles, ocultar cuando está colapsado
         isCollapsed && 'md:translate-x-0 -translate-x-full'
       )}
@@ -97,8 +97,7 @@ export const Sidebar = ({
             alt="Logo"
             width={40}
             height={40}
-            className="object-contain transition-all duration-300"
-            style={{ width: 'auto', height: 'auto' }}
+            className="object-contain transition-all duration-300 flex-shrink-0"
           />
           {!isCollapsed && (
             <span className="font-bold text-sm sm:text-base lg:text-lg transition-opacity truncate">

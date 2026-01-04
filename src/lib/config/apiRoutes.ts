@@ -52,6 +52,11 @@ export const API_ROUTES = {
       LIST: '/public/posts/:postId/comments',
       CREATE: '/public/posts/:postId/comments',
     },
+    ANALYTICS: {
+      SUMMARY: '/analytics/summary',
+      VISITS: '/analytics/visits',
+      SESSIONS: '/analytics/sessions',
+    },
   },
 
   // Auth routes (compatible with existing apiPath.ts)

@@ -70,6 +70,12 @@ const nextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3102',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
         hostname: 'www.uade.edu.ar',
         port: '',

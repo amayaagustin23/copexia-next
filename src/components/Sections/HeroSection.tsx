@@ -195,7 +195,7 @@ const HeroSection = () => {
   }, [springAnimation]);
 
   return (
-    <div
+    <section
       className="relative isolate flex flex-col items-center justify-center text-center w-full min-h-screen py-12 xs:py-16 sm:py-20 lg:py-24 text-foreground"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -353,7 +353,7 @@ const HeroSection = () => {
           }
         }
       `}</style>
-    </div>
+    </section>
   );
 };
 
