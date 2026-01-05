@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import { Lato } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import PropTypes from 'prop-types';
+import { SUPPORTED_LOCALES } from '@/lib/config/routes';
 import '../globals.css';
 
 const lato = Lato({
@@ -207,6 +208,11 @@ export default async function RootLayout({
   if (!awaitedParams) notFound();
 
   const locale = awaitedParams.locale;
+
+  // Validate locale
+  if (!SUPPORTED_LOCALES.includes(locale as any)) {
+    notFound();
+  }
 
   try {
     const messages = (await import(`../../../messages/${locale}.json`)).default;
