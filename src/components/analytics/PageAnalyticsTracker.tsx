@@ -1,6 +1,7 @@
 'use client';
 
 import { usePageAnalytics } from '@/lib/hooks/usePageAnalytics';
+import { useCookieConsent } from '@/context/CookieConsentContext';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -9,17 +10,17 @@ interface PageAnalyticsTrackerProps {
    * Habilitar/deshabilitar tracking
    */
   enabled?: boolean;
-  
+
   /**
    * Páginas a excluir del tracking (regex patterns)
    */
   excludePages?: RegExp[];
-  
+
   /**
    * Track scroll depth
    */
   trackScrollDepth?: boolean;
-  
+
   /**
    * Track sections visibility
    */
@@ -33,13 +34,16 @@ export default function PageAnalyticsTracker({
   trackSections = true,
 }: PageAnalyticsTrackerProps) {
   const pathname = usePathname();
-  
+
   // Verificar si la página actual debe ser excluida
   const shouldTrack = enabled && !excludePages.some((pattern) => pattern.test(pathname));
 
+  const { consent } = useCookieConsent();
+  const hasConsent = consent === 'granted';
+
   // Inicializar analytics
   const { isTracking } = usePageAnalytics({
-    enabled: shouldTrack,
+    enabled: shouldTrack && hasConsent,
     trackScrollDepth,
     trackSections,
     scrollThreshold: 25,

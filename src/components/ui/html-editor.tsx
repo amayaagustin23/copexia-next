@@ -18,9 +18,9 @@ interface HTMLEditorProps {
 
 type TextFormat = 'paragraph' | 'heading1' | 'heading2';
 
-export function HTMLEditor({ 
-  value = '', 
-  onChange, 
+export function HTMLEditor({
+  value = '',
+  onChange,
   placeholder = 'Escribe tu contenido...',
   className,
   rows = 10
@@ -51,7 +51,7 @@ export function HTMLEditor({
 
     const range = selection.getRangeAt(0);
     const selectedText = range.toString();
-    
+
     if (selectedText) {
       const wrappedText = `${openTag}${selectedText}${closeTag}`;
       range.deleteContents();
@@ -59,7 +59,7 @@ export function HTMLEditor({
     } else {
       execCommand('insertHTML', `${openTag}${closeTag}`);
     }
-    
+
     editorRef.current?.focus();
   }, [execCommand]);
 
@@ -120,7 +120,7 @@ export function HTMLEditor({
       const range = selection.getRangeAt(0);
       const container = range.commonAncestorContainer;
       const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container as Element;
-      
+
       if (element) {
         const tagName = element.tagName.toLowerCase();
         if (tagName === 'h1') setActiveFormat('heading1');
@@ -162,11 +162,11 @@ export function HTMLEditor({
     }
   }, [value]);
 
-  const ToolbarButton = ({ 
-    onClick, 
-    children, 
-    title, 
-    isActive = false 
+  const ToolbarButton = ({
+    onClick,
+    children,
+    title,
+    isActive = false
   }: {
     onClick: () => void;
     children: React.ReactNode;
@@ -190,24 +190,24 @@ export function HTMLEditor({
       {/* Toolbar */}
       <div className="flex items-center gap-1 p-2 border-b bg-muted/50">
         {/* Text Format */}
-        <ToolbarButton 
-          onClick={() => setFormat('paragraph')} 
+        <ToolbarButton
+          onClick={() => setFormat('paragraph')}
           title="Párrafo"
           isActive={activeFormat === 'paragraph'}
         >
           <AlignLeft className="h-4 w-4" />
         </ToolbarButton>
-        
-        <ToolbarButton 
-          onClick={() => setFormat('heading1')} 
+
+        <ToolbarButton
+          onClick={() => setFormat('heading1')}
           title="Título 1"
           isActive={activeFormat === 'heading1'}
         >
           <Heading1 className="h-4 w-4" />
         </ToolbarButton>
-        
-        <ToolbarButton 
-          onClick={() => setFormat('heading2')} 
+
+        <ToolbarButton
+          onClick={() => setFormat('heading2')}
           title="Título 2"
           isActive={activeFormat === 'heading2'}
         >
@@ -217,16 +217,16 @@ export function HTMLEditor({
         <div className="w-px h-6 bg-border mx-1" />
 
         {/* Text Style */}
-        <ToolbarButton 
-          onClick={handleBold} 
+        <ToolbarButton
+          onClick={handleBold}
           title="Negrita"
           isActive={isBoldActive}
         >
           <Bold className="h-4 w-4" />
         </ToolbarButton>
-        
-        <ToolbarButton 
-          onClick={handleItalic} 
+
+        <ToolbarButton
+          onClick={handleItalic}
           title="Cursiva"
           isActive={isItalicActive}
         >
@@ -359,7 +359,7 @@ export function HTMLEditor({
         }
         
         .prose a {
-          color: hsl(var(--primary));
+          color: var(--primary);
           text-decoration: underline;
         }
         

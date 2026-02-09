@@ -197,6 +197,7 @@ export default function FloatingWhatsApp({
 
   return (
     <div
+      id="whatsapp-widget"
       ref={containerRef}
       className="fixed bottom-6 right-6 flex flex-col items-end max-h-[100vh] overflow-visible pointer-events-none"
       style={{
@@ -245,11 +246,10 @@ export default function FloatingWhatsApp({
                       }
                     }}
                     data-preset={i}
-                    className={`rounded-full px-3 py-1.5 text-sm transition-all duration-200 border transform cursor-pointer ${
-                      active
+                    className={`rounded-full px-3 py-1.5 text-sm transition-all duration-200 border transform cursor-pointer ${active
                         ? 'bg-primary text-primary-foreground border-primary shadow-md scale-105'
                         : 'bg-muted border-border text-foreground/80 hover:bg-muted/80 hover:scale-105 hover:shadow-sm'
-                    }`}
+                      }`}
                   >
                     {text}
                   </button>
@@ -276,11 +276,10 @@ export default function FloatingWhatsApp({
                   }
                 }}
                 data-preset="otro"
-                className={`rounded-full px-3 py-1.5 text-sm transition-all duration-200 border transform cursor-pointer ${
-                  selected === 'otro'
+                className={`rounded-full px-3 py-1.5 text-sm transition-all duration-200 border transform cursor-pointer ${selected === 'otro'
                     ? 'bg-primary text-primary-foreground border-primary shadow-md scale-105'
                     : 'bg-muted border-border text-foreground/80 hover:bg-muted/80 hover:scale-105 hover:shadow-sm'
-                }`}
+                  }`}
               >
                 {t('other')}
               </button>
@@ -345,11 +344,10 @@ export default function FloatingWhatsApp({
                 }
               }}
               data-send-btn
-              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 transform ${
-                canSend
+              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 transform ${canSend
                   ? 'bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 active:scale-95 hover:shadow-md cursor-pointer'
                   : 'bg-muted text-muted-foreground cursor-not-allowed'
-              }`}
+                }`}
               aria-disabled={!canSend}
             >
               {t('send')}
@@ -374,11 +372,10 @@ export default function FloatingWhatsApp({
             });
           }
         }}
-        className={`pointer-events-auto flex h-[50px] w-[50px] items-center justify-center rounded-full shadow-lg bg-transparent transition-all duration-300 cursor-pointer ${
-          isHovered
+        className={`pointer-events-auto flex h-[50px] w-[50px] items-center justify-center rounded-full shadow-lg bg-transparent transition-all duration-300 cursor-pointer ${isHovered
             ? 'shadow-xl shadow-green-500/40 drop-shadow-[0_-6px_16px_rgba(34,197,94,0.4)] drop-shadow-[0_0_20px_rgba(34,197,94,0.2)]'
             : 'shadow-lg'
-        } ${open ? 'rotate-12' : ''}`}
+          } ${open ? 'rotate-12' : ''}`}
         aria-label={t('ariaOpen')}
         style={{
           position: 'relative',
@@ -390,11 +387,10 @@ export default function FloatingWhatsApp({
           alt="WhatsApp"
           width={50}
           height={50}
-          className={`object-contain transition-all duration-300 ${
-            isHovered
+          className={`object-contain transition-all duration-300 ${isHovered
               ? 'brightness-110 drop-shadow-[0_-2px_8px_rgba(255,255,255,0.6)]'
               : ''
-          }`}
+            }`}
           priority
         />
       </button>

@@ -13,9 +13,9 @@ interface QuillEditorProps {
   readOnly?: boolean;
 }
 
-export function QuillEditor({ 
-  value = '', 
-  onChange, 
+export function QuillEditor({
+  value = '',
+  onChange,
   placeholder,
   className,
   readOnly = false
@@ -33,7 +33,7 @@ export function QuillEditor({
   // Ensure component is mounted on client side and load Quill
   useEffect(() => {
     setMounted(true);
-    
+
     // Dynamically import Quill only on client side
     const loadQuill = async () => {
       try {
@@ -44,7 +44,7 @@ export function QuillEditor({
         setIsLoading(false);
       }
     };
-    
+
     loadQuill();
   }, []);
 
@@ -57,8 +57,8 @@ export function QuillEditor({
           [{ 'header': [1, 2, 3, false] }],
           ['bold', 'italic', 'underline', 'strike'],
           [{ 'color': [] }, { 'background': [] }],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          [{ 'indent': '-1'}, { 'indent': '+1' }],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
           [{ 'align': [] }],
           ['link', 'image', 'video'],
           ['blockquote', 'code-block'],
@@ -111,31 +111,59 @@ export function QuillEditor({
         placeholder: finalPlaceholder,
         readOnly
       });
-      
+
 
       // Apply custom labels to toolbar with multiple attempts
       const applyTranslations = () => {
         const toolbar = quillInstanceRef.current.getModule('toolbar');
         if (toolbar) {
-          
+
           // Apply custom labels to header picker
           const headerPicker = toolbar.container.querySelector('.ql-picker.ql-header');
           if (headerPicker) {
+            // Update Options
             const options = headerPicker.querySelectorAll('.ql-picker-item');
-            options.forEach((option, index) => {
+            options.forEach((option: Element) => {
               const value = option.getAttribute('data-value');
-              if (value !== null && customLabels.header[value]) {
-                option.textContent = customLabels.header[value];
+              const headerLabels = customLabels.header as Record<string, string>;
+              const text = (value && headerLabels[value]) ? headerLabels[value] : headerLabels[''];
+
+              if (text) {
+                option.setAttribute('data-custom-label', text);
+                option.textContent = ''; // Clear text content to rely on ::before
               }
             });
+
+            // Update Label (active selection)
+            const label = headerPicker.querySelector('.ql-picker-label');
+            if (label && !label.getAttribute('data-observer-id')) {
+              const updateLabel = () => {
+                const value = label.getAttribute('data-value');
+                const headerLabels = customLabels.header as Record<string, string>;
+                const text = (value && headerLabels[value]) ? headerLabels[value] : headerLabels[''];
+                if (text) {
+                  label.setAttribute('data-custom-label', text);
+                }
+              };
+
+              // Initial update
+              updateLabel();
+
+              // Observe changes to data-value
+              const observer = new MutationObserver(updateLabel);
+              observer.observe(label, { attributes: true, attributeFilter: ['data-value'] });
+
+              // Mark as observed to prevent duplicates
+              label.setAttribute('data-observer-id', 'true');
+            }
           }
 
           // Apply custom labels to other toolbar buttons
           const buttons = toolbar.container.querySelectorAll('.ql-toolbar button');
-          buttons.forEach(button => {
+          buttons.forEach((button: Element) => {
             const action = button.getAttribute('data-value') || button.classList[1];
-            if (action && customLabels[action]) {
-              button.setAttribute('title', customLabels[action]);
+            if (action && customLabels[action as keyof typeof customLabels]) {
+              button.setAttribute('title', customLabels[action as keyof typeof customLabels] as string);
             }
           });
         }
@@ -154,7 +182,7 @@ export function QuillEditor({
       // Handle text changes
       quillInstanceRef.current.on('text-change', () => {
         const content = quillInstanceRef.current.root.innerHTML;
-        
+
         if (onChange && content !== value) {
           onChange(content);
         }

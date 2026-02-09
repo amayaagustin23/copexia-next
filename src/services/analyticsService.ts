@@ -3,8 +3,10 @@ import api from '@/lib/axios';
 export interface AnalyticsSummary {
     totalVisits: number;
     totalSessions: number;
+    uniqueVisitors: number;
     totalEvents: number;
     avgSessionDuration: number;
+    averageScrollDepth: number;
     bounceRate: number;
     topPages: Array<{
         page: string;

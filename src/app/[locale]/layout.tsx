@@ -1,4 +1,6 @@
 import { DefaultPageAnalyticsTracker } from '@/components/analytics/PageAnalyticsTracker';
+import { CookieConsentBanner } from '@/components/ui/CookieConsentBanner';
+import { CookieConsentProvider } from '@/context/CookieConsentContext';
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper';
 import StructuredData from '@/components/SEO/StructuredData';
 import { AppProvider } from '@/providers/AppProvider';
@@ -197,6 +199,14 @@ export async function generateMetadata({
       yahoo: 'your-yahoo-verification-code',
     },
     metadataBase: new URL(baseUrl),
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+      ],
+      apple: '/apple-touch-icon.png',
+    },
+    // manifest: '/manifest.json', // Manifest is usually auto-detected or needs a route handler
   };
 }
 
@@ -228,11 +238,14 @@ export default async function RootLayout({
           }}
         >
           <AppProvider locale={locale} messages={messages}>
-            <LayoutWrapper>{children}</LayoutWrapper>
-            <StructuredData type="organization" locale={locale} />
-            <StructuredData type="website" locale={locale} />
-            <StructuredData type="localBusiness" locale={locale} />
-            <DefaultPageAnalyticsTracker />
+            <CookieConsentProvider>
+              <LayoutWrapper>{children}</LayoutWrapper>
+              <CookieConsentBanner />
+              <StructuredData type="organization" locale={locale} />
+              <StructuredData type="website" locale={locale} />
+              <StructuredData type="localBusiness" locale={locale} />
+              <DefaultPageAnalyticsTracker />
+            </CookieConsentProvider>
           </AppProvider>
         </body>
       </html>

@@ -41,7 +41,7 @@ export default function RecoverPasswordForm() {
       setLoading(true);
       await requestPasswordReset({ email }, t);
       setSent(true);
-      reset({ email: '' });
+      // reset({ email: '' });
 
       // Mostrar toast de éxito
       success(t('successTitle'), t('successMessage'));

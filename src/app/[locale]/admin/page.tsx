@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Area,
   AreaChart,
@@ -84,8 +84,12 @@ export default function AdminDashboardPage() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -193,87 +197,86 @@ export default function AdminDashboardPage() {
 
       {/* Main Stats Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Card 1: Sesiones Totales */}
         <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-blue-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <FileText className="h-24 w-24 text-blue-500" />
+            <Activity className="h-24 w-24 text-blue-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Total Posts</CardTitle>
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Sesiones Totales</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>{formatNumber(stats.totalPosts)}</div>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>{formatNumber(analyticsData?.totalSessions || 0)}</div>
             <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED} gap-2`}>
-              <span className="bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full font-medium border border-green-900/50">
-                {stats.publishedPosts} pub
-              </span>
-              <span className="bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full font-medium border border-yellow-900/50">
-                {stats.draftPosts} borr
+              <span className="text-blue-400 font-medium flex items-center">
+                <MousePointer className="h-3 w-3 mr-1" />
+                Interacciones activas
               </span>
             </div>
           </CardContent>
           <div className="h-1 w-full bg-blue-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
 
+        {/* Card 2: Usuarios Únicos */}
         <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-cyan-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <Users className="h-24 w-24 text-cyan-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Visitas Totales</CardTitle>
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Usuarios Únicos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
+              {formatNumber(analyticsData?.uniqueVisitors || 0)}
+            </div>
+            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED}`}>
+              <span className="text-cyan-400 font-medium flex items-center">
+                <Globe className="h-3 w-3 mr-1" />
+                Visitantes distintos
+              </span>
+            </div>
+          </CardContent>
+          <div className="h-1 w-full bg-cyan-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+        </Card>
+
+        {/* Card 3: Páginas Vistas (Total Page Loads) */}
+        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <FileText className="h-24 w-24 text-purple-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Páginas Vistas</CardTitle>
           </CardHeader>
           <CardContent>
             <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
               {formatNumber(analyticsData?.totalVisits || 0)}
             </div>
             <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED}`}>
-              <span className="text-cyan-400 font-medium flex items-center">
-                <TrendingUp className="h-3 w-3 mr-1" />
-                +12%
-              </span>
-              <span className="ml-2">vs mes anterior</span>
-            </div>
-          </CardContent>
-          <div className="h-1 w-full bg-cyan-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-        </Card>
-
-        <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-purple-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <Clock className="h-24 w-24 text-purple-500" />
-          </div>
-          <CardHeader className="pb-2">
-            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Tiempo en Página</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
-              {formatDuration(analyticsData?.avgSessionDuration || 0)}
-            </div>
-            <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED}`}>
               <span className="text-purple-400 font-medium flex items-center">
-                <Activity className="h-3 w-3 mr-1" />
-                Avg
+                <Eye className="h-3 w-3 mr-1" />
+                Secciones navegadas
               </span>
             </div>
           </CardContent>
           <div className="h-1 w-full bg-purple-600 absolute bottom-0 left-0 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </Card>
 
+        {/* Card 4: Tiempo Medio */}
         <Card className={`relative overflow-hidden hover:shadow-xl hover:shadow-orange-900/10 transition-all duration-300 hover:-translate-y-1 border-slate-800 shadow-lg ${CARD_BG} group`}>
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <MessageCircle className="h-24 w-24 text-orange-500" />
+            <Clock className="h-24 w-24 text-orange-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Interacciones</CardTitle>
+            <CardTitle className={`text-sm font-medium ${TEXT_MUTED}`}>Tiempo Medio</CardTitle>
           </CardHeader>
           <CardContent>
             <div className={`text-3xl font-bold ${TEXT_MAIN}`}>
-              {formatNumber((stats.totalLikes || 0) + (stats.totalComments || 0))}
+              {formatDuration(analyticsData?.avgSessionDuration || 0)}
             </div>
             <div className={`flex items-center mt-2 text-xs ${TEXT_MUTED} gap-2`}>
-              <span className="bg-pink-900/30 text-pink-400 px-2 py-0.5 rounded-full font-medium border border-pink-900/50">
-                {stats.totalLikes} likes
-              </span>
-              <span className="bg-orange-900/30 text-orange-400 px-2 py-0.5 rounded-full font-medium border border-orange-900/50">
-                {stats.totalComments} com
+              <span className="text-orange-400 font-medium flex items-center">
+                <TrendingUp className="h-3 w-3 mr-1" />
+                Por sesión
               </span>
             </div>
           </CardContent>
@@ -286,8 +289,8 @@ export default function AdminDashboardPage() {
         {/* Visits Chart */}
         <Card className={`col-span-1 lg:col-span-2 border-slate-800 shadow-lg ${CARD_BG}`}>
           <CardHeader>
-            <CardTitle className={TEXT_MAIN}>Tendencia de Visitas</CardTitle>
-            <CardDescription className={TEXT_MUTED}>Visitas diarias en los últimos 30 días</CardDescription>
+            <CardTitle className={TEXT_MAIN}>Tendencia de Sesiones</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Actividad diaria en los últimos 30 días</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">
@@ -322,6 +325,7 @@ export default function AdminDashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="visits"
+                    name="Sesiones"
                     stroke="#3b82f6"
                     strokeWidth={3}
                     fillOpacity={1}
@@ -351,6 +355,7 @@ export default function AdminDashboardPage() {
                     outerRadius={80}
                     paddingAngle={5}
                     dataKey="count"
+                    nameKey="type"
                   >
                     {deviceData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
@@ -367,7 +372,7 @@ export default function AdminDashboardPage() {
               {deviceData.map((device, index) => (
                 <div key={index} className="flex flex-col items-center p-2 bg-slate-800/50 rounded-lg border border-slate-800">
                   <div className={TEXT_MAIN}>{getDeviceIcon(device.type)}</div>
-                  <span className={`text-xs font-medium mt-1 capitalize ${TEXT_MUTED}`}>{device.type}</span>
+                  <span className={`text-xs font-medium mt-1 capitalize ${TEXT_MUTED}`}>{device.type || 'Otro'}</span>
                   <span className={`text-xs ${TEXT_MAIN} font-bold`}>{device.count}</span>
                 </div>
               ))}
@@ -381,8 +386,8 @@ export default function AdminDashboardPage() {
         {/* Top Pages */}
         <Card className={`col-span-1 lg:col-span-2 border-slate-800 shadow-lg ${CARD_BG}`}>
           <CardHeader>
-            <CardTitle className={TEXT_MAIN}>Páginas Más Visitadas</CardTitle>
-            <CardDescription className={TEXT_MUTED}>Secciones con mayor interacción</CardDescription>
+            <CardTitle className={TEXT_MAIN}>Secciones Más Visitadas</CardTitle>
+            <CardDescription className={TEXT_MUTED}>Áreas con mayor interés</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -393,7 +398,9 @@ export default function AdminDashboardPage() {
                       {index + 1}
                     </div>
                     <div className="flex flex-col flex-1">
-                      <span className={`font-medium ${TEXT_MAIN} group-hover:text-blue-400 transition-colors truncate`}>{page.page}</span>
+                      <span className={`font-medium ${TEXT_MAIN} group-hover:text-blue-400 transition-colors truncate`}>
+                        {page.page}
+                      </span>
                       <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 max-w-[200px]">
                         <div
                           className="bg-blue-500 h-1.5 rounded-full"
@@ -404,7 +411,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="text-right pl-4">
                     <span className={`block font-bold ${TEXT_MAIN}`}>{formatNumber(page.visits)}</span>
-                    <span className={`text-xs ${TEXT_MUTED}`}>visitas</span>
+                    <span className={`text-xs ${TEXT_MUTED}`}>vistas</span>
                   </div>
                 </div>
               ))}
@@ -487,8 +494,8 @@ export default function AdminDashboardPage() {
                     </p>
                   </div>
                   <div className={`text-xs px-2 py-1 rounded-full ${post.status === 'PUBLISHED'
-                      ? 'bg-green-900/30 text-green-400 border border-green-900/50'
-                      : 'bg-yellow-900/30 text-yellow-400 border border-yellow-900/50'
+                    ? 'bg-green-900/30 text-green-400 border border-green-900/50'
+                    : 'bg-yellow-900/30 text-yellow-400 border border-yellow-900/50'
                     }`}>
                     {post.status === 'PUBLISHED' ? 'Publicado' : 'Borrador'}
                   </div>

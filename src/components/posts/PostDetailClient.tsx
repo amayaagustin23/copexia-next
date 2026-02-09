@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { DefaultImage } from '@/components/ui/default-image';
+import { usePostView } from '@/lib/hooks/usePostView';
 import { useLikedPosts } from '@/lib/hooks/useLikedPosts';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
 import { postsService } from '@/services/postsService';
@@ -31,34 +32,23 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
   const router = useRouter();
   const t = useTranslations('postDetail');
   const paths = useLocalizedPaths();
-  
+
   const [post, setPost] = useState<Post>(initialPost);
   const [liking, setLiking] = useState(false);
-  const [viewTracked, setViewTracked] = useState(false);
-  
   const { isLiked, toggleLike, isLoading: likesLoading } = useLikedPosts();
 
-  // Track view on mount
-  useEffect(() => {
-    const trackView = async () => {
-      if (post && !viewTracked) {
-        try {
-          await postsService.incrementView(post.id);
-          setViewTracked(true);
-          
-          // Update local state to reflect view count increase immediately
-          setPost(prev => ({
-            ...prev,
-            viewCount: prev.viewCount + 1
-          }));
-        } catch (err) {
-          console.error('Error tracking view:', err);
-        }
-      }
-    };
+  // Use custom hook to track views (once per session)
+  const { viewCount: updatedViewCount } = usePostView(post.id, post.viewCount);
 
-    trackView();
-  }, [post.id, viewTracked]);
+  // Update local state when view count changes from the hook
+  useEffect(() => {
+    if (updatedViewCount && updatedViewCount > post.viewCount) {
+      setPost(prev => ({
+        ...prev,
+        viewCount: updatedViewCount
+      }));
+    }
+  }, [updatedViewCount, post.viewCount]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
@@ -198,20 +188,17 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
                   <button
                     onClick={handleLike}
                     disabled={liking || likesLoading}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      isLiked(post.id)
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isLiked(post.id)
                         ? 'text-red-500 bg-red-50 hover:bg-red-100'
                         : 'text-muted-foreground hover:text-red-500 hover:bg-red-50'
-                    } ${
-                      liking || likesLoading
+                      } ${liking || likesLoading
                         ? 'opacity-50 cursor-not-allowed'
                         : ''
-                    }`}
+                      }`}
                   >
                     <Heart
-                      className={`h-4 w-4 transition-transform ${
-                        isLiked(post.id) ? 'fill-current' : ''
-                      } ${liking ? 'animate-pulse' : ''}`}
+                      className={`h-4 w-4 transition-transform ${isLiked(post.id) ? 'fill-current' : ''
+                        } ${liking ? 'animate-pulse' : ''}`}
                     />
                     <span className="font-medium">
                       {isLiked(post.id) ? t('liked') : t('like')}

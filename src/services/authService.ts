@@ -81,12 +81,10 @@ export async function requestPasswordReset(
   data: ForgotPasswordData,
   t?: (key: string) => string
 ): Promise<void> {
-  try {
-    await api.post(BackendEndpoints.auth.recoveryPassword, data);
-    toast.success(t?.('passwordResetSuccess'));
-  } catch (error: unknown) {
-    toast.error(getErrorMessage(error));
-  }
+  const result = await api.post(BackendEndpoints.auth.recoveryPassword, data);
+  // Do not show success toast here, let the UI handle it for better control
+  // toast.success(t?.('passwordResetSuccess'));
+  return result.data;
 }
 
 export async function resetPassword(

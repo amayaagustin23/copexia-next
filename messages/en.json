@@ -504,6 +504,11 @@
       "viewAnalytics": "View analytics"
     }
   },
+  "CookieConsent": {
+    "message": "We use cookies to analyze our traffic and improve your experience. By clicking 'Accept', you agree to our use of cookies.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "AdminPosts": {
     "title": "Posts",
     "newPost": "New Post",
@@ -1114,6 +1119,13 @@
       "blockquote": "Quote",
       "codeBlock": "Code block",
       "clean": "Clear formatting"
+    }
+  },
+  "common": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "Sorry, the page you are looking for does not exist or has been moved.",
+      "backHome": "Back to home"
     }
   }
 }

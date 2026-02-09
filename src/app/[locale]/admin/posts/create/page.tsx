@@ -308,9 +308,6 @@ export default function CreatePostPage() {
 
             {/* Content */}
             <Card>
-              <CardHeader>
-                <CardTitle>{t('content')}</CardTitle>
-              </CardHeader>
               <CardContent>
                 {previewMode ? (
                   <div className="prose max-w-none">

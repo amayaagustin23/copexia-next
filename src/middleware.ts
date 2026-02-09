@@ -22,6 +22,10 @@ const SESSION_COOKIE = 'token';
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Debug logs
+  console.log('Middleware pathname:', pathname);
+  console.log('Decoded pathname:', decodeURIComponent(pathname));
+
   // Redirigir automáticamente desde la raíz a /es
   if (pathname === '/') {
     const url = req.nextUrl.clone();
@@ -34,14 +38,25 @@ export function middleware(req: NextRequest) {
     return intlRes;
   }
 
-  const locale = getLocaleFromPath(pathname);
-  const pathWithoutLocale = stripLocale(pathname);
+  // Ensure we check against decoded path to handle special chars (ñ, etc.)
+  const decodedPathname = decodeURIComponent(pathname);
+
+  const locale = getLocaleFromPath(decodedPathname);
+  const pathWithoutLocale = stripLocale(decodedPathname);
 
   if (shouldRedirectToEnglishRoute(pathWithoutLocale)) {
     const englishRoute = mapToEnglishRoute(pathWithoutLocale);
-    const url = req.nextUrl.clone();
-    url.pathname = `/${locale}${englishRoute}`;
-    return NextResponse.redirect(url);
+
+    // Construct new URL with locale and mapped route
+    // Preserve query string (e.g. ?token=...)
+    const newPath = `/${locale}${englishRoute}`;
+
+    // Check if we are already there to avoid redirect loops (though should use different route map)
+    if (decodedPathname !== newPath) {
+      const url = req.nextUrl.clone();
+      url.pathname = newPath;
+      return NextResponse.redirect(url);
+    }
   }
 
   const hasSession = !!req.cookies.get(SESSION_COOKIE)?.value;

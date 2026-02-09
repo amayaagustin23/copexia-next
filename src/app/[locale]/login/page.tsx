@@ -50,6 +50,12 @@ export default function LoginPage() {
     try {
       const response = await loginUser(data);
       if (response) {
+        // Verificar rol
+        if (response.user.role !== 'ADMIN') {
+          showError(t('errorTitle'), t('unauthorizedMessage', { defaultMessage: 'Acceso denegado: Solo administradores pueden ingresar.' }));
+          return;
+        }
+
         login(response.user);
 
         // Mostrar toast de éxito

@@ -11,6 +11,7 @@ export const AUTH_ROUTES_BASE = [
   '/recuperar-contrasena',
   '/reset-password',
   '/cambiar-contrasena',
+  '/cambiar-contraseña',
 ] as const;
 
 export const LOCALIZED_ROUTES = {
@@ -32,6 +33,7 @@ export const SPANISH_TO_ENGLISH_ROUTES = {
   '/ingresar': '/login',
   '/recuperar-contrasena': '/forgot-password',
   '/cambiar-contrasena': '/reset-password',
+  '/cambiar-contraseña': '/reset-password',
 } as const;
 
 export const ROUTE_MAPPING = {
@@ -41,6 +43,7 @@ export const ROUTE_MAPPING = {
   '/recuperar-contrasena': '/forgot-password',
   '/reset-password': '/reset-password',
   '/cambiar-contrasena': '/reset-password',
+  '/cambiar-contraseña': '/reset-password',
   '/admin': '/admin',
   '/panel-control': '/admin',
   '/admin/posts': '/admin/posts',

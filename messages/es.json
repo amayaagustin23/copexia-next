@@ -135,6 +135,11 @@
       "viewAnalytics": "Ver analíticas"
     }
   },
+  "CookieConsent": {
+    "message": "Utilizamos cookies para analizar nuestro tráfico y mejorar tu experiencia. Al hacer clic en 'Aceptar', aceptas nuestro uso de cookies.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
+  },
   "AdminPosts": {
     "title": "Publicaciones",
     "newPost": "Nueva publicación",
@@ -881,6 +886,13 @@
       "blockquote": "Cita",
       "codeBlock": "Bloque de código",
       "clean": "Limpiar formato"
+    }
+  },
+  "common": {
+    "notFound": {
+      "title": "Página no encontrada",
+      "description": "Lo sentimos, la página que estás buscando no existe o ha sido movida.",
+      "backHome": "Volver al inicio"
     }
   }
 }

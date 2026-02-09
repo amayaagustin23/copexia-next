@@ -20,8 +20,8 @@ function primeStyles(
     targets instanceof NodeList
       ? Array.from(targets)
       : Array.isArray(targets)
-      ? targets
-      : [targets];
+        ? targets
+        : [targets];
   for (const el of list) {
     const node = el as HTMLElement;
     for (const [k, v] of Object.entries(styles)) {
@@ -73,8 +73,49 @@ export const Header = () => {
     typeof window !== 'undefined' &&
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(href + '/');
+  const [activeSection, setActiveSection] = useState<string>('');
+
+  const isActive = (href: string) => {
+    const hashIndex = href.indexOf('#');
+
+    // 1. Is it a section link? Check against activeSection
+    if (hashIndex !== -1) {
+      const sectionId = href.substring(hashIndex + 1);
+      return activeSection === sectionId;
+    }
+
+    // 2. Is it the Root link? Only active if NO section is active (top of page)
+    if (href === rutas.root && pathname === rutas.root) {
+      return !activeSection;
+    }
+
+    // 3. Other pages (Admin, Login, etc.)
+    return pathname === href || pathname.startsWith(href + '/');
+  };
+
+  useEffect(() => {
+    const handleSpy = () => {
+      const sections = document.querySelectorAll('section[id]');
+      let current = '';
+      const scrollY = window.scrollY;
+      const offset = 100;
+
+      sections.forEach((section) => {
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
+        if (scrollY >= sectionTop - offset && scrollY < sectionTop + sectionHeight - offset) {
+          current = section.getAttribute('id') || '';
+        }
+      });
+
+      if (scrollY < 100) current = '';
+      setActiveSection((prev) => (prev === current ? prev : current));
+    };
+
+    window.addEventListener('scroll', handleSpy);
+    handleSpy();
+    return () => window.removeEventListener('scroll', handleSpy);
+  }, []);
 
   useEffect(() => setMounted(true), []);
 
@@ -133,13 +174,11 @@ export const Header = () => {
 
       cancelAnimationFrame(frameId);
       frameId = requestAnimationFrame(() => {
-        const currentProgress = dynamicProgress;
-        const diff = scrollProgress - currentProgress;
-
-        const dampening = 0.08;
-        const newProgress = currentProgress + diff * dampening;
-
-        setDynamicProgress(newProgress);
+        setDynamicProgress((prev) => {
+          const diff = scrollProgress - prev;
+          const dampening = 0.08;
+          return prev + diff * dampening;
+        });
         setHeaderAlpha(scrollProgress);
       });
     };
@@ -151,7 +190,7 @@ export const Header = () => {
       window.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(frameId);
     };
-  }, [dynamicProgress]);
+  }, []);
 
   const hasAuth = Boolean((rutas as any).auth?.signIn);
 
@@ -159,9 +198,8 @@ export const Header = () => {
     <>
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          openMobile ? '' : 'backdrop-blur-lg'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${openMobile ? '' : 'backdrop-blur-lg'
+          }`}
         aria-label={t('aria.siteHeader')}
         style={
           {
@@ -173,21 +211,7 @@ export const Header = () => {
         }
       >
         <div className="w-full mx-2 px-3 xs:px-4 sm:px-6 relative overflow-hidden">
-          <div
-            className="absolute bottom-0 left-0 h-0.5 w-40 pointer-events-none z-10 opacity-70"
-            style={{
-              background: `linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.6) 35%, rgba(255,215,0,0.9) 50%, rgba(255,215,0,0.6) 65%, transparent 100%)`,
-              transform: `translateX(${dynamicProgress * 100}vw)`,
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 h-1 w-32 pointer-events-none z-10 opacity-30"
-            style={{
-              background: `linear-gradient(90deg, transparent, rgba(255,215,0,0.7), transparent)`,
-              transform: `translateX(${dynamicProgress * 100}vw)`,
-              filter: 'blur(2px)',
-            }}
-          />
+
           <div className="flex items-center justify-center relative py-3 md:hidden">
             <Link
               href={rutas.root}
@@ -236,16 +260,16 @@ export const Header = () => {
                     <Link
                       href={item.href}
                       className={[
-                        'relative rounded-md px-3 py-2 text-sm text-white drop-shadow-sm transition hover:text-[--accent]',
-                        active ? 'text-[--accent]' : '',
+                        'relative rounded-md px-3 py-2 text-sm text-white drop-shadow-sm transition hover:text-[#dfcd81]',
+                        active ? 'text-[#dfcd81] font-bold' : '',
                       ].join(' ')}
                     >
                       <span className="relative inline-flex items-center gap-1">
                         {item.name}
                         <span
                           className={[
-                            'absolute -bottom-0.5 left-0 h-[2px] w-full origin-left',
-                            'bg-[--accent] transition-transform duration-300 ease-out',
+                            'absolute -bottom-0.5 left-0 h-[3px] w-full origin-left',
+                            'bg-[#dfcd81] transition-transform duration-300 ease-out',
                             active
                               ? 'scale-x-100'
                               : 'scale-x-0 group-hover:scale-x-100',
