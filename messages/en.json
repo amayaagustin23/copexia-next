@@ -36,8 +36,11 @@
     "brandName": "Copexia",
     "menu": {
       "home": "Home",
+      "identification": "Identification",
+      "about": "About",
       "services": "Services",
-      "about": "About Us",
+      "faro": "FARO Method",
+      "blog": "Articles",
       "values": "Values",
       "contact": "Contact",
       "admin": "Admin",
@@ -102,37 +105,179 @@
       "intro2": "We combine management and technology approaches to achieve lasting change.",
       "differential": "Our differential: we understand that technology is a tool, but people are the engine of transformation.",
       "meaningTitle": "What does COPEXIA mean?",
-      "meaningDesc": "Each letter represents a core value and approach in our work methodology.",
+      "meaningDesc": "The name comes from concepts that define our approach.",
       "letters": {
         "C": {
           "title": "Collaboration",
-          "desc": "We work together with our clients to achieve common goals."
+          "desc": "We work in partnership with your team. Solutions are co-built to be viable and sustainable."
         },
         "O": {
           "title": "Organization",
-          "desc": "We structure processes and systems for optimal performance."
+          "desc": "We order processes, information, and priorities to transform improvisation into a clear structure."
         },
         "P": {
           "title": "Personalization",
-          "desc": "We adapt solutions to the specific needs of each organization."
+          "desc": "We design tailored solutions, adapted to the reality, resources, and goals of each organization."
         },
         "E": {
           "title": "Strategy",
-          "desc": "We design action plans aligned with business objectives."
+          "desc": "We define concrete and measurable plans that align processes, people, and decisions with a clear direction."
         },
         "X": {
           "title": "Excellence",
-          "desc": "We strive for the highest quality in every project."
+          "desc": "We work with depth, rigor, and commitment. We don't seek superficial changes, but real and sustainable improvements."
         },
         "I": {
           "title": "Innovation",
-          "desc": "We incorporate new technologies and methodologies."
+          "desc": "We integrate data, tools, and new ways of working to drive smarter and more efficient decisions."
         },
         "A": {
           "title": "Accompaniment",
-          "desc": "We provide continuous support throughout the transformation process."
+          "desc": "We implement alongside your team and follow up until the change works in practice."
         }
       }
+    },
+    "painPoints": {
+      "eyebrow": "Identification",
+      "heading": "Is your company going through any of these situations?",
+      "intro": "Maybe it's not a large visible problem, but rather signals that repeat:",
+      "points": [
+        "Processes change depending on the person executing them.",
+        "There are reworks or duplicated tasks.",
+        "You make decisions by intuition, but you don't have data that gives you greater certainty.",
+        "Data exists in Excel, but it's not used to decide.",
+        "There are no clear indicators to evaluate results.",
+        "There's talk of implementing a system, but it's not clear which one to choose.",
+        "There are internal tensions or low team commitment."
+      ],
+      "outro": "If you identify with one or more of these points, we can help you."
+    },
+    "services": {
+      "block1": {
+        "title": "Business Process Improvement and Standardization",
+        "desc": "We work with organizations that need to order, document, and optimize their processes to reduce errors, reworks, and dependence on improvisation.",
+        "includesTitle": "What's included?",
+        "includes": [
+          "Process mapping and analysis (purchasing, sales, administration, operations).",
+          "Identification of bottlenecks.",
+          "Definition of roles and responsibilities.",
+          "Standardization of procedures.",
+          "Application of continuous improvement.",
+          "Clear and replicable documentation."
+        ],
+        "resultTitle": "Expected result",
+        "result": "Clear, measurable, and sustainable processes that improve operational efficiency.",
+        "needServiceTitle": "How do I know if I need this service?",
+        "needItems": [
+          "Everyone executes tasks 'their own way'.",
+          "There are frequent reworks or repetitive errors.",
+          "Delivery times are not predictable.",
+          "You depend too much on certain key people.",
+          "No documented procedures exist.",
+          "Growth is starting to generate internal disorder."
+        ]
+      },
+      "block2": {
+        "title": "Data Analysis with Excel and Management by Indicators",
+        "desc": "Many companies already have valuable information, but are not using it strategically. We organize, structure, and transform data into concrete decisions.",
+        "includesTitle": "What's included?",
+        "includes": [
+          "Organization and cleaning of Excel databases.",
+          "Report automation.",
+          "Control dashboard design.",
+          "Definition of Key Performance Indicators (KPIs).",
+          "Analysis for commercial and operational decision-making."
+        ],
+        "resultTitle": "Expected result",
+        "result": "Decisions backed by clear and accessible data, starting with Excel and evolving according to need.",
+        "needServiceTitle": "How do I know if I need this service?",
+        "needItems": [
+          "You make decisions mainly by intuition.",
+          "You have information in Excel but it's not organized.",
+          "Reports take a lot of time and don't provide clarity.",
+          "You don't have defined indicators to measure performance.",
+          "You don't know if your business is really growing or not.",
+          "You want to start working with data without implementing a complex system yet."
+        ]
+      },
+      "block3": {
+        "title": "Digitalization and Management Systems Selection",
+        "desc": "When Excel is no longer enough, we accompany the evaluation, selection, and implementation process of management systems suitable for each company's reality.",
+        "includesTitle": "What's included?",
+        "includes": [
+          "Evaluation of real digitalization need.",
+          "Definition of functional requirements.",
+          "Comparison of available options in the market.",
+          "Implementation plan.",
+          "Adoption accompaniment.",
+          "Post-implementation follow-up."
+        ],
+        "resultTitle": "Expected result",
+        "result": "Strategic digitalization with lower risk and higher team adoption.",
+        "needServiceTitle": "How do I know if I need this service?",
+        "needItems": [
+          "Excel no longer supports the volume of information.",
+          "You have multiple disconnected files.",
+          "Information is not centralized.",
+          "You don't know which system to choose.",
+          "You're afraid of investing in software that isn't used later.",
+          "You want to scale but current management doesn't allow it."
+        ]
+      },
+      "block4": {
+        "title": "Organizational Diagnosis, Climate and Job Satisfaction",
+        "desc": "When team performance doesn't reflect its potential, we analyze internal dynamics to identify improvement opportunities.",
+        "includesTitle": "What's included?",
+        "includes": [
+          "Organizational climate evaluations.",
+          "Job satisfaction evaluations.",
+          "Organizational maturity evaluations.",
+          "Structured interviews.",
+          "Actionable recommendations."
+        ],
+        "resultTitle": "Expected result",
+        "result": "Clear information for making informed organizational decisions.",
+        "needServiceTitle": "How do I know if I need this service?",
+        "needItems": [
+          "Frequent turnover or demotivation.",
+          "Tension between areas is perceived.",
+          "Performance dropped without a clear technical cause.",
+          "Recurrent conflicts exist.",
+          "The team shows resistance to change.",
+          "You want to grow but the current culture doesn't support it."
+        ]
+      },
+      "eyebrow": "Main Services"
+    },
+    "faro": {
+      "eyebrow": "How we work",
+      "heading": "FARO Method: clarity to decide, structure to advance",
+      "intro": "At Copexia, we work with a structured approach that allows us to accompany each organization from problem identification to sustained improvement. Our FARO method ensures deep analysis, information-based decisions, and concrete results.",
+      "F": {
+        "letter": "F",
+        "name": "Fix",
+        "subtitle": "Define the starting point",
+        "desc": "Before intervening, we clarify objectives, expectations, and context. We identify what needs to be improved, why, and what resources are available. Fixing involves ordering the initial diagnosis and establishing clear and measurable goals."
+      },
+      "A": {
+        "letter": "A",
+        "name": "Analyze",
+        "subtitle": "Understand before acting",
+        "desc": "We analyze processes, data, internal dynamics, and existing systems. We detect bottlenecks, improvement opportunities, and risks. We use process analysis tools, management indicators, and organizational evaluation to make informed decisions."
+      },
+      "R": {
+        "letter": "R",
+        "name": "Reveal",
+        "subtitle": "Convert information into clarity",
+        "desc": "We transform analysis into concrete conclusions. We reveal patterns, root causes, and strategic priorities. This stage allows the organization to clearly see where to intervene and what impact each decision can generate."
+      },
+      "O": {
+        "letter": "O",
+        "name": "Optimize",
+        "subtitle": "Implement and sustain improvement",
+        "desc": "We design personalized solutions and implement alongside the team. We accompany execution, measure results, and adjust until achieving stability and sustainability. Optimizing is not a one-time change: it's ensuring it works over time."
+      },
+      "outro": "This approach allows us to work with structure, clarity, and sustainable results."
     },
     "values": {
       "heading": "Our Values",
@@ -180,7 +325,7 @@
         },
         "location": {
           "title": "Location",
-          "address": "Buenos Aires, Argentina"
+          "address": "San Miguel de Tucumán, Argentina"
         }
       },
       "schedule": {

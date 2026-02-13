@@ -404,21 +404,21 @@ export default function AboutSection() {
       `}</style>
 
       <div
-        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 pt-12 xs:pt-16 sm:pt-20 pb-12 xs:pb-16 sm:pb-20 space-y-8 xs:space-y-12 sm:space-y-16 about-section-hover ${isHovered ? 'transform translate-y-[-2px]' : ''
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-12 xs:py-16 sm:py-20 lg:py-24 space-y-12 xs:space-y-16 sm:space-y-20 about-section-hover ${isHovered ? 'transform translate-y-[-2px]' : ''
           }`}
       >
         {/* Page Header */}
         <header
-          className={`text-center transition-all duration-700 will-change-transform ${inView
-              ? 'opacity-100 translate-y-0 scale-100'
-              : 'opacity-0 translate-y-6 scale-95'
+          className={`text-center mb-12 xs:mb-16 sm:mb-20 transition-all duration-700 will-change-transform ${inView
+            ? 'opacity-100 translate-y-0 scale-100'
+            : 'opacity-0 translate-y-6 scale-95'
             }`}
         >
           <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
             <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-medium mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
+            <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
               {t('heading')}
             </h2>
           </div>
@@ -430,9 +430,10 @@ export default function AboutSection() {
             }`}
           style={{ transitionDelay: inView ? '200ms' : '0ms' }}
         >
-          <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5 text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto leading-relaxed">
+          <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5 text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto leading-relaxed">
             <p>{t('intro1')}</p>
             <p>{t('intro2')}</p>
+            <p>{t('intro3')}</p>
             <p>{t('differential')}</p>
           </div>
         </section>

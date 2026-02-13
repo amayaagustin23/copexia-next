@@ -4,9 +4,12 @@ import { useLocale } from 'next-intl';
 
 type SectionId =
   | 'inicio'
-  | 'servicios'
+  | 'identificacion'
   | 'sobre-nosotros'
+  | 'servicios'
+  | 'metodo-faro'
   | 'valores'
+  | 'blog'
   | 'contacto'
 
 type ServicesAnchors = {
@@ -24,9 +27,12 @@ type AuthPaths = {
 
 type Sections = {
   home: string;
-  services: string;
+  identification: string;
   aboutUs: string;
+  services: string;
+  faro: string;
   values: string;
+  blog: string;
   contact: string;
 };
 
@@ -67,9 +73,12 @@ export const useLocalizedPaths = () => {
 
   const sections: Sections = {
     home: anchor('inicio'),
-    services: anchor('servicios'),
+    identification: anchor('identificacion'),
     aboutUs: anchor('sobre-nosotros'),
+    services: anchor('servicios'),
+    faro: anchor('metodo-faro'),
     values: anchor('valores'),
+    blog: anchor('blog'),
     contact: anchor('contacto'),
   } as const;
 

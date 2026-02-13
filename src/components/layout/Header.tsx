@@ -39,10 +39,14 @@ export const Header = () => {
   const menuPaths = {
     raiz: rutas.root,
     secciones: {
-      servicios: rutas.sections.services,
+      home: rutas.sections.home,
+      identificacion: rutas.sections.identification,
       sobreNosotros: rutas.sections.aboutUs,
-      contacto: rutas.sections.contact,
+      servicios: rutas.sections.services,
+      faro: rutas.sections.faro,
       valores: rutas.sections.values,
+      blog: rutas.sections.blog,
+      contacto: rutas.sections.contact,
     },
     link: rutas.anchor,
   } as const;

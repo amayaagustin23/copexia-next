@@ -7,6 +7,9 @@ import ContactSection from '@/components/Sections/ContactSection';
 import HeroSection from '@/components/Sections/HeroSection';
 import PostsSection from '@/components/Sections/PostsSection';
 import ValuesSection from '@/components/Sections/ValuesSection';
+import PainPointsSection from '@/components/Sections/PainPointsSection';
+import ServicesSection from '@/components/Sections/ServicesSection';
+import FaroMethodSection from '@/components/Sections/FaroMethodSection';
 import StructuredData from '@/components/SEO/StructuredData';
 import homePageSEO from './page-metadata';
 
@@ -47,26 +50,44 @@ export default function HomePage() {
       className: 'h-screen w-full bg-background',
     },
     {
+      id: 'identificacion',
+      title: '',
+      children: <PainPointsSection />,
+      className: 'section-pain-points',
+    },
+    {
       id: 'sobre-nosotros',
-      title: 'Sobre Nosotros - Consultoría Organizacional',
+      title: '',
       children: <AboutSection />,
       className: 'section-about bg-muted/5',
     },
     {
+      id: 'servicios',
+      title: '',
+      children: <ServicesSection />,
+      className: 'section-services',
+    },
+    {
+      id: 'metodo-faro',
+      title: '',
+      children: <FaroMethodSection />,
+      className: 'section-faro bg-muted/5',
+    },
+    {
       id: 'valores',
-      title: 'Nuestros Valores - Metodologías de Trabajo',
+      title: '',
       children: <ValuesSection />,
       className: 'section-values bg-background',
     },
     {
       id: 'blog',
-      title: 'Artículos - Transformación Digital y Organizacional',
+      title: '',
       children: <PostsSection />,
       className: 'section-posts bg-background',
     },
     {
       id: 'contacto',
-      title: 'Contacto - Consulta sobre nuestros servicios',
+      title: '',
       children: <ContactSection />,
       className: 'section-contact bg-muted/5',
     },
@@ -178,7 +199,7 @@ export default function HomePage() {
         }
       `}</style>
 
-      {sections.map((section, index) => {
+      {sections.map((section) => {
         if (section.id === 'inicio') {
           // Hero section con ancho completo pero respetando container
           return (

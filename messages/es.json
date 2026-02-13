@@ -3,8 +3,11 @@
     "brandName": "Copexia",
     "menu": {
       "home": "Inicio",
+      "identification": "Identificación",
       "services": "Servicios",
-      "about": "Sobre nosotros",
+      "about": "Nosotros",
+      "faro": "Método FARO",
+      "blog": "Artículos",
       "values": "Valores",
       "contact": "Contacto",
       "admin": "Admin",
@@ -581,41 +584,184 @@
     "about": {
       "eyebrow": "Sobre nosotros",
       "heading": "Gestión + Tecnología con enfoque humano",
-      "intro1": "Acompañamos a organizaciones que quieren evolucionar con soluciones viables, concretas y sostenibles.",
-      "intro2": "Desde 2021 combinamos herramientas tecnológicas con metodologías de gestión, enfoque humano y visión estratégica.",
-      "differential": "Nuestro diferencial: enfoque práctico, cercano y personalizado. Nada genérico: escuchamos, analizamos y diseñamos a medida.",
+      "intro1": "En Copexia acompañamos a empresas que necesitan ordenar procesos, profesionalizar su gestión y tomar decisiones basadas en información real.",
+      "intro2": "Trabajamos en mejora de procesos, análisis de datos y digitalización organizacional con soluciones viables y sostenibles.",
+      "intro3": "Desde 2021 combinamos herramientas tecnológicas, metodologías de gestión y enfoque humano para transformar la operación sin perder claridad estratégica.",
+      "differential": "No aplicamos fórmulas genéricas. Escuchamos, analizamos y diseñamos soluciones a medida, acompañando la implementación hasta que el cambio funcione en la práctica.",
       "meaningTitle": "¿Qué significa COPEXIA?",
       "meaningDesc": "El nombre surge de conceptos que definen nuestro enfoque.",
       "letters": {
         "C": {
-          "title": "Colaboración / Co-creación",
-          "desc": "Construimos en alianza con tus equipos."
+          "title": "Colaboración",
+          "desc": "Trabajamos en alianza con tu equipo. Las soluciones se construyen en conjunto para que sean viables y sostenibles."
         },
         "O": {
-          "title": "Organización / Oportunidad",
-          "desc": "Orden y aprovechamiento del potencial."
+          "title": "Organización",
+          "desc": "Ordenamos procesos, información y prioridades para transformar la improvisación en estructura clara."
         },
         "P": {
-          "title": "Personalización / Propósito",
-          "desc": "Cada proceso es único y con sentido."
+          "title": "Personalización",
+          "desc": "Diseñamos soluciones a medida, adaptadas a la realidad, recursos y objetivos de cada organización."
         },
         "E": {
-          "title": "Estrategia / Evolución",
-          "desc": "Planes reales, medibles y sostenibles."
+          "title": "Estrategia",
+          "desc": "Definimos planes concretos y medibles que alinean procesos, personas y decisiones con una dirección clara."
         },
         "X": {
-          "title": "Experiencia / eXcelencia",
-          "desc": "Cambio con impacto y ambición."
+          "title": "Excelencia",
+          "desc": "Trabajamos con profundidad, rigor y compromiso. No buscamos cambios superficiales, sino mejoras reales y sostenibles."
         },
         "I": {
           "title": "Innovación",
-          "desc": "Datos + creatividad para decidir mejor."
+          "desc": "Integramos datos, herramientas y nuevas formas de trabajo para impulsar decisiones más inteligentes y eficientes."
         },
         "A": {
-          "title": "Acompañamiento / Acción",
-          "desc": "Cerca, impulsando la ejecución."
+          "title": "Acompañamiento",
+          "desc": "Implementamos junto a tu equipo y damos seguimiento hasta que el cambio funcione en la práctica."
         }
       }
+    },
+    "painPoints": {
+      "eyebrow": "Identificación",
+      "heading": "¿Tu empresa está atravesando alguna de estas situaciones?",
+      "intro": "Tal vez no se trata de un gran problema visible, sino de señales que se repiten:",
+      "points": [
+        "Los procesos cambian según la persona que los ejecuta.",
+        "Hay retrabajos o tareas duplicadas.",
+        "Tomas decisiones por intuición, pero no tenés datos que te den mayor certeza.",
+        "Existen datos en Excel, pero no se usan para decidir.",
+        "No hay indicadores claros para evaluar resultados.",
+        "Se habla de implementar un sistema, pero no está claro cuál elegir.",
+        "Hay tensiones internas o bajo compromiso del equipo."
+      ],
+      "outro": "Si te identificás con uno o varios de estos puntos, podemos ayudarte."
+    },
+    "services": {
+      "eyebrow": "Servicios principales",
+      "block1": {
+        "title": "Mejora y Estandarización de Procesos Empresariales",
+        "desc": "Trabajamos con organizaciones que necesitan ordenar, documentar y optimizar sus procesos para reducir errores, retrabajos y dependencia de la improvisación.",
+        "includesTitle": "¿Qué incluye?",
+        "includes": [
+          "Mapeo y análisis de procesos (compras, ventas, administración, operaciones).",
+          "Identificación de cuellos de botella.",
+          "Definición de roles y responsabilidades.",
+          "Estandarización de procedimientos.",
+          "Aplicación de mejora continua (revisión sistemática para simplificar y optimizar).",
+          "Documentación clara y replicable."
+        ],
+        "resultTitle": "Resultado esperado",
+        "result": "Procesos claros, medibles y sostenibles que mejoran la eficiencia operativa.",
+        "needServiceTitle": "¿Cómo sé si necesito este servicio?",
+        "needItems": [
+          "Cada persona ejecuta las tareas “a su manera”.",
+          "Hay retrabajos frecuentes o errores repetitivos.",
+          "Los tiempos de entrega no son previsibles.",
+          "Dependes demasiado de ciertas personas clave.",
+          "No existen procedimientos documentados.",
+          "El crecimiento empieza a generar desorden interno."
+        ]
+      },
+      "block2": {
+        "title": "Análisis de Datos con Excel y Gestión por Indicadores",
+        "desc": "Muchas empresas ya cuentan con información valiosa, pero no la están utilizando estratégicamente. Organizamos, estructuramos y transformamos datos en decisiones concretas.",
+        "includesTitle": "¿Qué incluye?",
+        "includes": [
+          "Organización y limpieza de bases de datos en Excel.",
+          "Automatización de reportes.",
+          "Diseño de tableros de control.",
+          "Definición de indicadores clave de gestión (KPIs).",
+          "Análisis para toma de decisiones comerciales y operativas."
+        ],
+        "resultTitle": "Resultado esperado",
+        "result": "Decisiones respaldadas por datos claros y accesibles, comenzando con Excel y evolucionando según la necesidad.",
+        "needServiceTitle": "¿Cómo sé si necesito este servicio?",
+        "needItems": [
+          "Tomás decisiones principalmente por intuición.",
+          "Tenés información en Excel pero no está organizada.",
+          "Los reportes te llevan mucho tiempo y no aportan claridad.",
+          "No tenés indicadores definidos para medir desempeño.",
+          "No sabés si tu negocio realmente está creciendo o no.",
+          "Querés empezar a trabajar con datos sin implementar todavía un sistema complejo."
+        ]
+      },
+      "block3": {
+        "title": "Digitalización y Selección de Sistemas de Gestión",
+        "desc": "Cuando Excel ya no alcanza, acompañamos el proceso de evaluación, selección e implementación de sistemas de gestión adecuados a la realidad de cada empresa.",
+        "includesTitle": "¿Qué incluye?",
+        "includes": [
+          "Evaluación de necesidad real de digitalización.",
+          "Definición de requerimientos funcionales.",
+          "Comparación de opciones disponibles en el mercado.",
+          "Plan de implementación.",
+          "Acompañamiento en la adopción.",
+          "Seguimiento post implementación."
+        ],
+        "resultTitle": "Resultado esperado",
+        "result": "Digitalización estratégica con menor riesgo y mayor adopción del equipo.",
+        "needServiceTitle": "¿Cómo sé si necesito este servicio?",
+        "needItems": [
+          "Excel ya no soporta el volumen de información.",
+          "Tenés múltiples archivos desconectados entre sí.",
+          "La información no está centralizada.",
+          "No sabés qué sistema elegir.",
+          "Tenés miedo de invertir en un software que luego no se use.",
+          "Querés escalar pero la gestión actual no lo permite."
+        ]
+      },
+      "block4": {
+        "title": "Diagnóstico Organizacional, Clima y Satisfacción Laboral",
+        "desc": "Cuando el desempeño del equipo no refleja su potencial, analizamos la dinámica interna para identificar oportunidades de mejora.",
+        "includesTitle": "¿Qué incluye?",
+        "includes": [
+          "Evaluaciones de clima organizacional.",
+          "Evaluaciones de satisfacción laboral.",
+          "Evaluaciones de madurez organizacional.",
+          "Entrevistas estructuradas.",
+          "Recomendaciones accionables."
+        ],
+        "resultTitle": "Resultado esperado",
+        "result": "Información clara para tomar decisiones organizacionales fundamentadas.",
+        "needServiceTitle": "¿Cómo sé si necesito este servicio?",
+        "needItems": [
+          "Hay rotación frecuente o desmotivación.",
+          "Se percibe tensión entre áreas.",
+          "El rendimiento bajó sin causa técnica clara.",
+          "Existen conflictos recurrentes.",
+          "El equipo muestra resistencia al cambio.",
+          "Querés crecer pero la cultura actual no acompaña."
+        ]
+      }
+    },
+    "faro": {
+      "eyebrow": "Cómo trabajamos",
+      "heading": "Método FARO: claridad para decidir, estructura para avanzar",
+      "intro": "En Copexia trabajamos con un enfoque estructurado que nos permite acompañar a cada organización desde la identificación del problema hasta la mejora sostenida. Nuestro método FARO asegura análisis profundo, decisiones basadas en información y resultados concretos.",
+      "F": {
+        "letter": "F",
+        "name": "Fijar",
+        "subtitle": "Definir el punto de partida",
+        "desc": "Antes de intervenir, clarificamos objetivos, expectativas y contexto. Identificamos qué se quiere mejorar, por qué y con qué recursos se cuenta. Fijar implica ordenar el diagnóstico inicial y establecer metas claras y medibles."
+      },
+      "A": {
+        "letter": "A",
+        "name": "Analizar",
+        "subtitle": "Entender antes de actuar",
+        "desc": "Analizamos procesos, datos, dinámicas internas y sistemas existentes. Detectamos cuellos de botella, oportunidades de mejora y riesgos. Utilizamos herramientas de análisis de procesos, indicadores de gestión y evaluación organizacional para tomar decisiones fundamentadas."
+      },
+      "R": {
+        "letter": "R",
+        "name": "Revelar",
+        "subtitle": "Convertir información en claridad",
+        "desc": "Transformamos el análisis en conclusiones concretas. Revelamos patrones, causas raíz y prioridades estratégicas. Esta etapa permite que la organización vea con claridad dónde intervenir y qué impacto puede generar cada decisión."
+      },
+      "O": {
+        "letter": "O",
+        "name": "Optimizar",
+        "subtitle": "Implementar y sostener la mejora",
+        "desc": "Diseñamos soluciones personalizadas e implementamos junto al equipo. Acompañamos la ejecución, medimos resultados y ajustamos hasta lograr estabilidad y sostenibilidad. Optimizar no es hacer un cambio puntual: es asegurar que funcione en el tiempo."
+      },
+      "outro": "Este enfoque nos permite trabajar con estructura, claridad y resultados sostenibles."
     },
     "values": {
       "heading": "Valores de COPEXIA",
@@ -663,7 +809,7 @@
         },
         "location": {
           "title": "Ubicación",
-          "address": "San Miguel de Tucumán, Tucumán, Argentina"
+          "address": "San Miguel de Tucumán"
         }
       },
       "schedule": {

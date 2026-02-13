@@ -237,7 +237,7 @@ const HeroSection = () => {
 
         <p
           ref={subtitleRef}
-          className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground/90 mb-6 xs:mb-8 sm:mb-10 md:mb-14 max-w-4xl mx-auto leading-relaxed px-4"
+          className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground/90 mb-6 xs:mb-8 sm:mb-10 md:mb-14 max-w-6xl mx-auto leading-relaxed px-4"
         >
           {t('subtitle')}
         </p>
@@ -247,7 +247,7 @@ const HeroSection = () => {
           className="flex flex-row flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 max-w-2xl mx-auto"
         >
           <Link
-            href="#sobre-nosotros"
+            href="#servicios"
             data-cta
             className="relative overflow-hidden rounded-lg bg-primary px-5 xs:px-7 sm:px-9 py-3 xs:py-4 sm:py-5 text-sm xs:text-base sm:text-lg font-bold text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150 shadow-lg shadow-primary/20"
           >
@@ -258,7 +258,7 @@ const HeroSection = () => {
             <span className="relative z-10">{t('cta.services')}</span>
           </Link>
           <Link
-            href="#valores"
+            href="#sobre-nosotros"
             data-cta
             className="relative overflow-hidden rounded-lg border-2 border-primary/30 bg-background/50 px-5 xs:px-7 sm:px-9 py-3 xs:py-4 sm:py-5 text-sm xs:text-base sm:text-lg font-bold text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
           >

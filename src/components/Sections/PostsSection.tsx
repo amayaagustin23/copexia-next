@@ -137,10 +137,10 @@ export default function PostsSection() {
   }
 
   return (
-    <div className="w-full px-3 xs:px-4 py-10 xs:py-12 sm:py-16">
-      <div className="text-center mb-6 xs:mb-8 sm:mb-12">
+    <div className="w-full px-3 xs:px-4 py-12 xs:py-16 sm:py-20 lg:py-24">
+      <div className="text-center mb-12 xs:mb-16 sm:mb-20">
         <h2
-          className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold mb-3 xs:mb-4 sm:mb-6 leading-tight"
+          className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 xs:mb-4 sm:mb-6 leading-tight"
           data-animate
         >
           {t('title')}
@@ -223,8 +223,8 @@ export default function PostsSection() {
                       onClick={(e) => handleLike(post.id, e)}
                       disabled={likingPosts.has(post.id) || likesLoading}
                       className={`flex items-center gap-1 transition-colors touch-manipulation ${isLiked(post.id)
-                          ? 'text-red-500'
-                          : 'text-muted-foreground hover:text-red-500'
+                        ? 'text-red-500'
+                        : 'text-muted-foreground hover:text-red-500'
                         } ${likingPosts.has(post.id) || likesLoading
                           ? 'opacity-50 cursor-not-allowed'
                           : ''
@@ -250,7 +250,7 @@ export default function PostsSection() {
         ))}
       </div>
 
-      <div className="text-center mt-8 xs:mt-12" data-animate>
+      <div className="text-center mt-6 xs:mt-8" data-animate>
         <Button variant="outline" size="sm" className="xs:size-lg" asChild>
           <Link href={paths.path('posts')} className="text-xs xs:text-sm">
             {t('viewAllPosts')}

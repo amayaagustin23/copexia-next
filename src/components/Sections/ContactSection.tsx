@@ -17,8 +17,8 @@ const Map = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[300px] bg-muted/30 rounded-lg flex items-center justify-center">
-        <p className="text-muted-foreground text-sm">Cargando mapa...</p>
+      <div className="w-full min-h-[180px] bg-muted/30 rounded-lg flex items-center justify-center">
+        <p className="text-muted-foreground text-xs">Cargando mapa...</p>
       </div>
     ),
   }
@@ -147,20 +147,20 @@ export default function ContactSection() {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-10 xs:py-12 sm:py-16 lg:py-20 transition-all duration-700 ${isHovered ? 'transform translate-y-[-2px]' : ''
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-12 xs:py-16 sm:py-20 lg:py-24 transition-all duration-700 ${isHovered ? 'transform translate-y-[-2px]' : ''
           }`}
       >
         <header
-          className={`text-center mb-6 xs:mb-8 sm:mb-12 lg:mb-16 transition-all duration-700 will-change-transform ${inView
+          className={`text-center mb-12 xs:mb-16 sm:mb-20 transition-all duration-700 will-change-transform ${inView
             ? 'opacity-100 translate-y-0 scale-100'
             : 'opacity-0 translate-y-6 scale-95'
             }`}
         >
           <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
-            <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-bold mb-2 xs:mb-3 sm:mb-4">
+            <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-medium mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 leading-tight">
               {t('heading')}
             </h2>
             <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed px-4">
@@ -249,7 +249,7 @@ export default function ContactSection() {
                   zoom={13}
                   markerTitle="Copexia"
                   markerDescription={t('info.location.address')}
-                  className="h-[250px] xs:h-[300px] lg:h-[350px]"
+                  className="h-[180px] xs:h-[220px] lg:h-[280px]"
                 />
               )}
             </div>

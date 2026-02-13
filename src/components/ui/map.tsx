@@ -1,21 +1,7 @@
 'use client';
 
-import L from 'leaflet';
+import { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-
-// Fix for icon loading issues in Next.js
-const fixLeafletIcons = () => {
-  if (typeof window !== 'undefined' && L.Icon.Default) {
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-    });
-  }
-};
 
 interface MapProps {
   latitude: number;
@@ -26,6 +12,10 @@ interface MapProps {
   className?: string;
 }
 
+/**
+ * A robust Leaflet map component for Next.js.
+ * Uses a native Leaflet implementation to avoid common hydration and lifecycle issues with react-leaflet.
+ */
 export function Map({
   latitude,
   longitude,
@@ -34,56 +24,94 @@ export function Map({
   markerDescription,
   className = '',
 }: MapProps) {
-  const [isClient, setIsClient] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const leafletInstance = useRef<any>(null);
 
   useEffect(() => {
-    fixLeafletIcons();
-    setIsClient(true);
+    // Ensure we are in a browser environment
+    if (typeof window === 'undefined' || !mapRef.current) return;
 
-    // Trigger a resize event to ensure Leaflet calculates dimensions correctly
-    const timer = setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 1000);
+    let isCancelled = false;
 
-    return () => clearTimeout(timer);
-  }, []);
+    const initMap = async () => {
+      // Dynamic import to prevent SSR issues
+      const L = (await import('leaflet')).default;
 
-  if (!isClient) {
-    return (
-      <div className={`relative rounded-lg overflow-hidden bg-muted/20 flex items-center justify-center ${className}`}>
-        <div className="text-center p-4">
-          <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-2" />
-          <p className="text-muted-foreground text-xs">Cargando mapa...</p>
-        </div>
-      </div>
-    );
-  }
+      if (isCancelled || !mapRef.current) return;
+
+      // Clean up previous instance if it exists
+      if (leafletInstance.current) {
+        leafletInstance.current.remove();
+        leafletInstance.current = null;
+      }
+
+      // Fix for default Leaflet marker icons in Next.js
+      delete (L.Icon.Default.prototype as any)._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      });
+
+      try {
+        // Create map instance
+        const map = L.map(mapRef.current, {
+          center: [latitude, longitude],
+          zoom: zoom,
+          scrollWheelZoom: false,
+          dragging: !L.Browser.mobile,
+          touchZoom: true,
+        });
+
+        leafletInstance.current = map;
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Add a marker
+        const marker = L.marker([latitude, longitude]).addTo(map);
+
+        if (markerTitle || markerDescription) {
+          const popupContent = `
+            <div style="font-family: inherit; padding: 4px;">
+              <h5 style="margin: 0 0 4px 0; font-weight: 700; font-size: 14px;">${markerTitle}</h5>
+              ${markerDescription ? `<p style="margin: 0; font-size: 12px; color: #666; line-height: 1.4;">${markerDescription}</p>` : ''}
+            </div>
+          `;
+          marker.bindPopup(popupContent, { closeButton: false });
+          marker.openPopup();
+        }
+
+        // Force a resize calculation to fix partial loading/rendering bugs
+        setTimeout(() => {
+          if (!isCancelled && map) {
+            map.invalidateSize();
+          }
+        }, 300);
+
+      } catch (error) {
+        console.error('Error initializing Leaflet map:', error);
+      }
+    };
+
+    initMap();
+
+    return () => {
+      isCancelled = true;
+      if (leafletInstance.current) {
+        leafletInstance.current.remove();
+        leafletInstance.current = null;
+      }
+    };
+  }, [latitude, longitude, zoom, markerTitle, markerDescription]);
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${className}`} style={{ height: '100%', minHeight: '300px' }}>
-      <MapContainer
-        key={`${latitude}-${longitude}`}
-        center={[latitude, longitude]}
-        zoom={zoom}
-        scrollWheelZoom={false}
-        style={{ height: '100%', width: '100%' }}
-        className="z-0"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={[latitude, longitude]}>
-          {(markerTitle || markerDescription) && (
-            <Popup>
-              <div className="p-1">
-                {markerTitle && <div className="font-bold text-sm mb-1">{markerTitle}</div>}
-                {markerDescription && <div className="text-xs text-muted-foreground">{markerDescription}</div>}
-              </div>
-            </Popup>
-          )}
-        </Marker>
-      </MapContainer>
-    </div>
+    <div
+      ref={mapRef}
+      className={`w-full rounded-lg bg-muted/20 border border-border/50 overflow-hidden shadow-inner ${className}`}
+      style={{ minHeight: '180px', height: '100%' }}
+    />
   );
 }

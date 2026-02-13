@@ -147,16 +147,16 @@ export default function ValuesSection() {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-10 xs:py-12 sm:py-16 lg:py-20 transition-all duration-300 ${isHovered ? 'transform translate-y-[-1px]' : ''
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-12 xs:py-16 sm:py-20 lg:py-24 transition-all duration-300 ${isHovered ? 'transform translate-y-[-1px]' : ''
           }`}
       >
         <header
-          className={`mb-4 xs:mb-6 sm:mb-8 text-center transition-all duration-700 will-change-transform ${inView
-              ? 'opacity-100 translate-y-0 scale-100'
-              : 'opacity-0 translate-y-6 scale-95'
+          className={`mb-12 xs:mb-16 sm:mb-20 text-center transition-all duration-700 will-change-transform ${inView
+            ? 'opacity-100 translate-y-0 scale-100'
+            : 'opacity-0 translate-y-6 scale-95'
             }`}
         >
-          <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight">
+          <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
             {t('heading')}
           </h2>
           <p className="mt-3 text-xs xs:text-sm sm:text-base text-muted-foreground px-4 max-w-2xl mx-auto leading-relaxed">
@@ -229,8 +229,8 @@ export default function ValuesSection() {
           role="tabpanel"
           aria-labelledby={`value-tab-${active}`}
           className={`mx-auto mt-3 xs:mt-4 sm:mt-6 max-w-full w-full rounded-lg xs:rounded-xl sm:rounded-2xl border border-border bg-card p-3 xs:p-4 sm:p-6 shadow-sm flex flex-col items-center text-center transition-all duration-600 will-change-transform ${inView
-              ? 'opacity-100 translate-y-0 scale-100'
-              : 'opacity-0 translate-y-4 scale-95'
+            ? 'opacity-100 translate-y-0 scale-100'
+            : 'opacity-0 translate-y-4 scale-95'
             } ${isHovered ? 'shadow-lg scale-[1.02]' : ''}`}
           style={{
             animation: 'valuesFade 600ms ease-out',
