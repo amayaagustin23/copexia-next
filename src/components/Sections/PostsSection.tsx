@@ -140,13 +140,13 @@ export default function PostsSection() {
     <div className="w-full px-3 xs:px-4 py-10 xs:py-12 sm:py-16">
       <div className="text-center mb-6 xs:mb-8 sm:mb-12">
         <h2
-          className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold mb-2 xs:mb-3 sm:mb-4 leading-tight"
+          className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold mb-3 xs:mb-4 sm:mb-6 leading-tight"
           data-animate
         >
           {t('title')}
         </h2>
         <p
-          className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2"
+          className="text-xs xs:text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed px-4"
           data-animate
         >
           {t('description')}
@@ -181,7 +181,7 @@ export default function PostsSection() {
                     <Badge
                       key={postCategory.id}
                       variant="secondary"
-                      className="bg-white/90 text-black text-[10px] xs:text-xs px-1 xs:px-2 py-0.5"
+                      className="bg-white/90 text-black text-xs px-2 py-1 font-bold shadow-sm"
                     >
                       {postCategory.category.name}
                     </Badge>
@@ -190,10 +190,10 @@ export default function PostsSection() {
               </div>
 
               <CardHeader className="p-2 xs:p-3 sm:p-6">
-                <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-1 xs:py-2 sm:py-4 text-xs xs:text-sm sm:text-base leading-tight">
+                <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-1 xs:py-2 sm:py-4 text-sm xs:text-base sm:text-lg font-bold leading-tight">
                   {post.title}
                 </CardTitle>
-                <CardDescription className="line-clamp-2 xs:line-clamp-3 text-[10px] xs:text-xs sm:text-sm leading-relaxed">
+                <CardDescription className="line-clamp-2 xs:line-clamp-3 text-xs xs:text-sm sm:text-base leading-relaxed">
                   {post.excerpt}
                 </CardDescription>
               </CardHeader>
@@ -222,20 +222,17 @@ export default function PostsSection() {
                     <button
                       onClick={(e) => handleLike(post.id, e)}
                       disabled={likingPosts.has(post.id) || likesLoading}
-                      className={`flex items-center gap-1 transition-colors touch-manipulation ${
-                        isLiked(post.id)
+                      className={`flex items-center gap-1 transition-colors touch-manipulation ${isLiked(post.id)
                           ? 'text-red-500'
                           : 'text-muted-foreground hover:text-red-500'
-                      } ${
-                        likingPosts.has(post.id) || likesLoading
+                        } ${likingPosts.has(post.id) || likesLoading
                           ? 'opacity-50 cursor-not-allowed'
                           : ''
-                      }`}
+                        }`}
                     >
                       <Heart
-                        className={`h-3 w-3 xs:h-4 xs:w-4 transition-transform ${
-                          isLiked(post.id) ? 'fill-current' : ''
-                        } ${likingPosts.has(post.id) ? 'animate-pulse' : ''}`}
+                        className={`h-3 w-3 xs:h-4 xs:w-4 transition-transform ${isLiked(post.id) ? 'fill-current' : ''
+                          } ${likingPosts.has(post.id) ? 'animate-pulse' : ''}`}
                       />
                     </button>
                     <Button

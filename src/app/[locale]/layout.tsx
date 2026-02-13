@@ -32,7 +32,7 @@ export async function generateMetadata({
   const locale = awaitedParams.locale;
 
   const t = await getTranslations({ locale, namespace: 'metadata' });
-  const baseUrl = 'https://copexia.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dev.copexia.amayadev.cloud';
   const currentUrl = `${baseUrl}/${locale}`;
 
   return {
@@ -194,7 +194,7 @@ export async function generateMetadata({
       'DC.format': 'text/html',
     },
     verification: {
-      google: 'your-google-verification-code',
+      google: 'd1eb46f2425810a7',
       yandex: 'your-yandex-verification-code',
       yahoo: 'your-yahoo-verification-code',
     },

@@ -128,7 +128,7 @@ export default function CommentsSection({
             if (profile) {
               login(profile);
             }
-          } catch (profileError) {}
+          } catch (profileError) { }
         }
       }
     } catch (error) {
@@ -222,16 +222,16 @@ export default function CommentsSection({
         } else if (!error && !showCommentForm) {
           return (
             <Card>
-              <CardContent className="p-8 text-center">
-                <MessageCircle className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">{t('noComments')}</h3>
-                <p className="text-muted-foreground mb-4">
+              <CardContent className="p-6 xs:p-8 sm:p-12 text-center">
+                <MessageCircle className="w-12 h-12 xs:w-16 xs:h-16 mx-auto text-muted-foreground/60 mb-4 xs:mb-6" />
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold mb-3 xs:mb-4">{t('noComments')}</h3>
+                <p className="text-sm xs:text-base text-muted-foreground mb-6 xs:mb-8 max-w-md mx-auto leading-relaxed">
                   {t('noCommentsDescription')}
                 </p>
                 <Button
                   onClick={() => setShowCommentForm(true)}
                   size="lg"
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-primary hover:bg-primary/90 text-sm xs:text-base font-bold h-10 xs:h-12 px-8"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t('beFirst')}

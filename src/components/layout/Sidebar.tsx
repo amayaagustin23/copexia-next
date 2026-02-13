@@ -27,14 +27,18 @@ const IconMap = {
 } as const;
 
 interface SidebarProps {
-  isCollapsed?: boolean;
-  onToggleCollapse?: () => void;
+  isMobileOpen?: boolean;
+  isDesktopCollapsed?: boolean;
+  onMobileClose?: () => void;
+  onDesktopToggle?: () => void;
 }
 
 export const Sidebar = ({
-  isCollapsed: externalCollapsed,
-  onToggleCollapse,
-}: SidebarProps = {}) => {
+  isMobileOpen = false,
+  isDesktopCollapsed = false,
+  onMobileClose,
+  onDesktopToggle,
+}: SidebarProps) => {
   const pathname = usePathname() || '/';
   const router = useRouter();
   const t = useTranslations('Sidebar');
@@ -53,20 +57,6 @@ export const Sidebar = ({
     });
   }, [rawLinks]);
 
-  const [internalCollapsed, setInternalCollapsed] = useState(false);
-
-  // Usar el estado externo si está disponible, sino usar el interno
-  const isCollapsed =
-    externalCollapsed !== undefined ? externalCollapsed : internalCollapsed;
-  const setIsCollapsed = onToggleCollapse || setInternalCollapsed;
-
-  useEffect(() => {
-    if (externalCollapsed === undefined) {
-      const media = window.matchMedia('(max-width: 768px)');
-      setInternalCollapsed(media.matches);
-    }
-  }, [externalCollapsed]);
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -78,43 +68,67 @@ export const Sidebar = ({
   return (
     <aside
       className={cn(
-        'border-r border-border min-h-screen flex flex-col transition-all duration-300 bg-card fixed left-0 top-0 z-40',
-        isCollapsed ? 'w-24' : 'w-64',
-        // En móviles, ocultar cuando está colapsado
-        isCollapsed && 'md:translate-x-0 -translate-x-full'
+        'fixed left-0 top-0 z-40 h-screen bg-card border-r border-border flex flex-col transition-all duration-300',
+        // Width Control
+        isDesktopCollapsed ? 'w-20' : 'w-64',
+        // Mobile visibility (Off-canvas)
+        'transform',
+        isMobileOpen ? 'translate-x-0' : '-translate-x-full',
+        // Desktop visibility (Always visible, reset transform)
+        'md:translate-x-0'
       )}
     >
-      <div className="flex items-center justify-between p-3 sm:p-4 border-b border-border">
+      <div className={cn("flex items-center p-4 border-b border-border", isDesktopCollapsed ? "justify-center" : "justify-between")}>
         <Link
           href={paths.admin.dashboard}
           className={cn(
-            'flex items-center min-w-0',
-            isCollapsed ? 'flex-1' : 'gap-2'
+            'flex items-center min-w-0 transition-opacity',
+            isDesktopCollapsed ? 'hidden' : 'flex gap-2'
           )}
         >
           <Image
             src="/images/logo-copexia.png"
             alt="Logo"
-            width={40}
-            height={40}
-            className="object-contain transition-all duration-300 flex-shrink-0"
+            width={32}
+            height={32}
+            className="object-contain"
           />
-          {!isCollapsed && (
-            <span className="font-bold text-sm sm:text-base lg:text-lg transition-opacity truncate">
-              {t('panelTitle')}
-            </span>
-          )}
+          <span className="font-bold text-sm sm:text-base lg:text-lg truncate">
+            {t('panelTitle')}
+          </span>
         </Link>
+
+        {/* Logo icon only when collapsed */}
+        {isDesktopCollapsed && (
+          <Link href={paths.admin.dashboard}>
+            <Image
+              src="/images/logo-copexia.png"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
+          </Link>
+        )}
+
+        {/* Desktop Toggle Button */}
         <button
-          onClick={() => setIsCollapsed((prev) => !prev)}
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Toggle sidebar'}
-          className={cn(
-            'text-muted-foreground hover:text-foreground transition-colors',
-            isCollapsed ? 'p-1' : 'ml-auto p-1'
-          )}
+          onClick={onDesktopToggle}
+          aria-label={isDesktopCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors p-1"
           type="button"
         >
-          <List className="w-4 h-4 sm:w-5 sm:h-5" />
+          <List className="w-5 h-5" />
+        </button>
+
+        {/* Mobile Close Button */}
+        <button
+          onClick={onMobileClose}
+          aria-label="Close sidebar"
+          className="md:hidden text-muted-foreground hover:text-foreground transition-colors p-1"
+          type="button"
+        >
+          <List className="w-6 h-6" />
         </button>
       </div>
 
@@ -124,84 +138,49 @@ export const Sidebar = ({
           href={paths.root}
           className={cn(
             'flex items-center gap-3 px-3 py-2 w-full text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors',
-            isCollapsed ? 'justify-center' : ''
+            isDesktopCollapsed ? 'justify-center' : ''
           )}
+          title={isDesktopCollapsed ? t('goHome') : undefined}
         >
           <Home
             className={cn(
               'flex-shrink-0 transition-all duration-300',
-              isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+              isDesktopCollapsed ? 'w-6 h-6' : 'w-5 h-5'
             )}
           />
-          {!isCollapsed && <span className="truncate">{t('goHome')}</span>}
+          {!isDesktopCollapsed && <span className="truncate">{t('goHome')}</span>}
         </Link>
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto border-t border-border pt-2">
-        {(() => {
-          // Primero determinar cuál enlace debe estar activo
-          const activeLink = (() => {
-            // Buscar coincidencia exacta primero
-            const exactMatch = links.find(
-              (link) => pathname === link.href || pathname === `${link.href}/`
-            );
-            if (exactMatch) return exactMatch;
+        {links.map(({ href, label, iconName }, idx) => {
+          const Icon = IconMap[iconName as keyof typeof IconMap];
+          // Simple active check for now, can be improved with the previous logic if strictly needed
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
-            // Buscar la coincidencia más específica para rutas anidadas
-            const pathSegments = pathname.split('/').filter(Boolean);
-            let bestMatch = null;
-            let maxMatchingSegments = 0;
-
-            for (const link of links) {
-              const hrefSegments = link.href.split('/').filter(Boolean);
-
-              // Si la ruta actual comienza con esta href
-              if (pathSegments.length >= hrefSegments.length) {
-                const matchingSegments = hrefSegments.filter(
-                  (segment, index) => pathSegments[index] === segment
-                ).length;
-
-                if (
-                  matchingSegments === hrefSegments.length &&
-                  matchingSegments > maxMatchingSegments
-                ) {
-                  bestMatch = link;
-                  maxMatchingSegments = matchingSegments;
-                }
-              }
-            }
-
-            return bestMatch;
-          })();
-
-          return links.map(({ href, label, iconName }, idx) => {
-            const Icon = IconMap[iconName as keyof typeof IconMap];
-            const isActive = activeLink?.href === href;
-
-            return (
-              <Link
-                key={`${href}#${idx}`}
-                href={href}
-                className={cn(
-                  'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent',
-                  isActive && 'bg-accent text-accent-foreground',
-                  isCollapsed && 'justify-center'
-                )}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                {Icon && (
-                  <Icon
-                    className={cn(
-                      'transition-all duration-300',
-                      isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
-                    )}
-                  />
-                )}
-                {!isCollapsed && <span>{label}</span>}
-              </Link>
-            );
-          });
-        })()}
+          return (
+            <Link
+              key={`${href}#${idx}`}
+              href={href}
+              className={cn(
+                'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent',
+                isActive && 'bg-accent text-accent-foreground',
+                isDesktopCollapsed && 'justify-center'
+              )}
+              title={isDesktopCollapsed ? label : undefined}
+            >
+              {Icon && (
+                <Icon
+                  className={cn(
+                    'transition-all duration-300',
+                    isDesktopCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+                  )}
+                />
+              )}
+              {!isDesktopCollapsed && <span>{label}</span>}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="p-4 border-t border-border">
@@ -210,16 +189,17 @@ export const Sidebar = ({
           type="button"
           className={cn(
             'flex items-center gap-3 px-3 py-2 w-full text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors',
-            isCollapsed ? 'justify-center' : ''
+            isDesktopCollapsed ? 'justify-center' : ''
           )}
+          title={isDesktopCollapsed ? t('logout') : undefined}
         >
           <LogOut
             className={cn(
               'flex-shrink-0 transition-all duration-300',
-              isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
+              isDesktopCollapsed ? 'w-6 h-6' : 'w-5 h-5'
             )}
           />
-          {!isCollapsed && <span className="truncate">{t('logout')}</span>}
+          {!isDesktopCollapsed && <span className="truncate">{t('logout')}</span>}
         </button>
       </div>
     </aside>

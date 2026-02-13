@@ -502,6 +502,66 @@
       "newPost": "New post",
       "manageCategories": "Manage categories",
       "viewAnalytics": "View analytics"
+    },
+    "newPost": "New Post",
+    "error": "Error loading dashboard data",
+    "stats": {
+      "totalSessions": "Total Sessions",
+      "activeInteractions": "Active interactions",
+      "uniqueUsers": "Unique Users",
+      "distinctVisitors": "Distinct visitors",
+      "pageViews": "Page Views",
+      "sectionsNavigated": "Sections navigated",
+      "avgTime": "Avg Time",
+      "perSession": "Per session",
+      "totalEvents": "Total Events",
+      "engagementScore": "Registered actions",
+      "totalPosts": "Total Posts",
+      "publishedDrafts": "{published} published • {drafts} drafts",
+      "totalViews": "Total Views",
+      "globalReach": "Global content reach",
+      "totalComments": "Total Comments",
+      "communityInteractions": "Community interactions",
+      "totalLikes": "Total Likes",
+      "userAppreciation": "User appreciation"
+    },
+    "charts": {
+      "visitsTrend": "Sessions Trend",
+      "dailyActivity": "Daily activity in the last 30 days",
+      "sessions": "Sessions",
+      "devices": "Devices",
+      "distributionByType": "Distribution by type",
+      "other": "Other",
+      "topPages": "Top Visited Sections",
+      "mostInterestedAreas": "Areas with most interest",
+      "views": "views",
+      "browsers": "Browsers",
+      "userTech": "User technology",
+      "bounceRate": "Bounce Rate",
+      "avgDuration": "Avg Duration",
+      "noVisitsData": "No visit data yet",
+      "engagementLevels": "Interaction Levels",
+      "operatingSystems": "Operating Systems",
+      "deviceTypes": {
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "tablet": "Tablet"
+      },
+      "engagementTypes": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "count": "Count"
+    },
+    "activity": {
+      "recentPosts": "Top Interactive Posts",
+      "latestCreated": "Posts with most likes and comments",
+      "published": "Published",
+      "draft": "Draft",
+      "recentComments": "Recent Comments",
+      "latestInteractions": "Latest user interactions",
+      "on": "on"
     }
   },
   "CookieConsent": {

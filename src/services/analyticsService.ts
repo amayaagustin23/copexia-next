@@ -5,9 +5,7 @@ export interface AnalyticsSummary {
     totalSessions: number;
     uniqueVisitors: number;
     totalEvents: number;
-    avgSessionDuration: number;
     averageScrollDepth: number;
-    bounceRate: number;
     topPages: Array<{
         page: string;
         visits: number;
@@ -23,6 +21,10 @@ export interface AnalyticsSummary {
     dailyVisits: Array<{
         date: string;
         visits: number;
+    }>;
+    osBreakdown: Array<{
+        os: string;
+        count: number;
     }>;
 }
 

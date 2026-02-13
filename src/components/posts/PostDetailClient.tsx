@@ -99,46 +99,46 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-6 xs:mb-8">
             <Button
               variant="ghost"
               onClick={() => router.back()}
-              className="hover:bg-muted transition-colors"
+              className="hover:bg-muted transition-colors text-sm xs:text-base font-medium px-2 xs:px-4"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 xs:h-5 xs:w-5 mr-2" />
               {t('back')}
             </Button>
           </div>
 
-          <header className="mb-8">
-            <div className="flex flex-wrap gap-2 mb-4">
+          <header className="mb-6 xs:mb-8 sm:mb-10">
+            <div className="flex flex-wrap gap-2 mb-4 xs:mb-6">
               {post.categories.map((postCategory) => (
                 <Badge
                   key={postCategory.id}
                   variant="secondary"
-                  className="bg-primary/10 text-primary"
+                  className="bg-primary/10 text-primary px-2 xs:px-3 py-1 text-xs xs:text-sm font-bold"
                 >
-                  <Tag className="h-3 w-3 mr-1" />
+                  <Tag className="h-3 w-3 xs:h-4 xs:w-4 mr-1.5" />
                   {postCategory.category.name}
                 </Badge>
               ))}
             </div>
 
-            <h1 className="text-4xl font-bold mb-4 leading-tight">
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold mb-4 xs:mb-6 leading-tight tracking-tight">
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-6 text-muted-foreground mb-6">
+            <div className="flex flex-wrap items-center gap-4 xs:gap-6 text-xs xs:text-sm sm:text-base text-muted-foreground mb-4">
               {post.publishedAt && (
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(post.publishedAt)}</span>
+                  <Calendar className="h-4 w-4 xs:h-5 xs:w-5" />
+                  <span className="font-medium">{formatDate(post.publishedAt)}</span>
                 </div>
               )}
 
               <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4" />
-                <span>
+                <Eye className="h-4 w-4 xs:h-5 xs:w-5" />
+                <span className="font-medium">
                   {post.viewCount} {t('views')}
                 </span>
               </div>
@@ -164,10 +164,10 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
             )}
           </div>
 
-          <Card className="mb-8">
-            <CardContent className="p-8">
+          <Card className="mb-8 overflow-hidden shadow-sm border-border/60">
+            <CardContent className="p-4 xs:p-6 sm:p-10">
               <div
-                className="prose prose-lg max-w-none dark:prose-invert"
+                className="prose prose-sm xs:prose-base sm:prose-lg md:prose-xl max-w-none dark:prose-invert prose-headings:font-bold prose-p:leading-relaxed prose-img:rounded-xl"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </CardContent>
@@ -189,8 +189,8 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
                     onClick={handleLike}
                     disabled={liking || likesLoading}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${isLiked(post.id)
-                        ? 'text-red-500 bg-red-50 hover:bg-red-100'
-                        : 'text-muted-foreground hover:text-red-500 hover:bg-red-50'
+                      ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                      : 'text-muted-foreground hover:text-red-500 hover:bg-red-50'
                       } ${liking || likesLoading
                         ? 'opacity-50 cursor-not-allowed'
                         : ''

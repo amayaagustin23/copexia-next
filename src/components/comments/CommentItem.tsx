@@ -69,7 +69,7 @@ export default function CommentItem({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-medium text-sm">
+              <span className="font-bold text-sm xs:text-base">
                 {comment.authorWebsite ? (
                   <a
                     href={comment.authorWebsite}
@@ -85,7 +85,7 @@ export default function CommentItem({
                 )}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-[10px] xs:text-xs text-muted-foreground font-medium">
               <Calendar className="w-3 h-3" />
               {formatDate(comment.createdAt)}
             </div>
@@ -93,8 +93,8 @@ export default function CommentItem({
         </div>
       </div>
 
-      <div className="mb-3">
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">
+      <div className="mb-4">
+        <p className="text-sm xs:text-base leading-relaxed whitespace-pre-wrap text-foreground/90">
           {comment.content}
         </p>
       </div>
@@ -117,7 +117,7 @@ export default function CommentItem({
             variant="ghost"
             size="sm"
             onClick={() => setShowReplies(!showReplies)}
-            className="text-xs"
+            className="text-[11px] xs:text-xs font-bold text-primary hover:text-primary/80"
           >
             <MessageCircle className="w-3 h-3 mr-1" />
             {showReplies ? t('hideReplies') : t('showReplies')} (
@@ -161,9 +161,8 @@ export default function CommentItem({
 
   return (
     <div
-      className={`${
-        isMainComment ? '' : 'ml-6 border-l-2 border-primary pl-4 pt-3'
-      }`}
+      className={`${isMainComment ? '' : 'ml-6 border-l-2 border-primary pl-4 pt-3'
+        }`}
     >
       {isMainComment ? (
         <Card>

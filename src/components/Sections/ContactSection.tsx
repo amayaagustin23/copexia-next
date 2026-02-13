@@ -92,12 +92,12 @@ export default function ContactSection() {
 
         toast.success(
           response.message ||
-            'Mensaje enviado exitosamente. Te responderemos pronto.'
+          'Mensaje enviado exitosamente. Te responderemos pronto.'
         );
       } else {
         toast.error(
           response.message ||
-            'Hubo un error al enviar el mensaje. Inténtalo de nuevo.'
+          'Hubo un error al enviar el mensaje. Inténtalo de nuevo.'
         );
       }
     } catch (error: any) {
@@ -147,25 +147,23 @@ export default function ContactSection() {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-10 xs:py-12 sm:py-16 lg:py-20 transition-all duration-700 ${
-          isHovered ? 'transform translate-y-[-2px]' : ''
-        }`}
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 py-10 xs:py-12 sm:py-16 lg:py-20 transition-all duration-700 ${isHovered ? 'transform translate-y-[-2px]' : ''
+          }`}
       >
         <header
-          className={`text-center mb-6 xs:mb-8 sm:mb-12 lg:mb-16 transition-all duration-700 will-change-transform ${
-            inView
-              ? 'opacity-100 translate-y-0 scale-100'
-              : 'opacity-0 translate-y-6 scale-95'
-          }`}
+          className={`text-center mb-6 xs:mb-8 sm:mb-12 lg:mb-16 transition-all duration-700 will-change-transform ${inView
+            ? 'opacity-100 translate-y-0 scale-100'
+            : 'opacity-0 translate-y-6 scale-95'
+            }`}
         >
           <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
-            <p className="text-[9px] xs:text-[10px] sm:text-[11px] tracking-wider uppercase text-muted-foreground mb-2 xs:mb-3 sm:mb-4">
+            <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-bold mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight mb-2 xs:mb-3 sm:mb-4 leading-tight">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 leading-tight">
               {t('heading')}
             </h2>
-            <p className="text-[10px] xs:text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
+            <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed px-4">
               {t('subtitle')}
             </p>
           </div>
@@ -173,9 +171,8 @@ export default function ContactSection() {
 
         <div className="grid lg:grid-cols-2 gap-4 xs:gap-6 sm:gap-8 lg:gap-12">
           <div
-            className={`space-y-6 xs:space-y-8 transition-all duration-600 will-change-transform ${
-              inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+            className={`space-y-6 xs:space-y-8 transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
             style={{ transitionDelay: inView ? '200ms' : '0ms' }}
           >
             <div>
@@ -185,11 +182,10 @@ export default function ContactSection() {
                   return (
                     <div
                       key={index}
-                      className={`flex items-start gap-2 xs:gap-3 sm:gap-4 p-2 xs:p-3 sm:p-4 rounded-lg xs:rounded-xl border border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all duration-300 group ${
-                        inView
-                          ? 'opacity-100 translate-y-0'
-                          : 'opacity-0 translate-y-4'
-                      }`}
+                      className={`flex items-start gap-2 xs:gap-3 sm:gap-4 p-2 xs:p-3 sm:p-4 rounded-lg xs:rounded-xl border border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all duration-300 group ${inView
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-4'
+                        }`}
                       style={{
                         transitionDelay: inView
                           ? `${400 + index * 100}ms`
@@ -200,18 +196,18 @@ export default function ContactSection() {
                         <Icon className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-[10px] xs:text-xs sm:text-sm mb-1 group-hover:text-primary transition-colors duration-200">
+                        <h4 className="font-bold text-xs xs:text-sm sm:text-base mb-1 group-hover:text-primary transition-colors duration-200">
                           {item.title}
                         </h4>
                         {item.href && item.href !== '#' ? (
                           <a
                             href={item.href}
-                            className="text-[9px] xs:text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors duration-200 break-words"
+                            className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground/90 hover:text-primary transition-colors duration-200 break-words font-medium"
                           >
                             {item.content}
                           </a>
                         ) : (
-                          <p className="text-[9px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                          <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground/90 leading-relaxed font-medium">
                             {item.content}
                           </p>
                         )}
@@ -224,18 +220,17 @@ export default function ContactSection() {
 
             {/* Horarios de atención */}
             <div
-              className={`p-4 xs:p-6 rounded-lg xs:rounded-xl border border-border/50 bg-card/30 transition-all duration-600 will-change-transform ${
-                inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
+              className={`p-4 xs:p-6 rounded-lg xs:rounded-xl border border-border/50 bg-card/30 transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}
               style={{ transitionDelay: inView ? '800ms' : '0ms' }}
             >
-              <h4 className="font-semibold text-xs xs:text-sm mb-2 xs:mb-3">
+              <h4 className="font-bold text-sm xs:text-base mb-3 xs:mb-4 text-foreground/90">
                 {t('schedule.title')}
               </h4>
-              <div className="space-y-1 xs:space-y-2 text-xs xs:text-sm text-muted-foreground">
+              <div className="space-y-2 xs:space-y-3 text-xs xs:text-sm sm:text-base text-muted-foreground">
                 <p>{t('schedule.weekdays')}</p>
                 <p>{t('schedule.weekend')}</p>
-                <p className="text-[10px] xs:text-xs mt-2 text-muted-foreground/70 leading-relaxed">
+                <p className="text-[11px] xs:text-xs mt-3 text-muted-foreground/80 leading-relaxed font-medium">
                   {t('schedule.note')}
                 </p>
               </div>
@@ -243,27 +238,27 @@ export default function ContactSection() {
 
             {/* Mapa de ubicación */}
             <div
-              className={`rounded-lg xs:rounded-xl border border-border/50 bg-card/30 overflow-hidden transition-all duration-600 will-change-transform ${
-                inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
+              className={`rounded-lg xs:rounded-xl border border-border/50 bg-card/30 overflow-hidden transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}
               style={{ transitionDelay: inView ? '900ms' : '0ms' }}
             >
-              <Map
-                latitude={-26.8241}
-                longitude={-65.2226}
-                zoom={13}
-                markerTitle="Copexia"
-                markerDescription={t('info.location.address')}
-                className="h-[250px] xs:h-[300px] lg:h-[350px]"
-              />
+              {inView && (
+                <Map
+                  latitude={-26.8241}
+                  longitude={-65.2226}
+                  zoom={13}
+                  markerTitle="Copexia"
+                  markerDescription={t('info.location.address')}
+                  className="h-[250px] xs:h-[300px] lg:h-[350px]"
+                />
+              )}
             </div>
           </div>
 
           {/* Formulario de contacto */}
           <div
-            className={`transition-all duration-600 will-change-transform ${
-              inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+            className={`transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
             style={{ transitionDelay: inView ? '400ms' : '0ms' }}
           >
             <div className="p-4 xs:p-6 lg:p-8 rounded-lg xs:rounded-xl lg:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm">
@@ -287,11 +282,10 @@ export default function ContactSection() {
                       type="text"
                       id="fullName"
                       {...form.register('fullName')}
-                      className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                        form.formState.errors.fullName
-                          ? 'border-destructive bg-destructive/5'
-                          : 'border-border bg-background hover:border-primary/30 focus:border-primary'
-                      }`}
+                      className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${form.formState.errors.fullName
+                        ? 'border-destructive bg-destructive/5'
+                        : 'border-border bg-background hover:border-primary/30 focus:border-primary'
+                        }`}
                       placeholder={t('form.name.placeholder')}
                       disabled={form.formState.isSubmitting}
                     />
@@ -313,11 +307,10 @@ export default function ContactSection() {
                       type="email"
                       id="email"
                       {...form.register('email')}
-                      className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                        form.formState.errors.email
-                          ? 'border-destructive bg-destructive/5'
-                          : 'border-border bg-background hover:border-primary/30 focus:border-primary'
-                      }`}
+                      className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${form.formState.errors.email
+                        ? 'border-destructive bg-destructive/5'
+                        : 'border-border bg-background hover:border-primary/30 focus:border-primary'
+                        }`}
                       placeholder={t('form.email.placeholder')}
                       disabled={form.formState.isSubmitting}
                     />
@@ -340,11 +333,10 @@ export default function ContactSection() {
                     type="text"
                     id="subject"
                     {...form.register('subject')}
-                    className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${
-                      form.formState.errors.subject
-                        ? 'border-destructive bg-destructive/5'
-                        : 'border-border bg-background hover:border-primary/30 focus:border-primary'
-                    }`}
+                    className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs xs:text-sm ${form.formState.errors.subject
+                      ? 'border-destructive bg-destructive/5'
+                      : 'border-border bg-background hover:border-primary/30 focus:border-primary'
+                      }`}
                     placeholder={t('form.subject.placeholder')}
                     disabled={form.formState.isSubmitting}
                   />
@@ -366,11 +358,10 @@ export default function ContactSection() {
                     id="message"
                     rows={4}
                     {...form.register('message')}
-                    className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none text-xs xs:text-sm ${
-                      form.formState.errors.message
-                        ? 'border-destructive bg-destructive/5'
-                        : 'border-border bg-background hover:border-primary/30 focus:border-primary'
-                    }`}
+                    className={`w-full px-3 xs:px-4 py-2 xs:py-3 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none text-xs xs:text-sm ${form.formState.errors.message
+                      ? 'border-destructive bg-destructive/5'
+                      : 'border-border bg-background hover:border-primary/30 focus:border-primary'
+                      }`}
                     placeholder={t('form.message.placeholder')}
                     disabled={form.formState.isSubmitting}
                   />

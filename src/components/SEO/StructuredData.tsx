@@ -4,21 +4,21 @@ import { useTranslations } from 'next-intl';
 
 interface StructuredDataProps {
   type:
-    | 'organization'
-    | 'website'
-    | 'breadcrumb'
-    | 'article'
-    | 'localBusiness'
-    | 'faq';
+  | 'organization'
+  | 'website'
+  | 'breadcrumb'
+  | 'article'
+  | 'localBusiness'
+  | 'faq';
   data?: any;
   locale?: string;
 }
 
 export function StructuredData({ type, data, locale = 'es' }: StructuredDataProps) {
   const t = useTranslations('metadata');
-  
+
   const getStructuredData = () => {
-    const baseUrl = 'https://copexia.com';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dev.copexia.amayadev.cloud';
     const currentLocale = locale === 'es' ? 'es' : 'en';
     const currentUrl = `${baseUrl}/${currentLocale}`;
 

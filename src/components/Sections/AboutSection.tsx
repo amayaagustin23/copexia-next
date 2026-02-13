@@ -404,23 +404,21 @@ export default function AboutSection() {
       `}</style>
 
       <div
-        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 pt-12 xs:pt-16 sm:pt-20 pb-12 xs:pb-16 sm:pb-20 space-y-8 xs:space-y-12 sm:space-y-16 about-section-hover ${
-          isHovered ? 'transform translate-y-[-2px]' : ''
-        }`}
+        className={`w-full px-3 xs:px-4 sm:px-6 lg:px-8 pt-12 xs:pt-16 sm:pt-20 pb-12 xs:pb-16 sm:pb-20 space-y-8 xs:space-y-12 sm:space-y-16 about-section-hover ${isHovered ? 'transform translate-y-[-2px]' : ''
+          }`}
       >
         {/* Page Header */}
         <header
-          className={`text-center transition-all duration-700 will-change-transform ${
-            inView
+          className={`text-center transition-all duration-700 will-change-transform ${inView
               ? 'opacity-100 translate-y-0 scale-100'
               : 'opacity-0 translate-y-6 scale-95'
-          }`}
+            }`}
         >
           <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
-            <p className="text-[9px] xs:text-[10px] sm:text-[11px] tracking-wider uppercase text-muted-foreground mb-2 xs:mb-3 sm:mb-4">
+            <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-medium mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight">
+            <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
               {t('heading')}
             </h2>
           </div>
@@ -428,12 +426,11 @@ export default function AboutSection() {
 
         {/* Management + Technology Section */}
         <section
-          className={`text-center transition-all duration-600 will-change-transform ${
-            inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+          className={`text-center transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
           style={{ transitionDelay: inView ? '200ms' : '0ms' }}
         >
-          <div className="w-full space-y-2 xs:space-y-3 sm:space-y-4 text-[10px] xs:text-xs sm:text-sm md:text-base text-muted-foreground px-3 xs:px-4 sm:px-6 lg:px-8">
+          <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5 text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto leading-relaxed">
             <p>{t('intro1')}</p>
             <p>{t('intro2')}</p>
             <p>{t('differential')}</p>
@@ -442,16 +439,15 @@ export default function AboutSection() {
 
         {/* Crossword Section */}
         <section
-          className={`text-center space-y-8 xs:space-y-12 transition-all duration-600 will-change-transform ${
-            inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+          className={`text-center space-y-8 xs:space-y-12 transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
           style={{ transitionDelay: inView ? '400ms' : '0ms' }}
         >
           <div className="px-3 xs:px-4 sm:px-6">
-            <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl font-medium mb-3 xs:mb-4 sm:mb-6">
+            <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold mb-4 xs:mb-6">
               {t('meaningTitle')}
             </h3>
-            <p className="text-[10px] xs:text-xs sm:text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t('meaningDesc')}
             </p>
           </div>
@@ -521,13 +517,12 @@ export default function AboutSection() {
 
         {/* Letter Meanings */}
         <section
-          className={`text-center transition-all duration-600 will-change-transform ${
-            inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+          className={`text-center transition-all duration-600 will-change-transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
           style={{ transitionDelay: inView ? '600ms' : '0ms' }}
         >
           <header className="mb-6 xs:mb-8 px-2">
-            <h4 className="uppercase tracking-wide text-[10px] xs:text-[11px] font-medium text-muted-foreground/70">
+            <h4 className="uppercase tracking-widest text-xs xs:text-sm font-bold text-primary/80">
               Significado de cada letra
             </h4>
           </header>
@@ -547,14 +542,14 @@ export default function AboutSection() {
                 aria-label={`${item.k}: ${item.title}`}
               >
                 <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 p-2 xs:p-3 sm:p-4 rounded-lg hover:bg-muted/20 transition-all duration-500 hover:shadow-sm border border-transparent hover:border-border/30">
-                  <div className="flex-shrink-0 w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 rounded-md bg-primary/10 flex items-center justify-center text-[10px] xs:text-xs sm:text-sm font-bold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                  <div className="flex-shrink-0 w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center text-xs xs:text-sm sm:text-base font-bold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 shadow-sm">
                     {item.k}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-semibold text-[10px] xs:text-xs sm:text-sm mb-1 group-hover:text-primary transition-colors duration-200 text-left leading-tight">
+                    <h5 className="font-bold text-xs xs:text-sm sm:text-base mb-1 group-hover:text-primary transition-colors duration-200 text-left leading-tight">
                       {item.title}
                     </h5>
-                    <p className="text-[9px] xs:text-[10px] sm:text-xs text-muted-foreground leading-relaxed text-left">
+                    <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed text-left">
                       {item.desc}
                     </p>
                   </div>

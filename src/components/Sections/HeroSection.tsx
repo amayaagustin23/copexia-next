@@ -225,7 +225,7 @@ const HeroSection = () => {
       <div className="w-full text-center px-3 xs:px-4 sm:px-6 md:px-8">
         <h1
           ref={titleRef}
-          className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 md:mb-8 leading-tight"
+          className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 xs:mb-8 text-center leading-[1.1]"
         >
           <span
             className="bg-clip-text text-transparent inline-block"
@@ -237,7 +237,7 @@ const HeroSection = () => {
 
         <p
           ref={subtitleRef}
-          className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-muted-foreground mb-4 xs:mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed"
+          className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground/90 mb-6 xs:mb-8 sm:mb-10 md:mb-14 max-w-4xl mx-auto leading-relaxed px-4"
         >
           {t('subtitle')}
         </p>
@@ -249,7 +249,7 @@ const HeroSection = () => {
           <Link
             href="#sobre-nosotros"
             data-cta
-            className="relative overflow-hidden rounded-lg bg-primary px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-medium text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
+            className="relative overflow-hidden rounded-lg bg-primary px-5 xs:px-7 sm:px-9 py-3 xs:py-4 sm:py-5 text-sm xs:text-base sm:text-lg font-bold text-primary-foreground hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150 shadow-lg shadow-primary/20"
           >
             <span
               aria-hidden
@@ -260,7 +260,7 @@ const HeroSection = () => {
           <Link
             href="#valores"
             data-cta
-            className="relative overflow-hidden rounded-lg border border-primary/20 bg-background/50 px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-medium text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
+            className="relative overflow-hidden rounded-lg border-2 border-primary/30 bg-background/50 px-5 xs:px-7 sm:px-9 py-3 xs:py-4 sm:py-5 text-sm xs:text-base sm:text-lg font-bold text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring w-auto active:scale-95 transition-transform duration-150"
           >
             <span
               aria-hidden

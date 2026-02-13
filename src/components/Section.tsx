@@ -31,7 +31,7 @@ const Section: React.FC<SectionProps> = ({
   staggerChildren = false,
   itemSelector,
   className = 'w-full',
-  titleClassName = 'text-xl xs:text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-4 xs:mb-6 text-center leading-tight',
+  titleClassName = 'text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 xs:mb-8 text-center leading-tight',
   threshold = DEFAULT_ANIMATION_CONFIG.threshold,
 }) => {
   const rootRef = useRef<HTMLElement | null>(null);

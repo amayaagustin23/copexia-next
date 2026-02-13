@@ -3,6 +3,27 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
+/** @type {import('next').NextConfig} */
+// Suppress deprecation warning from dependencies (axios -> follow-redirects)
+// See: https://github.com/axios/axios/issues/6259
+const originalEmitWarning = process.emitWarning;
+process.emitWarning = (warning, ...args) => {
+  if (
+    typeof warning === 'string' &&
+    warning.includes('DEP0169')
+  ) {
+    return;
+  }
+  if (
+    warning &&
+    typeof warning === 'object' &&
+    warning.code === 'DEP0169'
+  ) {
+    return;
+  }
+  return originalEmitWarning.call(process, warning, ...args);
+};
+
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',

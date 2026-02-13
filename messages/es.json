@@ -133,6 +133,66 @@
       "newPost": "Nueva publicación",
       "manageCategories": "Gestionar categorías",
       "viewAnalytics": "Ver analíticas"
+    },
+    "newPost": "Nuevo Post",
+    "error": "Error al cargar los datos del dashboard",
+    "stats": {
+      "totalSessions": "Sesiones Totales",
+      "activeInteractions": "Interacciones activas",
+      "uniqueUsers": "Usuarios Únicos",
+      "distinctVisitors": "Visitantes distintos",
+      "pageViews": "Páginas Vistas",
+      "sectionsNavigated": "Secciones navegadas",
+      "avgTime": "Tiempo Medio",
+      "perSession": "Por sesión",
+      "totalEvents": "Eventos Totales",
+      "engagementScore": "Acciones registradas",
+      "totalPosts": "Publicaciones Totales",
+      "publishedDrafts": "{published} publicadas • {drafts} borradores",
+      "totalViews": "Vistas Totales",
+      "globalReach": "Alcance global de contenido",
+      "totalComments": "Comentarios Totales",
+      "communityInteractions": "Interacciones de la comunidad",
+      "totalLikes": "Me Gusta Totales",
+      "userAppreciation": "Apreciación de usuarios"
+    },
+    "charts": {
+      "visitsTrend": "Tendencia de Sesiones",
+      "dailyActivity": "Actividad diaria en los últimos 30 días",
+      "sessions": "Sesiones",
+      "devices": "Dispositivos",
+      "distributionByType": "Distribución por tipo",
+      "other": "Otro",
+      "topPages": "Secciones Más Visitadas",
+      "mostInterestedAreas": "Áreas con mayor interés",
+      "views": "vistas",
+      "browsers": "Navegadores",
+      "userTech": "Tecnología de usuarios",
+      "bounceRate": "Rebote",
+      "avgDuration": "Duración Media",
+      "noVisitsData": "No hay datos de visitas aún",
+      "engagementLevels": "Niveles de Interacción",
+      "operatingSystems": "Sistemas Operativos",
+      "deviceTypes": {
+        "desktop": "Escritorio",
+        "mobile": "Móvil",
+        "tablet": "Tablet"
+      },
+      "engagementTypes": {
+        "high": "Alto",
+        "medium": "Medio",
+        "low": "Bajo"
+      },
+      "count": "Cantidad"
+    },
+    "activity": {
+      "recentPosts": "Top Publicaciones Interactivas",
+      "latestCreated": "Posts con más likes y comentarios",
+      "published": "Publicado",
+      "draft": "Borrador",
+      "recentComments": "Comentarios Recientes",
+      "latestInteractions": "Últimas interacciones de usuarios",
+      "on": "en"
     }
   },
   "CookieConsent": {

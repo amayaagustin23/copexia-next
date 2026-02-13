@@ -127,12 +127,12 @@ export default function CommentForm({
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MessageCircle className="w-5 h-5" />
+      <CardHeader className="p-4 xs:p-6 pb-2 xs:pb-4">
+        <CardTitle className="flex items-center gap-2 text-base xs:text-lg sm:text-xl font-bold">
+          <MessageCircle className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
           {replyTo ? t('replyTo', { author: replyTo }) : t('addComment')}
           {isLoggedIn && isReply && (
-            <span className="text-sm text-muted-foreground font-normal">
+            <span className="text-xs xs:text-sm text-muted-foreground font-normal">
               ({t('asUser', { name: user?.name || 'Usuario' })})
             </span>
           )}
@@ -147,7 +147,9 @@ export default function CommentForm({
           )}
 
           <div>
-            <Label htmlFor="content">{t('content')}</Label>
+            <Label htmlFor="content" className="text-xs xs:text-sm font-bold mb-1.5 xs:mb-2 block">
+              {t('content')}
+            </Label>
             <Textarea
               id="content"
               value={formData.content}
@@ -155,6 +157,7 @@ export default function CommentForm({
               placeholder={t('contentPlaceholder')}
               rows={4}
               required
+              className="text-sm xs:text-base focus:ring-primary/20 transition-all min-h-[120px]"
             />
           </div>
 
@@ -162,7 +165,9 @@ export default function CommentForm({
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="authorName">{t('authorName')}</Label>
+                  <Label htmlFor="authorName" className="text-xs xs:text-sm font-bold mb-1.5 xs:mb-2 block">
+                    {t('authorName')}
+                  </Label>
                   <Input
                     id="authorName"
                     value={formData.authorName}
@@ -172,11 +177,14 @@ export default function CommentForm({
                     placeholder={t('authorNamePlaceholder')}
                     required={!isLoggedIn}
                     disabled={isLoggedIn}
+                    className="text-sm xs:text-base h-10 xs:h-12"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="authorEmail">{t('authorEmail')}</Label>
+                  <Label htmlFor="authorEmail" className="text-xs xs:text-sm font-bold mb-1.5 xs:mb-2 block">
+                    {t('authorEmail')}
+                  </Label>
                   <Input
                     id="authorEmail"
                     type="email"
@@ -186,12 +194,15 @@ export default function CommentForm({
                     }
                     placeholder={t('authorEmailPlaceholder')}
                     disabled={isLoggedIn}
+                    className="text-sm xs:text-base h-10 xs:h-12"
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="authorWebsite">{t('authorWebsite')}</Label>
+                <Label htmlFor="authorWebsite" className="text-xs xs:text-sm font-bold mb-1.5 xs:mb-2 block">
+                  {t('authorWebsite')}
+                </Label>
                 <Input
                   id="authorWebsite"
                   type="url"
@@ -200,13 +211,18 @@ export default function CommentForm({
                     handleInputChange('authorWebsite', e.target.value)
                   }
                   placeholder={t('authorWebsitePlaceholder')}
+                  className="text-sm xs:text-base h-10 xs:h-12"
                 />
               </div>
             </>
           )}
 
-          <div className="flex items-center gap-2">
-            <Button type="submit" disabled={loading}>
+          <div className="flex items-center gap-3 pt-2">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="text-sm xs:text-base font-bold h-10 xs:h-12 px-6"
+            >
               {loading ? (
                 <LoadingSpinner size="sm" />
               ) : (
@@ -216,7 +232,12 @@ export default function CommentForm({
             </Button>
 
             {onCancelReply && (
-              <Button type="button" variant="outline" onClick={onCancelReply}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancelReply}
+                className="text-sm xs:text-base h-10 xs:h-12 px-6"
+              >
                 {t('cancel')}
               </Button>
             )}

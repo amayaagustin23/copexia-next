@@ -27,7 +27,7 @@ export default function HomePage() {
   const locale = (params?.locale as string) || 'es';
   const seoData =
     homePageSEO[locale as keyof typeof homePageSEO] || homePageSEO.es;
-  
+
   // Configuración global de animaciones
   useEffect(() => {
     // Preload fonts for better animation performance

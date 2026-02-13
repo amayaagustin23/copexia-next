@@ -49,7 +49,6 @@ export const Header = () => {
 
   const baseMenu = getMenu(t, menuPaths, { showAuth: false });
 
-  // Agregar opción de Admin si el usuario está logueado
   const menu = user
     ? [...baseMenu, { name: t('menu.admin'), href: rutas.admin.root }]
     : baseMenu;
@@ -354,7 +353,7 @@ export const Header = () => {
                     ].join(' ')}
                     onClick={handleNavigate}
                   >
-                    🏠 {t('menu.home')}
+                    {t('menu.home')}
                   </Link>
                 </div>
 

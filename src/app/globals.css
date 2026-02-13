@@ -153,6 +153,13 @@
     overflow-x: hidden;
   }
 
+  /* Ajuste global de tipografía para mobile (+2 puntos en la base) */
+  @media (max-width: 640px) {
+    html {
+      font-size: 112.5% !important; /* 16px -> 18px */
+    }
+  }
+
   body {
     /* 🎨 degradés sutiles sobre el color base */
     background: var(--bg-gradient), var(--background);

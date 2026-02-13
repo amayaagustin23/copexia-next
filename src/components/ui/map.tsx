@@ -5,6 +5,18 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
+// Fix for icon loading issues in Next.js
+const fixLeafletIcons = () => {
+  if (typeof window !== 'undefined' && L.Icon.Default) {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    });
+  }
+};
+
 interface MapProps {
   latitude: number;
   longitude: number;
@@ -25,51 +37,36 @@ export function Map({
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Asegurarse de que solo se renderice en el cliente
+    fixLeafletIcons();
     setIsClient(true);
 
-    // Fix para los iconos de Leaflet en Next.js
-    if (typeof window !== 'undefined') {
-      delete (L.Icon.Default.prototype as any)._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-        iconUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-        shadowUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-      });
-    }
+    // Trigger a resize event to ensure Leaflet calculates dimensions correctly
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      // Forzar redimensionamiento del mapa después de que se carga
-      const timer = setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isClient]);
 
   if (!isClient) {
     return (
-      <div
-        className={`relative rounded-lg overflow-hidden ${className} bg-muted/30 flex items-center justify-center`}
-      >
-        <p className="text-muted-foreground text-sm">Cargando mapa...</p>
+      <div className={`relative rounded-lg overflow-hidden bg-muted/20 flex items-center justify-center ${className}`}>
+        <div className="text-center p-4">
+          <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-2" />
+          <p className="text-muted-foreground text-xs">Cargando mapa...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${className}`}>
+    <div className={`relative rounded-lg overflow-hidden ${className}`} style={{ height: '100%', minHeight: '300px' }}>
       <MapContainer
+        key={`${latitude}-${longitude}`}
         center={[latitude, longitude]}
         zoom={zoom}
         scrollWheelZoom={false}
-        style={{ height: '100%', width: '100%', minHeight: '300px' }}
+        style={{ height: '100%', width: '100%' }}
         className="z-0"
       >
         <TileLayer
@@ -79,12 +76,10 @@ export function Map({
         <Marker position={[latitude, longitude]}>
           {(markerTitle || markerDescription) && (
             <Popup>
-              {markerTitle && (
-                <div className="font-semibold text-sm">{markerTitle}</div>
-              )}
-              {markerDescription && (
-                <div className="text-xs mt-1">{markerDescription}</div>
-              )}
+              <div className="p-1">
+                {markerTitle && <div className="font-bold text-sm mb-1">{markerTitle}</div>}
+                {markerDescription && <div className="text-xs text-muted-foreground">{markerDescription}</div>}
+              </div>
             </Popup>
           )}
         </Marker>

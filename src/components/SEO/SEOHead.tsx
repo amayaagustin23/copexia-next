@@ -44,13 +44,13 @@ export function SEOHead({
   const t = useTranslations('metadata');
   const params = useParams();
   const locale = params?.locale as string || 'es';
-  
-  const baseUrl = 'https://copexia.com';
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dev.copexia.amayadev.cloud';
   const currentUrl = url || `${baseUrl}/${locale}`;
   const currentTitle = title ? `${title} | Copexia` : t('title');
   const currentDescription = description || t('description');
   const currentImage = image || `${baseUrl}/og-image.jpg`;
-  
+
   const defaultKeywords = [
     'Copexia',
     'Tucumán',
@@ -80,10 +80,10 @@ export function SEOHead({
         <meta name="author" content={author || 'Copexia Team'} />
         <meta name="robots" content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}`} />
         <meta name="googlebot" content={`${noindex ? 'noindex' : 'index'}, ${nofollow ? 'nofollow' : 'follow'}`} />
-        
+
         {/* Canonical URL */}
         <link rel="canonical" href={currentUrl} />
-        
+
         {/* Open Graph */}
         <meta property="og:type" content={type} />
         <meta property="og:title" content={currentTitle} />
@@ -95,7 +95,7 @@ export function SEOHead({
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={currentTitle} />
         <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
-        
+
         {/* Article specific meta tags */}
         {type === 'article' && (
           <>
@@ -108,7 +108,7 @@ export function SEOHead({
             ))}
           </>
         )}
-        
+
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={currentTitle} />
@@ -116,17 +116,17 @@ export function SEOHead({
         <meta name="twitter:image" content={currentImage} />
         <meta name="twitter:site" content="@copexia" />
         <meta name="twitter:creator" content="@copexia" />
-        
+
         {/* Additional Meta Tags */}
         <meta name="theme-color" content="#ffffff" />
         <meta name="msapplication-TileColor" content="#ffffff" />
-        
+
         {/* Geo Tags */}
         <meta name="geo.region" content="AR-T" />
         <meta name="geo.placename" content="San Miguel de Tucumán" />
         <meta name="geo.position" content="-26.8241;-65.2226" />
         <meta name="ICBM" content="-26.8241, -65.2226" />
-        
+
         {/* Dublin Core */}
         <meta name="DC.title" content={currentTitle} />
         <meta name="DC.description" content={currentDescription} />
@@ -137,34 +137,34 @@ export function SEOHead({
         <meta name="DC.publisher" content="Copexia" />
         <meta name="DC.type" content={type} />
         <meta name="DC.format" content="text/html" />
-        
+
         {/* Hreflang for multilingual support */}
         <link rel="alternate" hrefLang="es" href={`${baseUrl}/es`} />
         <link rel="alternate" hrefLang="en" href={`${baseUrl}/en`} />
         <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/es`} />
-        
+
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" />
-        
+
         {/* DNS prefetch */}
-        <link rel="dns-prefetch" href="//copexia.com" />
+        <link rel="dns-prefetch" href={baseUrl} />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
       </Head>
-      
+
       {/* Structured Data */}
       <StructuredData type="organization" locale={locale} />
       <StructuredData type="website" locale={locale} />
       <StructuredData type="localBusiness" locale={locale} />
-      
+
       {breadcrumbs && breadcrumbs.length > 0 && (
         <StructuredData type="breadcrumb" data={breadcrumbs} locale={locale} />
       )}
-      
+
       {type === 'article' && (
-        <StructuredData 
-          type="article" 
+        <StructuredData
+          type="article"
           data={{
             title: currentTitle,
             description: currentDescription,

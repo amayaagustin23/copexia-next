@@ -1,6 +1,6 @@
 // SEO Configuration for Copexia
 export const seoConfig = {
-  baseUrl: 'https://copexia.com',
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://dev.copexia.amayadev.cloud',
   organization: {
     name: 'Copexia',
     alternateName: 'COPEXIA',
@@ -58,7 +58,7 @@ export const seoConfig = {
       'San Miguel de Tucumán',
     ],
   },
-  
+
   // Default meta tags
   defaultMeta: {
     robots: {

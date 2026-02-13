@@ -17,7 +17,7 @@ export async function generateMetadata({
 }: PostPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
-  const baseUrl = 'https://copexia.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://dev.copexia.amayadev.cloud';
 
   try {
     const post = await postsService.getPublicPostBySlug(slug);
@@ -114,7 +114,6 @@ export default async function PostPage({ params }: PostPageProps) {
       </>
     );
   } catch (error) {
-    console.error('Error fetching post:', error);
     notFound();
   }
 }
