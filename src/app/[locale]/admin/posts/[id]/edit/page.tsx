@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoadingSpinner } from '@/components/ui/loading';
-import { QuillEditor } from '@/components/ui/quill-editor';
+import { TiptapEditor } from '@/components/ui/tiptap-editor';
 import { Textarea } from '@/components/ui/textarea';
 import { ToastContainer } from '@/components/ui/toast';
 import { useLocalizedPaths } from '@/lib/hooks/useLocalizedPaths';
@@ -364,7 +364,7 @@ export default function EditPostPage() {
               </CardHeader>
               <CardContent>
                 {previewMode ? (
-                  <div className="prose max-w-none">
+                  <div className="tiptap-editor-content">
                     <div
                       dangerouslySetInnerHTML={{ __html: formData.content }}
                     />
@@ -372,7 +372,7 @@ export default function EditPostPage() {
                 ) : (
                   <div>
                     <Label htmlFor="content">{t('contentLabel')}</Label>
-                    <QuillEditor
+                    <TiptapEditor
                       value={formData.content}
                       onChange={(value) => handleInputChange('content', value)}
                       placeholder={t('contentPlaceholder')}

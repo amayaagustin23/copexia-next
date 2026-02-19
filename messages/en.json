@@ -1297,7 +1297,7 @@
       }
     }
   },
-  "QuillEditor": {
+  "TiptapEditor": {
     "placeholder": "Write your content...",
     "toolbar": {
       "normal": "Normal",

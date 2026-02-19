@@ -90,10 +90,18 @@ export function usePageAnalytics(options: UsePageAnalyticsOptions = {}) {
     const ua = navigator.userAgent;
     const isMobile = /Mobile|Android|iPhone/i.test(ua);
     const isTablet = /Tablet|iPad/i.test(ua);
+    
+    let os = 'Unknown';
+    if (/Android/i.test(ua)) os = 'Android';
+    else if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS';
+    else if (/Mac/i.test(ua)) os = 'macOS';
+    else if (/Windows/i.test(ua)) os = 'Windows';
+    else if (/Linux/i.test(ua)) os = 'Linux';
+
     return {
       type: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop',
-      browser: ua.includes('Chrome') ? 'Chrome' : ua.includes('Safari') ? 'Safari' : 'Unknown', // Simplified
-      os: ua.includes('Mac') ? 'macOS' : ua.includes('Windows') ? 'Windows' : 'Unknown',
+      browser: ua.includes('Chrome') ? 'Chrome' : ua.includes('Safari') ? 'Safari' : ua.includes('Firefox') ? 'Firefox' : 'Unknown', // Simplified
+      os,
     };
   }, []);
 
@@ -110,41 +118,31 @@ export function usePageAnalytics(options: UsePageAnalyticsOptions = {}) {
     sectionsViewedRef.current.clear();
     interactionsRef.current = [];
 
-    // CONDITIONAL POST: Only if it's a completely new session (not in localStorage)
-    if (isNewSessionRef.current) {
-      console.log('📡 [Analytics] New Session -> Sending POST /visits');
+    console.log('📡 [Analytics] Sending POST /visits');
 
-      const visitData = {
-        sessionId: sessionId,
-        page: path,
-        referrer: document.referrer || null,
-        userAgent: navigator.userAgent,
-        deviceInfo: getDeviceInfo(),
-        screenInfo: {
-          resolution: `${window.screen.width}x${window.screen.height}`,
-          viewport: `${window.innerWidth}x${window.innerHeight}`,
-        },
-        language: navigator.language,
-      };
+    const visitData = {
+      sessionId: sessionId,
+      page: path,
+      referrer: document.referrer || null,
+      userAgent: navigator.userAgent,
+      deviceInfo: getDeviceInfo(),
+      screenInfo: {
+        resolution: `${window.screen.width}x${window.screen.height}`,
+        viewport: `${window.innerWidth}x${window.innerHeight}`,
+      },
+      language: navigator.language,
+    };
 
-      try {
-        const res = await analyticsService.trackPageVisit(visitData);
-        if (res.success) {
-          setIsTracking(true);
-          // After successful creation, treating as existing for future navigations?
-          // Actually, user said: "si ya existe... no mande el post".
-          // So subsequent navigations (change url) should ALSO skip POST?
-          // Yes. Because "ya existe en localstorage".
-          isNewSessionRef.current = false;
-        } else {
-          console.error('[Analytics] POST Failed:', res.error);
-        }
-      } catch (e) {
-        console.error('[Analytics] Error POST:', e);
+    try {
+      const res = await analyticsService.trackPageVisit(visitData);
+      if (res.success) {
+        setIsTracking(true);
+        // We do not set isNewSessionRef.current = false here anymore because we want to track every "startSession" as a visit
+      } else {
+        console.error('[Analytics] POST Failed:', res.error);
       }
-    } else {
-      console.log('⏩ [Analytics] Session Exists -> Skipping POST. Metrics will be sent on Update (PUT).');
-      setIsTracking(true);
+    } catch (e) {
+      console.error('[Analytics] Error POST:', e);
     }
   }, [enabled, sessionId, getDeviceInfo]);
 

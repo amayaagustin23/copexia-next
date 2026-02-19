@@ -160,10 +160,10 @@ export default function ContactSection() {
             <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-medium mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3 xs:mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-2xl xs:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight mb-3 xs:mb-4 sm:mb-6 leading-[1.1]">
               {t('heading')}
             </h2>
-            <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed px-4">
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 leading-relaxed max-w-2xl mx-auto px-4">
               {t('subtitle')}
             </p>
           </div>
@@ -262,7 +262,7 @@ export default function ContactSection() {
             style={{ transitionDelay: inView ? '400ms' : '0ms' }}
           >
             <div className="p-4 xs:p-6 lg:p-8 rounded-lg xs:rounded-xl lg:rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm">
-              <h3 className="text-lg xs:text-xl font-semibold mb-4 xs:mb-6">
+              <h3 className="text-xl xs:text-2xl font-bold tracking-tight leading-snug mb-4 xs:mb-6">
                 {t('form.title')}
               </h3>
 

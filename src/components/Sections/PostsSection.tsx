@@ -140,13 +140,13 @@ export default function PostsSection() {
     <div className="w-full px-3 xs:px-4 py-12 xs:py-16 sm:py-20 lg:py-24">
       <div className="text-center mb-12 xs:mb-16 sm:mb-20">
         <h2
-          className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 xs:mb-4 sm:mb-6 leading-tight"
+          className="text-2xl xs:text-3xl md:text-5xl lg:text-6xl font-black mb-3 xs:mb-4 sm:mb-6 leading-tight"
           data-animate
         >
           {t('title')}
         </h2>
         <p
-          className="text-xs xs:text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed px-4"
+          className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 leading-relaxed max-w-2xl mx-auto px-4"
           data-animate
         >
           {t('description')}
@@ -190,7 +190,7 @@ export default function PostsSection() {
               </div>
 
               <CardHeader className="p-2 xs:p-3 sm:p-6">
-                <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-1 xs:py-2 sm:py-4 text-sm xs:text-base sm:text-lg font-bold leading-tight">
+                <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors py-1 xs:py-2 sm:py-4 text-xl xs:text-2xl font-bold tracking-tight leading-snug">
                   {post.title}
                 </CardTitle>
                 <CardDescription className="line-clamp-2 xs:line-clamp-3 text-xs xs:text-sm sm:text-base leading-relaxed">

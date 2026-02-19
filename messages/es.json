@@ -458,73 +458,41 @@
   },
   "AdminComments": {
     "title": "Gestión de Comentarios",
-    "description": "Gestiona y modera comentarios",
-    "searchPlaceholder": "Buscar comentarios...",
+    "description": "Moderá los comentarios de tus posts",
+    "searchPlaceholder": "Buscar en contenido...",
     "errorLoading": "Error al cargar comentarios",
     "errorUpdating": "Error al actualizar comentario",
-    "errorDeleting": "Error al eliminar comentario",
-    "confirmDelete": "¿Estás seguro de que quieres eliminar este comentario?",
-    "empty": "No se encontraron comentarios",
-    "emptyDescription": "No hay comentarios que coincidan con tus criterios de búsqueda",
+    "empty": "No hay comentarios",
+    "emptyDescription": "No se encontraron comentarios con los filtros aplicados",
+    "hide": "Ocultar",
+    "activate": "Activar",
     "stats": {
       "total": "Total",
-      "approved": "Aprobados",
-      "pending": "Pendientes",
-      "rejected": "Rechazados",
-      "deleted": "Eliminados"
+      "active": "Activos",
+      "hidden": "Ocultos"
     },
     "status": {
-      "pending": "Pendiente",
-      "approved": "Aprobado",
-      "rejected": "Rechazado",
-      "deleted": "Eliminado"
+      "active": "Activo",
+      "hidden": "Oculto"
     },
-    "orderBy": {
-      "createdAt": "Fecha de Creación",
-      "updatedAt": "Fecha de Actualización"
-    },
-    "order": {
-      "desc": "Más Recientes",
-      "asc": "Más Antiguos"
-    },
-    "startDate": "Fecha Inicio",
-    "endDate": "Fecha Fin",
-    "perPage": "{n} por página",
-    "approve": "Aprobar",
-    "reject": "Rechazar",
-    "postId": "ID del Post",
-    "replyTo": "Respuesta a",
-    "pagination": {
-      "summary": "{from}–{to} de {total}",
-      "prev": "Anterior",
-      "next": "Siguiente"
-    },
-    "locale": "es-ES",
     "filters": {
-      "title": "Filtros y Búsqueda",
-      "clear": "Limpiar",
+      "title": "Filtros",
+      "clear": "Limpiar filtros",
       "allStatuses": "Todos los estados",
-      "pending": "Pendientes",
-      "approved": "Aprobados",
-      "rejected": "Rechazados"
-    },
-    "bulkActions": {
-      "selected": "{count} comentario(s) seleccionado(s)",
-      "approve": "Aprobar",
-      "reject": "Rechazar",
-      "delete": "Eliminar",
-      "confirmBulk": "¿Estás seguro de que quieres {action} {count} comentario(s)?",
-      "errorBulk": "Error al {action} comentarios"
-    },
-    "selection": {
-      "selectAll": "Seleccionar todos",
-      "deselectAll": "Deseleccionar todos",
-      "found": "{count} comentario(s) encontrado(s)"
+      "active": "Activos",
+      "hidden": "Ocultos",
+      "authorPlaceholder": "Buscar por autor..."
     },
     "comments": {
       "post": "Post:",
-      "reply": "Respuesta",
-      "showing": "Mostrando {from} a {to} de {total} comentarios"
+      "reply": "Respuesta"
+    },
+    "selection": {
+      "found": "{count} comentario(s) encontrado(s)"
+    },
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente"
     },
     "relativeTime": {
       "justNow": "Hace un momento",
@@ -1065,7 +1033,7 @@
       }
     }
   },
-  "QuillEditor": {
+  "TiptapEditor": {
     "placeholder": "Escribe tu contenido...",
     "toolbar": {
       "normal": "Normal",

@@ -43,10 +43,10 @@ const ServiceCard = ({ blockKey, icon: Icon, index }: ServiceCardProps) => {
                     <Icon className="w-8 h-8" />
                 </div>
                 <div className="text-left">
-                    <h3 className="text-2xl font-bold tracking-tight leading-tight group-hover:text-primary transition-colors duration-300 text-left">
+                    <h3 className="text-xl xs:text-2xl font-bold tracking-tight leading-tight group-hover:text-primary transition-colors duration-300 text-left">
                         {t(`${blockKey}.title`)}
                     </h3>
-                    <p className="mt-4 text-muted-foreground leading-relaxed line-clamp-3 text-left">
+                    <p className="mt-4 text-xs xs:text-sm sm:text-base text-muted-foreground leading-relaxed line-clamp-3 text-left">
                         {t(`${blockKey}.desc`)}
                     </p>
                 </div>
@@ -152,7 +152,7 @@ export default function ServicesSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight"
+                            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] px-2"
                         >
                             Nuestras Soluciones Estratégicas
                         </motion.h2>

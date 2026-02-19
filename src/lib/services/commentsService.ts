@@ -35,6 +35,7 @@ export class CommentsService extends BaseService {
       page?: number;
       size?: number;
       search?: string;
+      status?: 'ALL' | 'ACTIVE' | 'HIDDEN';
       orderBy?: 'createdAt' | 'updatedAt';
       order?: 'asc' | 'desc';
       startDate?: string;
@@ -45,6 +46,7 @@ export class CommentsService extends BaseService {
       page = 1,
       size = 10,
       search,
+      status,
       orderBy = 'createdAt',
       order = 'desc',
       startDate,
@@ -59,6 +61,7 @@ export class CommentsService extends BaseService {
         page,
         size,
         search,
+        status,
         orderBy,
         order,
         startDate,
@@ -89,11 +92,11 @@ export class CommentsService extends BaseService {
   }
 
   /**
-   * Update comment status (admin)
+   * Update comment status (admin) — solo ACTIVE o HIDDEN
    */
   async updateStatus(
     id: string,
-    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'DELETED'
+    status: 'ACTIVE' | 'HIDDEN'
   ): Promise<CommentResponse> {
     return this.adminRequest(
       'PATCH',

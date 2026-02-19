@@ -1,0 +1,12 @@
+export default function NotFound() {
+    return (
+        <html lang="es">
+            <body>
+                <div style={{ padding: '20px', textAlign: 'center', fontFamily: 'sans-serif' }}>
+                    <h1>404 - Página no encontrada</h1>
+                    <p>Estamos verificando el sistema.</p>
+                </div>
+            </body>
+        </html>
+    );
+}

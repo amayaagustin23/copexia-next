@@ -225,7 +225,7 @@ const HeroSection = () => {
       <div className="w-full text-center px-3 xs:px-4 sm:px-6 md:px-8">
         <h1
           ref={titleRef}
-          className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 xs:mb-8 text-center leading-[1.1]"
+          className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6 xs:mb-8 text-center leading-[1.1]"
         >
           <span
             className="bg-clip-text text-transparent inline-block"
@@ -237,7 +237,7 @@ const HeroSection = () => {
 
         <p
           ref={subtitleRef}
-          className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground/90 mb-6 xs:mb-8 sm:mb-10 md:mb-14 max-w-6xl mx-auto leading-relaxed px-4"
+          className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground/90 mb-6 xs:mb-8 sm:mb-10 md:mb-14 max-w-6xl mx-auto leading-relaxed px-4 font-medium"
         >
           {t('subtitle')}
         </p>

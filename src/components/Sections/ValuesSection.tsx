@@ -156,10 +156,10 @@ export default function ValuesSection() {
             : 'opacity-0 translate-y-6 scale-95'
             }`}
         >
-          <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+          <h2 className="text-2xl xs:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
             {t('heading')}
           </h2>
-          <p className="mt-3 text-xs xs:text-sm sm:text-base text-muted-foreground px-4 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 leading-relaxed max-w-2xl mx-auto px-4 mt-3">
             {t('subheading')}
           </p>
         </header>
@@ -238,10 +238,10 @@ export default function ValuesSection() {
           }}
         >
           <ActiveIcon className="h-6 w-6 xs:h-8 xs:w-8 sm:h-10 sm:w-10 text-primary mb-3 xs:mb-4" />
-          <h3 className="text-base xs:text-lg sm:text-xl font-bold leading-tight">
+          <h3 className="text-xl xs:text-2xl font-bold tracking-tight leading-snug">
             {items[active].title}
           </h3>
-          <p className="mt-3 text-xs xs:text-sm sm:text-base text-muted-foreground leading-relaxed px-3 max-w-xl">
+          <p className="mt-3 text-sm xs:text-base text-muted-foreground leading-relaxed px-3 max-w-xl">
             {items[active].desc}
           </p>
         </div>

@@ -208,7 +208,7 @@ function ViewPostPageContent({ params }: { params: Promise<{ id: string }> }) {
                 </div>
               )}
               
-              <div className="prose max-w-none dark:prose-invert">
+              <div className="tiptap-editor-content">
                 <div dangerouslySetInnerHTML={{ __html: post.content }} />
               </div>
             </CardContent>

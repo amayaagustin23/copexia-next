@@ -212,8 +212,8 @@ export default function AboutSection() {
   const getCellClasses = useCallback(
     (cell: Cell | undefined, isAnchorCol: boolean) => {
       const baseClasses = [
-        'relative w-3 h-3 xs:w-4 xs:h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm border cursor-pointer will-change-transform',
-        'flex items-center justify-center text-[10px] xs:text-xs sm:text-base font-bold leading-none',
+        'relative w-4 h-4 xs:w-5 xs:h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-sm border cursor-pointer will-change-transform',
+        'flex items-center justify-center text-[11px] xs:text-sm sm:text-lg font-bold leading-none',
         'transition-all duration-700 ease-out',
         'hover:scale-105 sm:hover:scale-110 hover:shadow-xl hover:z-10 hover:-translate-y-0.5 sm:hover:-translate-y-1',
         'hover:transition-all hover:duration-300 hover:ease-in-out',
@@ -362,9 +362,9 @@ export default function AboutSection() {
         /* Mejoras responsive para dispositivos muy pequeños */
         @media (max-width: 320px) {
           [data-cell] {
-            font-size: 0.65rem;
-            min-width: 0.75rem;
-            min-height: 0.75rem;
+            font-size: 0.7rem;
+            min-width: 0.85rem;
+            min-height: 0.85rem;
             line-height: 1;
             display: flex;
             align-items: center;
@@ -375,7 +375,7 @@ export default function AboutSection() {
         /* Ajustes para teléfonos pequeños */
         @media (max-width: 480px) {
           [data-cell] {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             line-height: 1;
             display: flex;
             align-items: center;
@@ -383,7 +383,7 @@ export default function AboutSection() {
           }
 
           .crossword-grid {
-            gap: 0.1rem 0.1rem;
+            gap: 2px;
           }
         }
 
@@ -418,7 +418,7 @@ export default function AboutSection() {
             <p className="text-[11px] xs:text-xs sm:text-sm tracking-widest uppercase text-muted-foreground/80 font-medium mb-2 xs:mb-3 sm:mb-4">
               {t('eyebrow')}
             </p>
-            <h2 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+            <h2 className="text-7xl xs:text-3xl md:text-7xl lg:text-6xl font-black tracking-tight leading-[1.1]">
               {t('heading')}
             </h2>
           </div>
@@ -430,7 +430,7 @@ export default function AboutSection() {
             }`}
           style={{ transitionDelay: inView ? '200ms' : '0ms' }}
         >
-          <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5 text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto leading-relaxed">
+          <div className="w-full space-y-3 xs:space-y-4 sm:space-y-5 text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/90 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto leading-relaxed">
             <p>{t('intro1')}</p>
             <p>{t('intro2')}</p>
             <p>{t('intro3')}</p>
@@ -445,10 +445,10 @@ export default function AboutSection() {
           style={{ transitionDelay: inView ? '400ms' : '0ms' }}
         >
           <div className="px-3 xs:px-4 sm:px-6">
-            <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold mb-4 xs:mb-6">
+            <h3 className="text-xl xs:text-7xl font-bold tracking-tight leading-snug mb-4 xs:mb-6">
               {t('meaningTitle')}
             </h3>
-            <p className="text-xs xs:text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm xs:text-base text-muted-foreground max-w-7xl mx-auto leading-relaxed">
               {t('meaningDesc')}
             </p>
           </div>
@@ -462,9 +462,9 @@ export default function AboutSection() {
               <div
                 className="grid justify-items-center items-center mx-auto crossword-grid"
                 style={{
-                  gridTemplateColumns: `repeat(${cols}, minmax(0.75rem, 2.5rem))`,
-                  gridTemplateRows: `repeat(${rows}, minmax(1rem, 2.5rem))`,
-                  gap: '0.1rem 0.1rem', // gap reducido para ser más compacto
+                  gridTemplateColumns: `repeat(${cols}, minmax(0.85rem, 3rem))`,
+                  gridTemplateRows: `repeat(${rows}, minmax(1.1rem, 3rem))`,
+                  gap: '2px', // gap mínimo para visualización clara
                   maxWidth: 'fit-content',
                 }}
               >
@@ -547,10 +547,10 @@ export default function AboutSection() {
                     {item.k}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-bold text-xs xs:text-sm sm:text-base mb-1 group-hover:text-primary transition-colors duration-200 text-left leading-tight">
+                    <h5 className="text-sm xs:text-base font-bold mb-1 group-hover:text-primary transition-colors duration-200 text-left leading-tight">
                       {item.title}
                     </h5>
-                    <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed text-left">
+                    <p className="text-xs xs:text-sm text-muted-foreground leading-relaxed text-left">
                       {item.desc}
                     </p>
                   </div>

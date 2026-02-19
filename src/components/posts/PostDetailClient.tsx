@@ -167,7 +167,7 @@ export default function PostDetailClient({ initialPost }: PostDetailClientProps)
           <Card className="mb-8 overflow-hidden shadow-sm border-border/60">
             <CardContent className="p-4 xs:p-6 sm:p-10">
               <div
-                className="prose prose-sm xs:prose-base sm:prose-lg md:prose-xl max-w-none dark:prose-invert prose-headings:font-bold prose-p:leading-relaxed prose-img:rounded-xl"
+                className="tiptap-editor-content"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </CardContent>

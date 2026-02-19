@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const PostStatusSchema = z.enum(['PUBLISHED', 'DRAFT']);
 export type PostStatus = z.infer<typeof PostStatusSchema>;
 
-export const CommentStatusSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED', 'DELETED']);
+export const CommentStatusSchema = z.enum(['ACTIVE', 'HIDDEN']);
 export type CommentStatus = z.infer<typeof CommentStatusSchema>;
 
 // ==================== BASE TYPES ====================
@@ -140,21 +140,12 @@ export const CommentListResponseSchema = z.object({
   total: z.number(),
   page: z.number(),
   size: z.number(),
-  stats: z.object({
-    total: z.number(),
-    approved: z.number(),
-    pending: z.number(),
-    rejected: z.number(),
-    deleted: z.number(),
-  }).optional(),
 });
 
 export const CommentStatsSchema = z.object({
   total: z.number(),
-  approved: z.number(),
-  pending: z.number(),
-  rejected: z.number(),
-  deleted: z.number(),
+  active: z.number(),
+  hidden: z.number(),
 });
 
 // ==================== CATEGORY TYPES ====================
